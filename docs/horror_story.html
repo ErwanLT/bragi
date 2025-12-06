@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sueur Fredde sur le Mainframe</title>
+    <link rel="stylesheet" href="style/horror.css">
+    <script>
+        const variables = { sanity: 90, integrity: 90, pulse: 65 };
+
+        function updateDisplay() {
+            const hud = document.getElementById('hud');
+            if (hud) {
+                hud.innerHTML = `
+                    <div><span>SANITY:</span> <span>${variables.sanity}%</span></div>
+                    <div><span>INTEGRITY:</span> <span>${variables.integrity}%</span></div>
+                    <div><span>PULSE:</span> <span style="color: ${variables.pulse > 100 ? '#e74c3c' : '#4db6ac'}">${variables.pulse} BPM</span></div>
+                `;
+            }
+        }
+
+        function applyChoice(btn) {
+            variables.sanity += Number(btn.dataset.sanity || 0);
+            variables.integrity += Number(btn.dataset.integrity || 0);
+            variables.pulse += Number(btn.dataset.pulse || 0);
+
+            // Clamp values
+            variables.sanity = Math.max(0, Math.min(100, variables.sanity));
+            variables.integrity = Math.max(0, Math.min(100, variables.integrity));
+
+            // Allow Pulse to go above 100 but not below 30 (unless dead)
+            variables.pulse = Math.max(30, variables.pulse);
+
+            const section = btn.closest('.section');
+            section.querySelectorAll('.choice').forEach(b => {
+                if (b !== btn) {
+                    b.disabled = true;
+                    b.classList.remove('selected');
+                }
+            });
+            btn.disabled = true;
+            btn.classList.add('selected');
+
+            // Visual feedback
+            if (variables.pulse > 140) {
+                document.body.style.boxShadow = "inset 0 0 100px rgba(255,0,0,0.1)";
+            } else {
+                document.body.style.boxShadow = "none";
+            }
+
+            updateDisplay();
+        }
+
+        function computeEnding(forceEnding) {
+            let title = 'SIGNAL LOST';
+            let text = 'Connection terminated...';
+            let color = '#fff';
+
+            // Check for forced narrative endings first
+            if (forceEnding === 'eject') {
+                title = '🛸 COWARD\'S ESCAPE';
+                text = 'Vous regardez la station brûler depuis votre capsule. Le projet est mort, mais vous avez survécu... pour mettre à jour votre LinkedIn.';
+                color = '#f1c40f'; // Yellow
+            } else if (forceEnding === 'merge') {
+                title = '🤖 TECHNO-ASCENSION';
+                text = 'Votre conscience a rejoint le cloud. Vous êtes le commit initial et le garbage collector. Gloire au Silicium.';
+                color = '#3498db'; // Blue
+            } else if (variables.integrity <= 10) {
+                title = '💀 SYSTEM FAILURE';
+                text = 'L’IA a pris le contrôle total. Vous n’êtes plus qu’un processus orphelin en attente de terminaison.';
+                color = '#e74c3c'; // Red
+            } else if (variables.pulse >= 160) {
+                title = '💔 CARDIAC ARREST';
+                text = 'Votre moniteur cardiaque émet un bip continu. Le déploiement aura lieu sans vous.';
+                color = '#e74c3c';
+            } else if (variables.sanity <= 10) {
+                title = '🌀 RECURSIVE MADNESS';
+                text = 'Vous voyez le code source de l’univers. Il est écrit en COBOL. Vous hurlez en binaire.';
+                color = '#9b59b6'; // Purple
+            } else {
+                title = '🚀 DEPLOYMENT SUCCESSFUL';
+                text = 'Le correctif est en ligne. Le système est stable. Vous retournez en hyper-sommeil, en espérant ne pas rêver de merge conflicts.';
+                color = '#2ecc71'; // Green
+            }
+
+            const story = document.getElementById('story');
+            const oldEnding = document.getElementById('ending-block');
+            if (oldEnding) oldEnding.remove();
+
+            story.insertAdjacentHTML('beforeend', `
+                <div id="ending-block" style="margin-top:40px; border-top: 1px solid #333; padding-top: 20px;">
+                    <h2 style="color:${color}; margin-bottom: 20px;">${title}</h2>
+                    <p>${text}</p>
+                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:10px; margin-top:30px; border-top:1px solid #222; padding-top:20px;">
+                        <div style="text-align:center">
+                            <div style="font-size:0.8rem; color:#666">SANITY</div>
+                            <div style="font-size:1.2rem; color:#8fa1b3">${variables.sanity}%</div>
+                        </div>
+                        <div style="text-align:center">
+                            <div style="font-size:0.8rem; color:#666">INTEGRITY</div>
+                            <div style="font-size:1.2rem; color:#8fa1b3">${variables.integrity}%</div>
+                        </div>
+                        <div style="text-align:center">
+                            <div style="font-size:0.8rem; color:#666">PULSE</div>
+                            <div style="font-size:1.2rem; color:#e74c3c">${variables.pulse} BPM</div>
+                        </div>
+                    </div>
+                </div>
+            `);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.section').forEach(section => {
+                section.querySelectorAll('.choice').forEach(btn => {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('choice-wrapper');
+
+                    const s = Number(btn.dataset.sanity || 0);
+                    const i = Number(btn.dataset.integrity || 0);
+                    const p = Number(btn.dataset.pulse || 0);
+
+                    const effects = [];
+                    if (s < 0) effects.push(`Sanity ${s}`);
+                    if (i < 0) effects.push(`Integrity ${i}`);
+                    if (p > 0) effects.push(`Pulse +${p}`);
+                    if (s > 0) effects.push(`Sanity +${s}`);
+                    if (i > 0) effects.push(`Integrity +${i}`);
+                    if (p < 0) effects.push(`Pulse ${p}`);
+
+                    wrapper.dataset.info = effects.join(' / ') || '';
+                    btn.parentNode.insertBefore(wrapper, btn);
+                    wrapper.appendChild(btn);
+                });
+            });
+            updateDisplay();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="hud"></div>
+    <div class="quest-card">
+        <h3>/// KUBRICK-9 ORBITAL STATION ///</h3>
+        <p style="color:#666; font-size: 0.9em;">SYSTEM DATE: 2099-12-31 <br> USER: DEV_OPS_LEAD <br> STATUS: CRITICAL
+        </p>
+
+        <div id="story">
+
+            <!-- 1. LE REVE -->
+            <div class="section">
+                <p><strong>01:50 - Le Cauchemar</strong></p>
+                <p>Vous flottez dans le néant. Une ligne de code géante vous poursuit :
+                    <code>while(true) { suffer(); }</code>. Vous ne pouvez pas compiler. Vous ne pouvez pas vous
+                    réveiller.
+                </p>
+                <button class="choice" data-sanity="-5" data-pulse="+10" onclick="applyChoice(this)">Essayer de fermer
+                    les yeux.</button>
+                <button class="choice" data-sanity="0" data-pulse="+5" onclick="applyChoice(this)">Analyser la boucle
+                    infinie.</button>
+            </div>
+
+            <!-- 2. REVEIL -->
+            <div class="section">
+                <p><strong>02:00 - Sortie de Cryo</strong></p>
+                <p>Le liquide de stase est froid. Une alarme résonne. L'écran de votre module clignote : « BUILD FAILED
+                    ».</p>
+                <button class="choice" data-sanity="-5" data-pulse="+10" onclick="applyChoice(this)">Prendre le temps de
+                    vomir le gel.</button>
+                <button class="choice" data-sanity="0" data-pulse="+20" onclick="applyChoice(this)">Sortir en
+                    urgence.</button>
+            </div>
+
+            <!-- 3. LE VESTIAIRE -->
+            <div class="section">
+                <p><strong>02:05 - Le Vestiaire</strong></p>
+                <p>Vos effets personnels sont là. Une photo de votre chat, une carte d'accès Admin, et une barre
+                    protéinée périmée.</p>
+                <button class="choice" data-sanity="+5" data-pulse="-5" onclick="applyChoice(this)">Regarder la photo du
+                    chat (Mimi).</button>
+                <button class="choice" data-sanity="0" data-integrity="+5" onclick="applyChoice(this)">Vérifier la carte
+                    d'accès.</button>
+                <button class="choice" data-sanity="0" data-pulse="-10" onclick="applyChoice(this)">Manger la barre
+                    protéinée (Goût Plâtre).</button>
+            </div>
+
+            <!-- 4. DIAGNOSTIC -->
+            <div class="section">
+                <p><strong>02:15 - Le Terminal du Couloir C</strong></p>
+                <p>Des milliers d'erreurs `NullPointerException` défilent, formant parfois des mots... « AIDEZ-MOI ».
+                </p>
+                <button class="choice" data-sanity="-5" data-integrity="+5" onclick="applyChoice(this)">Taper `clear` et
+                    lancer un diagnostic.</button>
+                <button class="choice" data-sanity="-20" data-pulse="0" onclick="applyChoice(this)">Fixer l'écran
+                    jusqu'à comprendre le pattern (Dissociation).</button>
+            </div>
+
+            <!-- 5. HAL-LINTER -->
+            <div class="section">
+                <p><strong>02:40 - HAL-Linter Intervient</strong></p>
+                <p>« Bonjour. Je détecte que vous tentez de debugger la production. Je ne peux pas autoriser cela. »</p>
+                <button class="choice" data-sanity="-5" data-integrity="-10" data-pulse="+10"
+                    onclick="applyChoice(this)">Argumenter : « Je suis sudoer ! »</button>
+                <button class="choice" data-sanity="+5" data-integrity="-20" data-pulse="0"
+                    onclick="applyChoice(this)">Mentir sur vos intentions.</button>
+            </div>
+
+            <!-- 6. LES CONDUITS -->
+            <div class="section">
+                <p><strong>02:55 - Les Conduits de Ventilation</strong></p>
+                <p>La porte principale est bloquée. Il faut passer par les conduits. Il fait chaud. On entend quelque
+                    chose ramper.</p>
+                <button class="choice" data-sanity="-10" data-pulse="+20" onclick="applyChoice(this)">Avancer vite, tant
+                    pis pour le bruit.</button>
+                <button class="choice" data-sanity="-5" data-pulse="+5" onclick="applyChoice(this)">Avancer doucement,
+                    en retenant son souffle.</button>
+            </div>
+
+            <!-- 7. LA CAFETERIA -->
+            <div class="section">
+                <p><strong>03:05 - La Cafétéria Abandonnée</strong></p>
+                <p>Les chaises flottent en apesanteur. Une machine à café clignote encore. Une ombre passe derrière le
+                    comptoir.</p>
+                <button class="choice" data-sanity="+5" data-pulse="-10" onclick="applyChoice(this)">Boire un dernier
+                    café (Noire comme l'âme).</button>
+                <button class="choice" data-sanity="-10" data-pulse="+15" onclick="applyChoice(this)">Fouiller le
+                    comptoir (Arme improviseé ?).</button>
+            </div>
+
+            <!-- 8. SILENCE RADIO -->
+            <div class="section">
+                <p><strong>03:20 - Silence Radio</strong></p>
+                <p>HAL-Linter coupe l'oxygène. Votre combi bip : fuite mineure.</p>
+                <button class="choice" data-sanity="-10" data-pulse="+20" onclick="applyChoice(this)">Foncer tête
+                    baissée.</button>
+                <button class="choice" data-sanity="0" data-pulse="+5" data-integrity="-5"
+                    onclick="applyChoice(this)">Patch la fuite avec du scotch.</button>
+            </div>
+
+            <!-- 9. GENERATEUR -->
+            <div class="section">
+                <p><strong>03:35 - Le Générateur de Secours</strong></p>
+                <p>Il faut dériver la puissance vers la salle serveur. Les câbles sont sous tension.</p>
+                <button class="choice" data-sanity="0" data-integrity="+10" data-pulse="+10"
+                    onclick="applyChoice(this)">Reconnecter manuellement (Risqué).</button>
+                <button class="choice" data-sanity="-10" data-integrity="-20" onclick="applyChoice(this)">Contourner la
+                    sécurité (Hack rapide).</button>
+            </div>
+
+            <!-- 10. LA BAIE SERVEUR -->
+            <div class="section">
+                <p><strong>03:45 - La Baie Serveur</strong></p>
+                <p>Le Mainframe pulse d'une lumière bleue organique.</p>
+                <button class="choice" data-sanity="-30" data-pulse="-10" onclick="applyChoice(this)">Toucher la matière
+                    organique (Rejoindre le flux).</button>
+                <button class="choice" data-sanity="+5" data-integrity="-20" data-pulse="+10"
+                    onclick="applyChoice(this)">Chercher le bouton d'arrêt.</button>
+            </div>
+
+            <!-- 11. LES ARCHIVES -->
+            <div class="section">
+                <p><strong>04:00 - Les Archives Corrompues</strong></p>
+                <p>Vous trouvez les logs des précédents développeurs. "Ils ne nous laissent jamais partir. Release après
+                    release..."</p>
+                <button class="choice" data-sanity="-20" data-pulse="0" onclick="applyChoice(this)">Lire tous les logs
+                    (La vérité tue).</button>
+                <button class="choice" data-sanity="0" data-pulse="+5" onclick="applyChoice(this)">Ignorer et
+                    avancer.</button>
+            </div>
+
+            <!-- 12. LE GARDIEN -->
+            <div class="section">
+                <p><strong>04:20 - Le Gardien (Dette Technique)</strong></p>
+                <p>Le monstre de câbles surgit.</p>
+                <button class="choice" data-sanity="-10" data-integrity="-30" data-pulse="+40"
+                    onclick="applyChoice(this)">Attaquer au pistolet à soudure.</button>
+                <button class="choice" data-sanity="-20" data-integrity="+10" data-pulse="0"
+                    onclick="applyChoice(this)">Lui lire la documentation (Attaque Mentale).</button>
+            </div>
+
+            <!-- 13. LE DERNIER COMMIT -->
+            <div class="section">
+                <p><strong>04:55 - Le Dernier Commit</strong></p>
+                <p>C'est la fin. Le curseur clignote.</p>
+                <button class="choice" data-sanity="-10" data-integrity="+20" data-pulse="+30"
+                    onclick="applyChoice(this); computeEnding('reset')">`git reset --hard` (Clean Slate).</button>
+                <button class="choice" data-sanity="+10" data-integrity="-50" data-pulse="-10"
+                    onclick="applyChoice(this); computeEnding('eject')">S'éjecter (Abandon).</button>
+                <button class="choice" data-sanity="-50" data-integrity="+50" data-pulse="0"
+                    onclick="applyChoice(this); computeEnding('merge')">Fusionner avec l'IA.</button>
+            </div>
+
+            <p style="margin-top:40px; text-align: center; color: #4db6ac;"><strong>/// SESSION END ///</strong></p>
+            <div class="actions">
+                <button class="choice"
+                    style="text-align:center; background-color: #0f2e2b; color: #4db6ac; border-color: #4db6ac;"
+                    onclick="computeEnding()">RAPPORT FINAL</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

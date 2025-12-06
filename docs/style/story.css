@@ -1,0 +1,86 @@
+body {
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+    color: #0b2545;
+}
+
+.quest-card {
+    max-width: 700px;
+    margin: 18px auto;
+    padding: 18px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #fffdf6, #f0fbff);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+h3 {
+    margin: 0 0 10px;
+    font-size: 1.15rem;
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.choice-wrapper {
+    position: relative;
+    margin: 8px 0;
+    display: block;
+}
+
+.choice {
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 0;
+    cursor: pointer;
+    font-weight: 600;
+    background: #e6eef7;
+    color: #08324a;
+    text-align: left;
+    transition: 0.2s;
+}
+
+.choice:hover {
+    background: #d0e2f0;
+}
+
+.choice.selected {
+    background: #b9d8f5;
+    color: #0b2545;
+    border: 1px solid #689cca;
+}
+
+.choice[disabled] {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* tooltip au survol */
+.choice-wrapper::after {
+    content: attr(data-info);
+    position: absolute;
+    top: -30px;
+    left: 0;
+    background: #0b2545;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.choice-wrapper:hover::after {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.actions {
+    margin-top: 12px;
+}

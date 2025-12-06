@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>La plume dont vous êtes le Héros</title>
+
+    <link rel="stylesheet" href="style/story.css">
+
+    <script>
+        // variables globales
+        const variables = { stress: 4, prepa: 3, batterie: 7 };
+
+        function applyChoice(btn) {
+            // mise à jour des variables
+            variables.stress += Number(btn.dataset.stress || 0);
+            variables.prepa += Number(btn.dataset.prepa || 0);
+            variables.batterie += Number(btn.dataset.batterie || 0);
+
+            // désactivation des autres choix dans la section
+            const section = btn.closest('.section');
+            section.querySelectorAll('.choice').forEach(b => {
+                if (b !== btn) {
+                    b.disabled = true;
+                    b.classList.remove('selected');
+                }
+            });
+
+            // surbrillance du bouton cliqué
+            btn.disabled = true;
+            btn.classList.add('selected');
+        }
+
+        function computeEnding() {
+            let title = 'Fin classique';
+            let text = 'Tu as terminé ton aventure éditoriale de manière classique.';
+
+            if (variables.stress >= 7) {
+                title = '🔥 Burn-out Éditorial';
+                text = 'Tu as trop poussé, tu repars épuisé·e mais avec la légende qui va avec.';
+            } else if (variables.prepa >= 8) {
+                title = '🧠 L’Auteur Possédé';
+                text = 'Tu as préparé à fond et tout est presque parfait. Bravo !';
+            } else if (variables.batterie >= 10) {
+                title = '☕ La Plume Zen';
+                text = 'Tu as géré ton énergie et ton réseau avec brio. Inspiré·e et léger·ère.';
+            }
+
+            const story = document.getElementById('story');
+
+            // Supprimer l’ancienne fin si elle existe
+            const oldEnding = document.getElementById('ending-block');
+            if (oldEnding) oldEnding.remove();
+
+            // Ajouter la nouvelle fin
+            story.insertAdjacentHTML('beforeend', `
+                <div id="ending-block" style="margin-top:14px; padding:12px; border-radius:8px; background:#fff; border:1px solid #e6eef7;">
+                    <div style="font-weight:700; margin-bottom:6px">Résultat : ${title}</div>
+                    <div>${text}</div>
+                    <div style="margin-top:10px;">
+                        <span style="display:inline-block; padding:6px 8px; border-radius:6px; font-weight:700; font-size:0.85rem; background:#eef8ff;color:#0b5fa8">Stress: ${variables.stress}</span>
+                        <span style="display:inline-block; padding:6px 8px; border-radius:6px; font-weight:700; font-size:0.85rem; background:#fff7ea;color:#a66f00; margin-left:6px">Prépa: ${variables.prepa}</span>
+                        <span style="display:inline-block; padding:6px 8px; border-radius:6px; font-weight:700; font-size:0.85rem; background:#f0fff4;color:#0a7a2e; margin-left:6px">Batterie sociale: ${variables.batterie}</span>
+                    </div>
+                </div>
+            `);
+        }
+
+        // ajouter infobulles dynamiques après chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.section').forEach(section => {
+                section.querySelectorAll('.choice').forEach(btn => {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('choice-wrapper');
+
+                    const s = Number(btn.dataset.stress || 0);
+                    const p = Number(btn.dataset.prepa || 0);
+                    const b = Number(btn.dataset.batterie || 0);
+
+                    const effects = [];
+                    if (s !== 0) effects.push(`Stress ${s > 0 ? "+" + s : s}`);
+                    if (p !== 0) effects.push(`Prépa ${p > 0 ? "+" + p : p}`);
+                    if (b !== 0) effects.push(`Batterie ${b > 0 ? "+" + b : b}`);
+
+                    wrapper.dataset.info = effects.join(' · ') || 'Aucun effet';
+
+                    // remplacer le bouton par le wrapper
+                    btn.parentNode.insertBefore(wrapper, btn);
+                    wrapper.appendChild(btn);
+                });
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div class="quest-card">
+        <h3>🖋️ La plume dont vous êtes le Héros — Quelle sera votre fin éditoriale ?</h3>
+
+        <div id="story">
+            <p>Tu viens de poser ton sac dans le hall d’entrée du Palais des Congrès. Il est 8 h 12. Ton talk est demain
+                à 14 h 10 en salle Rhône. Tu as 28 heures 58 minutes avant le jugement dernier.</p>
+
+            <div class="section">
+                <p><strong>1. Hall d’entrée, 8 h 12</strong></p>
+                <button class="choice" data-stress="0" data-prepa="1" data-batterie="0"
+                    onclick="applyChoice(this)">Foncer direct en salle Rhône pour tester la démo</button>
+                <button class="choice" data-stress="0" data-prepa="0" data-batterie="1"
+                    onclick="applyChoice(this)">Prendre un café + croissant et faire semblant d’être sociable</button>
+                <button class="choice" data-stress="0" data-prepa="0" data-batterie="2"
+                    onclick="applyChoice(this)">Aller poser tes affaires au speaker lounge</button>
+            </div>
+
+            <div class="section">
+                <p><strong>2. Test technique – salle encore vide</strong></p>
+                <button class="choice" data-stress="2" data-prepa="3" data-batterie="0"
+                    onclick="applyChoice(this)">Refaire en 4/3</button>
+                <button class="choice" data-stress="1" data-prepa="0" data-batterie="0"
+                    onclick="applyChoice(this)">Forcer le 16/9 avec des barres noires</button>
+            </div>
+
+            <p><strong>…et ainsi de suite pour chaque section…</strong></p>
+
+            <p><strong>Dernière étape — Découvrir ta fin :</strong></p>
+            <div class="actions">
+                <button class="choice" onclick="computeEnding()">✨ Découvrir ma fin</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

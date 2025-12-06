@@ -1,0 +1,166 @@
+/* Main Terminal Theme */
+body {
+    background-color: #0b0c0d;
+    /* Very dark grey/black */
+    color: #c0c5ce;
+    /* Off-white/light grey for general text */
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.6;
+    font-size: 16px;
+}
+
+/* Container */
+.quest-card {
+    max-width: 800px;
+    margin: 40px auto;
+    background-color: #121415;
+    border: 1px solid #333;
+    padding: 30px;
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Headers */
+h3 {
+    color: #4db6ac;
+    /* Teal/Cyan-ish for headers */
+    border-bottom: 1px solid #333;
+    padding-bottom: 10px;
+    margin-top: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Story Text */
+#story p {
+    margin-bottom: 20px;
+}
+
+strong {
+    color: #fff;
+}
+
+/* Interactive Elements */
+.section {
+    margin-bottom: 30px;
+    padding-left: 15px;
+    border-left: 2px solid #333;
+    transition: border-color 0.3s;
+}
+
+.section:hover {
+    border-left-color: #4db6ac;
+}
+
+/* Buttons */
+.choice {
+    display: block;
+    width: 100%;
+    padding: 12px 15px;
+    margin: 10px 0;
+    text-align: left;
+    background-color: #1e2124;
+    color: #8fa1b3;
+    border: 1px solid #333;
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+}
+
+.choice:hover:not(:disabled) {
+    background-color: #262b30;
+    color: #4db6ac;
+    border-color: #4db6ac;
+    padding-left: 20px;
+    /* Slight movement on hover */
+}
+
+.choice:active:not(:disabled) {
+    background-color: #1e2124;
+    transform: translateY(1px);
+}
+
+.choice:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    border-color: transparent;
+}
+
+.choice.selected {
+    background-color: #0f2e2b;
+    /* Dark teal background */
+    color: #4db6ac;
+    border-color: #4db6ac;
+    font-weight: bold;
+    opacity: 1;
+}
+
+/* Info Wrapper */
+.choice-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.choice-wrapper::after {
+    content: attr(data-info);
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.75rem;
+    color: #555;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    opacity: 0;
+}
+
+.choice-wrapper:hover::after {
+    opacity: 1;
+}
+
+/* Endings */
+#ending-block {
+    animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* HUD */
+#hud {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: rgba(11, 12, 13, 0.9);
+    border: 1px solid #333;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    z-index: 9999;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 150px;
+}
+
+#hud div {
+    display: flex;
+    justify-content: space-between;
+}
+
+#hud span:last-child {
+    font-weight: bold;
+    color: #4db6ac;
+}
