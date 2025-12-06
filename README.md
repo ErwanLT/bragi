@@ -10,8 +10,8 @@ Ce projet rend hommage à cet art du récit en proposant des expériences narrat
 ## Histoires disponibles
 Vous pouvez accéder aux histoires via notre [page d'accueil](https://erwanlt.github.io/bragi/) (ou localement via `docs/index.html`).
 
-*   **Histoire d'Horreur** : Une aventure frissonnante dans le monde du développement logiciel.
-*   **Histoire Classique** : Une narration interactive traditionnelle.
+*   **Section Horreur** : Une collection d'histoires frissonnantes, dont *KUBRICK-9 ORBITAL STATION*.
+*   **Section Fantasy** : Des aventures épiques, comme *La Quête du Code Ancestral*.
 
 ## Structure du projet
 Le site est hébergé via GitHub Pages depuis le dossier `docs/`.
