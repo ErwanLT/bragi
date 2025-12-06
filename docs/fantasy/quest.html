@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Quête du Code Ancestral</title>
+    <link rel="stylesheet" href="../style/fantasy.css">
+    <script>
+        const variables = { mana: 50, xp: 0, karma: 50 };
+
+        function updateDisplay() {
+            const hud = document.getElementById('hud');
+            if (hud) {
+                hud.innerHTML = `
+                    <div>✨ MANA: ${variables.mana}</div>
+                    <div>⚔️ XP: ${variables.xp}</div>
+                    <div>⚖️ KARMA: ${variables.karma}</div>
+                `;
+            }
+        }
+
+        function applyChoice(btn) {
+            variables.mana += Number(btn.dataset.mana || 0);
+            variables.xp += Number(btn.dataset.xp || 0);
+            variables.karma += Number(btn.dataset.karma || 0);
+
+            // Clamp
+            variables.mana = Math.max(0, Math.min(100, variables.mana));
+            variables.karma = Math.max(0, Math.min(100, variables.karma));
+
+            const section = btn.closest('.section');
+            section.querySelectorAll('.choice').forEach(b => {
+                if (b !== btn) {
+                    b.disabled = true;
+                    b.classList.remove('selected');
+                }
+            });
+            btn.disabled = true;
+            btn.classList.add('selected');
+
+            updateDisplay();
+        }
+
+        function computeEnding() {
+            let title = 'Fin Inconnue';
+            let text = 'Le destin est trouble...';
+
+            // Logic for endings
+            if (variables.mana <= 0) {
+                title = '👻 Fantôme du Commit (Burnout)';
+                text = 'Votre énergie vitale s\'est dissipée. Vous errez désormais dans le git log, un spectre hantant les Pull Requests abandonnées. Vous avez oublié de prendre des pauses.';
+            } else if (variables.xp >= 80 && variables.karma >= 70) {
+                title = '🧙 Grand Archimage (CTO Légendaire)';
+                text = 'Vous avez vaincu le Dragon Monolithique avec élégance et sagesse. Le Code Ancestral est propre, documenté, et testé. Les bardes chanteront vos louanges sur HackerNews.';
+            } else if (variables.xp >= 60 && variables.karma <= 30) {
+                title = '💀 Nécromancien du Spaghetti';
+                text = 'Le Dragon est mort, mais à quel prix ? Votre code est un labyrinthe de hacks obscurs et de magie noire. Ça marche, mais personne n\'ose relire votre travail. Vous régnez sur un royaume de Chaos.';
+            } else {
+                title = '🛡️ Garde du Donjon (Le "Ça Passe")';
+                text = 'Vous avez survécu. Le projet est en prod. Ce n\'est pas parfait, il y a des bugs, mais le client paie. Vous êtes un aventurier honnête, ni héros ni vilain.';
+            }
+
+            const story = document.getElementById('story');
+            const oldEnding = document.getElementById('ending-block');
+            if (oldEnding) oldEnding.remove();
+
+            story.insertAdjacentHTML('beforeend', `
+                <div id="ending-block" class="section" style="border-left-color: var(--accent-magic);">
+                    <h2 style="color: var(--accent-magic);">${title}</h2>
+                    <p>${text}</p>
+                    <div style="margin-top: 2rem; font-weight: bold;">
+                        Stats Finales: Mana ${variables.mana} | XP ${variables.xp} | Karma ${variables.karma}
+                    </div>
+                </div>
+            `);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.section').forEach(section => {
+                section.querySelectorAll('.choice').forEach(btn => {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('choice-wrapper');
+                    const m = Number(btn.dataset.mana || 0);
+                    const x = Number(btn.dataset.xp || 0);
+                    const k = Number(btn.dataset.karma || 0);
+
+                    const effects = [];
+                    if (m !== 0) effects.push(`Mana ${m > 0 ? '+' + m : m}`);
+                    if (x !== 0) effects.push(`XP ${x > 0 ? '+' + x : x}`);
+                    if (k !== 0) effects.push(`Karma ${k > 0 ? '+' + k : k}`);
+
+                    wrapper.dataset.info = effects.join(' / ') || 'Aucun effet';
+                    btn.parentNode.insertBefore(wrapper, btn);
+                    wrapper.appendChild(btn);
+                });
+            });
+            updateDisplay();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="hud"></div>
+    <div class="quest-card">
+        <h3>⚔️ La Quête du Code Ancestral ⚔️</h3>
+        <p style="text-align: center; font-style: italic; margin-bottom: 2rem;">"Celui qui maîtrise le Legacy, maîtrise
+            le Monde."</p>
+
+        <div id="story">
+
+            <!-- 1. ENTREE -->
+            <div class="section">
+                <p><strong>1. L'Entrée du Donjon "Legacy"</strong></p>
+                <p>Vous vous tenez devant une porte massive couverte de toiles d'araignée. Une inscription gravée dit :
+                    "Dernière mise à jour : 2003". Un vieux parchemin (README.txt) est cloué dessus.</p>
+                <button class="choice" data-mana="-5" data-xp="+5" data-karma="+5" onclick="applyChoice(this)">Lire
+                    attentivement le parchemin (Documentation).</button>
+                <button class="choice" data-mana="0" data-xp="+0" data-karma="-5" onclick="applyChoice(this)">Enfoncer
+                    la porte en hurlant "DEPLOY TO PROD!".</button>
+            </div>
+
+            <!-- 2. GOBELIN -->
+            <div class="section">
+                <p><strong>2. Le Gobelin Stagiaire</strong></p>
+                <p>Un petit gobelin nerveux bloque le couloir. Il tient une Pull Request tremblante. "S'il vous plaît,
+                    messire, can I merge? J'ai peur de casser la prod."</p>
+                <button class="choice" data-mana="-5" data-xp="+10" data-karma="+10" onclick="applyChoice(this)">Faire
+                    une Code Review bienveillante et corriger ses erreurs.</button>
+                <button class="choice" data-mana="0" data-xp="+0" data-karma="-10" onclick="applyChoice(this)">Lui dire
+                    "LGTM" sans regarder et courir.</button>
+            </div>
+
+            <!-- 3. PONT -->
+            <div class="section">
+                <p><strong>3. Le Pont des Tests Unitaires</strong></p>
+                <p>Un gouffre sans fin barre la route. Le pont est constitué de dalles rouges et vertes. Certaines
+                    semblent fragiles (Flaky Tests).</p>
+                <button class="choice" data-mana="-5" data-xp="+10" data-karma="+10" onclick="applyChoice(this)">Réparer
+                    les dalles rouges avant de traverser.</button>
+                <button class="choice" data-mana="+10" data-xp="0" data-karma="-20" onclick="applyChoice(this)">Utiliser
+                    le sortilège `@Ignore` et sauter par-dessus.</button>
+            </div>
+
+            <!-- 4. FORET -->
+            <div class="section">
+                <p><strong>4. La Forêt des Spaghettis</strong></p>
+                <p>Des lianes de code s'entremêlent partout. Des `GOTO` pendent des arbres comme des serpents venimeux.
+                </p>
+                <button class="choice" data-mana="-15" data-xp="+15" data-karma="+15" onclick="applyChoice(this)">Sortir
+                    l'épée du Refactoring et tailler un chemin propre.</button>
+                <button class="choice" data-mana="-5" data-xp="+5" data-karma="-5" onclick="applyChoice(this)">Se
+                    faufiler en ajoutant une condition `if (true)` supplémentaire.</button>
+            </div>
+
+            <!-- 5. AUBERGE -->
+            <div class="section">
+                <p><strong>5. L'Auberge du Stack Overflow</strong></p>
+                <p>Un refuge lumineux. Des voyageurs s'échangent des solutions copiées-collées. L'aubergiste vous
+                    propose un breuvage.</p>
+                <button class="choice" data-mana="+40" data-xp="0" data-karma="0" onclick="applyChoice(this)">Boire la
+                    Potion de Caféine (Repos long).</button>
+                <button class="choice" data-mana="+20" data-xp="+10" data-karma="0" onclick="applyChoice(this)">Écouter
+                    les légendes des anciens (Lire les top answers).</button>
+            </div>
+
+            <!-- 6. BASE DE DONNEES -->
+            <div class="section">
+                <p><strong>6. Les Cavernes de la Base de Données</strong></p>
+                <p>Un dragon de cristal dort sur un tas de données non indexées. Il grogne en SQL.</p>
+                <button class="choice" data-mana="-10" data-xp="+15" data-karma="+5" onclick="applyChoice(this)">Lancer
+                    un sort d'Indexation Silencieuse (`CREATE INDEX CONCURRENTLY`).</button>
+                <button class="choice" data-mana="0" data-xp="-5" data-karma="-10" onclick="applyChoice(this)">Fuir
+                    pendant qu'il fait un `FULL TABLE SCAN`.</button>
+            </div>
+
+            <!-- 7. ARCHITECTURE -->
+            <div class="section">
+                <p><strong>7. Le Sorcier de l'Architecture</strong></p>
+                <p>Un vieux mage en robe blanche apparaît. "Ce donjon est obsolète ! Nous devrions tout réécrire en Rust
+                    ou en Go !"</p>
+                <button class="choice" data-mana="-20" data-xp="+20" data-karma="0" onclick="applyChoice(this)">Débattre
+                    avec lui pendant des heures (Perte de temps mais gain de savoir).</button>
+                <button class="choice" data-mana="0" data-xp="0" data-karma="+5" onclick="applyChoice(this)">Lui dire
+                    "On verra ça en Q4" et continuer.</button>
+            </div>
+
+            <!-- 8. MIROIR -->
+            <div class="section">
+                <p><strong>8. Le Miroir de la Rétrospection</strong></p>
+                <p>Vous voyez votre reflet... mais il code mal. Il commite directement sur main.</p>
+                <button class="choice" data-mana="-5" data-xp="+5" data-karma="+10" onclick="applyChoice(this)">Accepter
+                    ses erreurs passées et promettre de s'améliorer.</button>
+                <button class="choice" data-mana="-10" data-xp="0" data-karma="-5" onclick="applyChoice(this)">Briser le
+                    miroir de rage.</button>
+            </div>
+
+            <!-- 9. ARMURERIE -->
+            <div class="section">
+                <p><strong>9. L'Armurerie Open Source</strong></p>
+                <p>Des armes légendaires sont au mur. Vous pouvez en prendre une pour le combat final.</p>
+                <button class="choice" data-mana="-5" data-xp="+10" data-karma="0" onclick="applyChoice(this)">Prendre
+                    le Bouclier Docker (Isolation).</button>
+                <button class="choice" data-mana="-5" data-xp="+10" data-karma="-5" onclick="applyChoice(this)">Prendre
+                    la Hache `rm -rf` (Destruction).</button>
+            </div>
+
+            <!-- 10. PORTE DEPLOIEMENT -->
+            <div class="section">
+                <p><strong>10. La Porte du Déploiement</strong></p>
+                <p>Le Gardien CI/CD barre la route. "Montre-moi tes badges de couverture de code !"</p>
+                <button class="choice" data-mana="-5" data-xp="+5" data-karma="+5" onclick="applyChoice(this)">Montrer
+                    fièrement un badge à 85%.</button>
+                <button class="choice" data-mana="0" data-xp="+5" data-karma="-15" onclick="applyChoice(this)">Utiliser
+                    un faux badge Photoshop.</button>
+            </div>
+
+            <!-- 11. DRAGON -->
+            <div class="section">
+                <p><strong>11. Le Dragon Monolithique</strong></p>
+                <p>Il est immense. Ses écailles sont faites de classes Java de 5000 lignes. Il crache du XML.</p>
+                <button class="choice" data-mana="-30" data-xp="+30" data-karma="+20"
+                    onclick="applyChoice(this)">Attaque "Strangler Fig Pattern" (Remplacement progressif).</button>
+                <button class="choice" data-mana="-10" data-xp="+10" data-karma="-20"
+                    onclick="applyChoice(this)">Attaque "Gros Patch Sale" (Quick Fix).</button>
+                <button class="choice" data-mana="-50" data-xp="0" data-karma="0"
+                    onclick="applyChoice(this)">Incantation ultime : "REWRITE FROM SCRATCH" (Risque mortel).</button>
+            </div>
+
+            <!-- 12. TRESOR -->
+            <div class="section">
+                <p><strong>12. Le Trésor (La Production)</strong></p>
+                <p>Le dragon est vaincu (ou apaisé). Le coffre de la Prod est devant vous.</p>
+                <button class="choice" data-mana="0" data-xp="+5" data-karma="+5"
+                    onclick="applyChoice(this); computeEnding()">Ouvrir le coffre et livrer la valeur.</button>
+            </div>
+
+        </div>
+
+        <div class="footer-nav"
+            style="margin-top: 3rem; border-top: 1px solid var(--border-color); padding-top: 1rem; text-align: center;">
+            <a href="../fantasy.html">&larr; Retour au Grimoire</a> |
+            <a href="../index.html">Bibliothèque Principale</a>
+        </div>
+    </div>
+</body>
+
+</html>

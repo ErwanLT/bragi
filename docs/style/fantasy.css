@@ -1,0 +1,185 @@
+/* Fantasy Theme Styles */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap');
+
+:root {
+    --bg-parchment: #fdf6e3;
+    --text-ink: #2c241b;
+    --accent-gold: #d4af37;
+    --accent-magic: #8e44ad;
+    --border-color: #8b7355;
+    --font-heading: 'Cinzel', serif;
+    --font-body: 'Lora', serif;
+}
+
+body {
+    background-color: #e6dcc3;
+    background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+    color: var(--text-ink);
+    font-family: var(--font-body);
+    line-height: 1.8;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 2rem;
+    align-items: center;
+}
+
+.quest-card {
+    background-color: var(--bg-parchment);
+    max-width: 800px;
+    width: 100%;
+    padding: 3rem;
+    border-radius: 4px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1), inset 0 0 60px rgba(139, 115, 85, 0.1);
+    border: 3px double var(--border-color);
+    position: relative;
+}
+
+.quest-card::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 1px solid var(--border-color);
+    pointer-events: none;
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-heading);
+    color: var(--text-ink);
+    text-align: center;
+}
+
+h3 {
+    border-bottom: 2px solid var(--accent-gold);
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+}
+
+.section {
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.4);
+    border-left: 4px solid var(--accent-gold);
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+.choice {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-ink);
+    padding: 1rem;
+    margin: 0.5rem 0;
+    cursor: pointer;
+    font-family: var(--font-heading);
+    font-weight: 700;
+    transition: all 0.3s ease;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.choice:hover:not(:disabled) {
+    background: var(--text-ink);
+    color: var(--bg-parchment);
+    border-color: var(--text-ink);
+}
+
+.choice:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    border-style: dashed;
+}
+
+.choice.selected {
+    background: var(--accent-gold);
+    color: white;
+    border-color: var(--accent-gold);
+    opacity: 1;
+}
+
+.choice-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.choice-wrapper::after {
+    content: attr(data-info);
+    position: absolute;
+    top: -10px;
+    right: 10px;
+    background: var(--bg-parchment);
+    padding: 0 5px;
+    font-size: 0.75rem;
+    color: var(--accent-magic);
+    font-family: var(--font-heading);
+    border: 1px solid var(--accent-magic);
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+
+.choice-wrapper:hover::after {
+    opacity: 1;
+}
+
+#hud {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--text-ink);
+    color: var(--bg-parchment);
+    padding: 1rem;
+    border-radius: 8px;
+    font-family: var(--font-heading);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    border: 2px solid var(--accent-gold);
+}
+
+#hud div {
+    margin: 5px 0;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #e6dcc3;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.footer-nav a {
+    color: var(--border-color);
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.footer-nav a:hover {
+    color: var(--accent-magic);
+}
