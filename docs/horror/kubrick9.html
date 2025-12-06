@@ -25,45 +25,47 @@
             const sections = Array.from(document.querySelectorAll('.section'));
             const index = sections.indexOf(section);
 
-            // Revert previous choice if exists
-            if (choices[index]) {
-                const prev = choices[index];
-                variables.sanity -= prev.sanity;
-                variables.integrity -= prev.integrity;
-                variables.pulse -= prev.pulse;
-            }
-
             // Get new values
             const s = Number(btn.dataset.sanity || 0);
             const i = Number(btn.dataset.integrity || 0);
             const p = Number(btn.dataset.pulse || 0);
 
-            // Apply new values
-            variables.sanity += s;
-            variables.integrity += i;
-            variables.pulse += p;
-
             // Store choice
             choices[index] = { sanity: s, integrity: i, pulse: p };
 
-            // Clamp values
-            variables.sanity = Math.max(0, Math.min(100, variables.sanity));
-            variables.integrity = Math.max(0, Math.min(100, variables.integrity));
-
-            // Allow Pulse to go above 100 but not below 30 (unless dead)
-            variables.pulse = Math.max(30, variables.pulse);
-
-            // section is already defined above
+            // Visual update
             section.querySelectorAll('.choice').forEach(b => {
-                if (b !== btn) {
-                    b.disabled = true;
-                    b.classList.remove('selected');
-                }
+                b.classList.remove('selected');
             });
-            btn.disabled = true;
             btn.classList.add('selected');
 
-            // Visual feedback
+            recalculateState();
+        }
+
+        function recalculateState() {
+            // Reset to initial
+            variables.sanity = 90;
+            variables.integrity = 90;
+            variables.pulse = 65;
+
+            // Replay choices
+            const sortedIndices = Object.keys(choices).sort((a, b) => Number(a) - Number(b));
+
+            for (const idx of sortedIndices) {
+                const choice = choices[idx];
+                variables.sanity += choice.sanity;
+                variables.integrity += choice.integrity;
+                variables.pulse += choice.pulse;
+
+                // Clamp values
+                variables.sanity = Math.max(0, Math.min(100, variables.sanity));
+                variables.integrity = Math.max(0, Math.min(100, variables.integrity));
+
+                // Allow Pulse to go above 100 but not below 30
+                variables.pulse = Math.max(30, variables.pulse);
+            }
+
+            // Visual feedback (based on current state)
             if (variables.pulse > 140) {
                 document.body.style.boxShadow = "inset 0 0 100px rgba(255,0,0,0.1)";
             } else {
@@ -71,6 +73,9 @@
             }
 
             updateDisplay();
+            // checkProgress is inside applyChoice but often called in updateDisplay? No, unrelated.
+            // Kubrick has no checkProgress function in the provided snippet?
+            // checkProgress removed per user request
         }
 
         function computeEnding(forceEnding) {

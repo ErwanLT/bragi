@@ -26,39 +26,45 @@
             const sections = Array.from(document.querySelectorAll('.section'));
             const index = sections.indexOf(section);
 
-            // Revert previous choice if exists
-            if (choices[index]) {
-                const prev = choices[index];
-                variables.mana -= prev.mana;
-                variables.xp -= prev.xp;
-                variables.karma -= prev.karma;
-            }
-
             // Get new values
             const m = Number(btn.dataset.mana || 0);
             const x = Number(btn.dataset.xp || 0);
             const k = Number(btn.dataset.karma || 0);
 
-            // Apply new values
-            variables.mana += m;
-            variables.xp += x;
-            variables.karma += k;
+            // Store choice
+            choices[index] = { mana: m, xp: x, karma: k };
 
-            // Clamp
-            variables.mana = Math.max(0, Math.min(100, variables.mana));
-            variables.karma = Math.max(0, Math.min(100, variables.karma));
-
-            // section already defined
+            // Visual update
             section.querySelectorAll('.choice').forEach(b => {
-                if (b !== btn) {
-                    b.disabled = true;
-                    b.classList.remove('selected');
-                }
+                b.classList.remove('selected');
             });
-            btn.disabled = true;
             btn.classList.add('selected');
 
+            recalculateState();
+        }
+
+        function recalculateState() {
+            // Reset to initial
+            variables.mana = 50;
+            variables.xp = 0;
+            variables.karma = 50;
+
+            // Replay all choices
+            const sortedIndices = Object.keys(choices).sort((a, b) => Number(a) - Number(b));
+
+            for (const idx of sortedIndices) {
+                const choice = choices[idx];
+                variables.mana += choice.mana;
+                variables.xp += choice.xp;
+                variables.karma += choice.karma;
+
+                // Clamp at each step to match intended game rules
+                variables.mana = Math.max(0, Math.min(100, variables.mana));
+                variables.karma = Math.max(0, Math.min(100, variables.karma));
+            }
+
             updateDisplay();
+            // checkProgress removed per user request
         }
 
         function computeEnding() {

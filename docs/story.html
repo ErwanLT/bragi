@@ -44,23 +44,10 @@
 
             btn.classList.add('selected');
 
-            checkProgress();
+            // checkProgress removed per user request
         }
 
-        function checkProgress() {
-            const sections = document.querySelectorAll('.section');
-            const total = sections.length;
-            const answered = Object.keys(choices).length;
-
-            const finalBtn = document.getElementById('final-btn');
-            if (finalBtn) {
-                const isReady = answered === total;
-                finalBtn.disabled = !isReady;
-                finalBtn.style.opacity = isReady ? "1" : "0.5";
-                finalBtn.style.cursor = isReady ? "pointer" : "not-allowed";
-                finalBtn.title = isReady ? "" : "Répondez à toutes les questions pour découvrir votre fin.";
-            }
-        }
+        // checkProgress function removed
 
         function computeEnding() {
             let title = 'Fin classique';
@@ -124,7 +111,7 @@
                     wrapper.appendChild(btn);
                 });
             });
-            checkProgress(); // Initialize button state
+            // checkProgress removed per user request
         });
     </script>
 </head>
