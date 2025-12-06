@@ -10,25 +10,56 @@
     <script>
         // variables globales
         const variables = { stress: 4, prepa: 3, batterie: 7 };
+        const choices = {};
 
         function applyChoice(btn) {
-            // mise à jour des variables
-            variables.stress += Number(btn.dataset.stress || 0);
-            variables.prepa += Number(btn.dataset.prepa || 0);
-            variables.batterie += Number(btn.dataset.batterie || 0);
-
-            // désactivation des autres choix dans la section
             const section = btn.closest('.section');
+            const sections = Array.from(document.querySelectorAll('.section'));
+            const index = sections.indexOf(section);
+
+            // Revert previous choice
+            if (choices[index]) {
+                const prev = choices[index];
+                variables.stress -= prev.stress;
+                variables.prepa -= prev.prepa;
+                variables.batterie -= prev.batterie;
+            }
+
+            // Apply new choice
+            const s = Number(btn.dataset.stress || 0);
+            const p = Number(btn.dataset.prepa || 0);
+            const b = Number(btn.dataset.batterie || 0);
+
+            variables.stress += s;
+            variables.prepa += p;
+            variables.batterie += b;
+
+            choices[index] = { stress: s, prepa: p, batterie: b };
+
+            // Visual update
             section.querySelectorAll('.choice').forEach(b => {
-                if (b !== btn) {
-                    b.disabled = true;
-                    b.classList.remove('selected');
-                }
+                b.classList.remove('selected');
+                // Allow re-selection
             });
 
-            // surbrillance du bouton cliqué
-            btn.disabled = true;
             btn.classList.add('selected');
+
+            checkProgress();
+        }
+
+        function checkProgress() {
+            const sections = document.querySelectorAll('.section');
+            const total = sections.length;
+            const answered = Object.keys(choices).length;
+
+            const finalBtn = document.getElementById('final-btn');
+            if (finalBtn) {
+                const isReady = answered === total;
+                finalBtn.disabled = !isReady;
+                finalBtn.style.opacity = isReady ? "1" : "0.5";
+                finalBtn.style.cursor = isReady ? "pointer" : "not-allowed";
+                finalBtn.title = isReady ? "" : "Répondez à toutes les questions pour découvrir votre fin.";
+            }
         }
 
         function computeEnding() {
@@ -64,6 +95,10 @@
                     </div>
                 </div>
             `);
+
+            setTimeout(() => {
+                document.getElementById('ending-block').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
         }
 
         // ajouter infobulles dynamiques après chargement
@@ -89,6 +124,7 @@
                     wrapper.appendChild(btn);
                 });
             });
+            checkProgress(); // Initialize button state
         });
     </script>
 </head>
@@ -123,7 +159,7 @@
 
             <p><strong>Dernière étape — Découvrir ta fin :</strong></p>
             <div class="actions">
-                <button class="choice" onclick="computeEnding()">✨ Découvrir ma fin</button>
+                <button class="choice" id="final-btn" onclick="computeEnding()">✨ Découvrir ma fin</button>
             </div>
         </div>
     </div>

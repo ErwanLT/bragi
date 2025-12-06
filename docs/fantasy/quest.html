@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="../style/fantasy.css">
     <script>
         const variables = { mana: 50, xp: 0, karma: 50 };
+        const choices = {}; // Stores chosen values for each section index
 
         function updateDisplay() {
             const hud = document.getElementById('hud');
@@ -21,15 +22,33 @@
         }
 
         function applyChoice(btn) {
-            variables.mana += Number(btn.dataset.mana || 0);
-            variables.xp += Number(btn.dataset.xp || 0);
-            variables.karma += Number(btn.dataset.karma || 0);
+            const section = btn.closest('.section');
+            const sections = Array.from(document.querySelectorAll('.section'));
+            const index = sections.indexOf(section);
+
+            // Revert previous choice if exists
+            if (choices[index]) {
+                const prev = choices[index];
+                variables.mana -= prev.mana;
+                variables.xp -= prev.xp;
+                variables.karma -= prev.karma;
+            }
+
+            // Get new values
+            const m = Number(btn.dataset.mana || 0);
+            const x = Number(btn.dataset.xp || 0);
+            const k = Number(btn.dataset.karma || 0);
+
+            // Apply new values
+            variables.mana += m;
+            variables.xp += x;
+            variables.karma += k;
 
             // Clamp
             variables.mana = Math.max(0, Math.min(100, variables.mana));
             variables.karma = Math.max(0, Math.min(100, variables.karma));
 
-            const section = btn.closest('.section');
+            // section already defined
             section.querySelectorAll('.choice').forEach(b => {
                 if (b !== btn) {
                     b.disabled = true;

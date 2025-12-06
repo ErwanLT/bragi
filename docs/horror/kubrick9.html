@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../style/horror.css">
     <script>
         const variables = { sanity: 90, integrity: 90, pulse: 65 };
+        const choices = {}; // Stores chosen values for each section index
 
         function updateDisplay() {
             const hud = document.getElementById('hud');
@@ -20,9 +21,30 @@
         }
 
         function applyChoice(btn) {
-            variables.sanity += Number(btn.dataset.sanity || 0);
-            variables.integrity += Number(btn.dataset.integrity || 0);
-            variables.pulse += Number(btn.dataset.pulse || 0);
+            const section = btn.closest('.section');
+            const sections = Array.from(document.querySelectorAll('.section'));
+            const index = sections.indexOf(section);
+
+            // Revert previous choice if exists
+            if (choices[index]) {
+                const prev = choices[index];
+                variables.sanity -= prev.sanity;
+                variables.integrity -= prev.integrity;
+                variables.pulse -= prev.pulse;
+            }
+
+            // Get new values
+            const s = Number(btn.dataset.sanity || 0);
+            const i = Number(btn.dataset.integrity || 0);
+            const p = Number(btn.dataset.pulse || 0);
+
+            // Apply new values
+            variables.sanity += s;
+            variables.integrity += i;
+            variables.pulse += p;
+
+            // Store choice
+            choices[index] = { sanity: s, integrity: i, pulse: p };
 
             // Clamp values
             variables.sanity = Math.max(0, Math.min(100, variables.sanity));
@@ -31,7 +53,7 @@
             // Allow Pulse to go above 100 but not below 30 (unless dead)
             variables.pulse = Math.max(30, variables.pulse);
 
-            const section = btn.closest('.section');
+            // section is already defined above
             section.querySelectorAll('.choice').forEach(b => {
                 if (b !== btn) {
                     b.disabled = true;
@@ -291,7 +313,7 @@
 
             <p style="margin-top:40px; text-align: center; color: #4db6ac;"><strong>/// SESSION END ///</strong></p>
             <div class="actions">
-                <button class="choice"
+                <button class="choice" id="report-btn"
                     style="text-align:center; background-color: #0f2e2b; color: #4db6ac; border-color: #4db6ac;"
                     onclick="computeEnding()">RAPPORT FINAL</button>
             </div>
