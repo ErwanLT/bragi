@@ -6,60 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bragi - Histoires de Fantasy</title>
     <meta name="description" content="Aventures fantastiques et code ancestral.">
-    <link rel="stylesheet" href="style/fantasy.css">
+    <link rel="stylesheet" href="style/index.css">
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
     <style>
-        /* Minimal override for the landing page layout reusing fantasy styles */
-        body {
-            justify-content: flex-start;
+        :root {
+            --font-main: 'Cinzel', serif;
+            --accent-color: #8e44ad;
+            /* Magic Purple */
         }
 
-        .card {
-            background: rgba(255, 255, 255, 0.6);
-            padding: 2rem;
-            margin: 1rem;
-            border: 2px solid var(--border-color);
-            text-decoration: none;
-            color: var(--text-ink);
-            width: 300px;
-            transition: transform 0.3s;
-            display: inline-block;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-magic);
-        }
-
-        .card h2 {
-            color: var(--accent-magic);
-        }
-
-        main {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 2rem;
-        }
+        /* Custom override specifically for fantasy cards if needed, 
+           but standardizing implies using the default card structure primarily. 
+           We rely on index.css for layout. */
     </style>
 </head>
 
 <body>
-    <header style="text-align: center; margin-bottom: 2rem;">
-        <h1>Le Grimoire des Codes</h1>
-        <p class="subtitle">Où la magie rencontre la syntaxe.</p>
+    <header>
+        <h1>Histoires de Fantasy</h1>
+        <p class="subtitle">Le Grimoire des Codes. Où la magie rencontre la syntaxe.</p>
     </header>
 
     <main>
         <a href="fantasy/quest.html" class="card">
-            <div style="font-size: 3rem; text-align: center;">📜</div>
+            <div class="card-icon">📜</div>
             <h2>La Quête du Code Ancestral</h2>
             <p>Explorez le donjon "Legacy" et affrontez le Dragon Monolithique.</p>
         </a>
+
+        <!-- Placeholder for future fantasy stories -->
     </main>
 
-    <footer style="margin-top: 4rem; text-align: center;" class="footer-nav">
-        <p><a href="index.html">&larr; Retour à la Bibliothèque (Accueil)</a></p>
+    <footer>
+        <p><a href="index.html" style="color: var(--text-secondary); text-decoration: none;">&larr; Retour à
+                l'accueil</a></p>
+        <p>&copy; 2025 Histoires Bragi.</p>
     </footer>
 </body>
 
