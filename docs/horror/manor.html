@@ -34,11 +34,8 @@
             // Visual update
             section.querySelectorAll('.choice').forEach(b => {
                 b.classList.remove('selected');
-                b.style.pointerEvents = 'none'; // Lock choices
-                b.style.opacity = '0.5';
             });
             btn.classList.add('selected');
-            btn.style.opacity = '1';
 
             recalculateState();
 
