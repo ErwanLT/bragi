@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LE MANOIR DU SILENCE</title>
+    <link rel="stylesheet" href="../style/horror.css">
+    <script>
+        const variables = { sanity: 100, battery: 100 };
+        const choices = {};
+
+        function updateDisplay() {
+            const hud = document.getElementById('hud');
+            if (hud) {
+                hud.innerHTML = `
+                    <div><span>SANTÉ MENTALE:</span> <span style="color: ${variables.sanity < 30 ? '#c0392b' : '#dcdcdc'}">${variables.sanity}%</span></div>
+                    <div><span>BATTERIE:</span> <span style="color: ${variables.battery < 20 ? '#c0392b' : '#dcdcdc'}">${variables.battery}%</span></div>
+                `;
+            }
+        }
+
+        function applyChoice(btn) {
+            const section = btn.closest('.section');
+            const sections = Array.from(document.querySelectorAll('.section'));
+            const index = sections.indexOf(section);
+
+            // Get new values
+            const s = Number(btn.dataset.sanity || 0);
+            const b = Number(btn.dataset.battery || 0);
+
+            // Store choice (if previous choice exists, overwrite it - simple model)
+            choices[index] = { sanity: s, battery: b };
+
+            // Visual update
+            section.querySelectorAll('.choice').forEach(b => {
+                b.classList.remove('selected');
+                b.style.pointerEvents = 'none'; // Lock choices
+                b.style.opacity = '0.5';
+            });
+            btn.classList.add('selected');
+            btn.style.opacity = '1';
+
+            recalculateState();
+
+            // Scroll to next section if exists
+            if (sections[index + 1]) {
+                sections[index + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function recalculateState() {
+            variables.sanity = 100;
+            variables.battery = 100;
+
+            const sortedIndices = Object.keys(choices).sort((a, b) => Number(a) - Number(b));
+
+            for (const idx of sortedIndices) {
+                const choice = choices[idx];
+                variables.sanity += choice.sanity;
+                variables.battery += choice.battery;
+            }
+
+            // Clamp
+            variables.sanity = Math.max(0, Math.min(100, variables.sanity));
+            variables.battery = Math.max(0, Math.min(100, variables.battery));
+
+            updateDisplay();
+        }
+
+        function computeEnding(forceEnding) {
+            let title = 'LA FIN ?';
+            let text = 'Tout devient noir...';
+            let color = '#dcdcdc';
+
+            if (forceEnding === 'flee') {
+                title = 'FUITE HONTEUSE';
+                text = 'Vous courez sans vous retourner. Le manoir restera un mystère, mais vous êtes en vie. Pour l\'instant.';
+                color = '#dcdcdc';
+            } else if (variables.sanity <= 0) {
+                title = 'FOLIE';
+                text = 'Votre esprit se brise. Vous riez, seul dans le noir. Vous faites désormais partie du décor.';
+                color = '#c0392b';
+            } else if (variables.battery <= 0) {
+                title = 'OBSCURITÉ';
+                text = 'Votre lampe s\'éteint pour de bon. Quelque chose vous frôle. Ce n\'est pas un meuble. Adieu.';
+                color = '#333';
+            } else {
+                title = 'SURVIVANT';
+                text = 'Le soleil se lève enfin. Vous sortez, tremblant mais vivant. Les ombres reculent, pour l\'instant. Personne ne vous croira.';
+                color = '#4caf50';
+            }
+
+            const story = document.getElementById('story');
+            const oldEnding = document.getElementById('ending-block');
+            if (oldEnding) oldEnding.remove();
+
+            story.insertAdjacentHTML('beforeend', `
+                <div id="ending-block" style="margin-top:40px; border-top: 1px solid #333; padding-top: 20px; animation: fadeIn 2s;">
+                    <h2 style="color:${color}; margin-bottom: 20px;">${title}</h2>
+                    <p>${text}</p>
+                    <div style="text-align:center; margin-top:20px;">
+                        <a href="manor.html" style="color: #c0392b; text-decoration: none; border-bottom: 1px solid #c0392b;">Recommencer</a>
+                    </div>
+                </div>
+            `);
+
+            // Scroll to ending
+            setTimeout(() => {
+                document.getElementById('ending-block').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.section').forEach(section => {
+                section.querySelectorAll('.choice').forEach(btn => {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('choice-wrapper');
+
+                    const s = Number(btn.dataset.sanity || 0);
+                    const b = Number(btn.dataset.battery || 0);
+
+                    const effects = [];
+                    if (s < 0) effects.push(`Santé ${s}`);
+                    if (b < 0) effects.push(`Batterie ${b}`);
+                    if (s > 0) effects.push(`Santé +${s}`);
+                    if (b > 0) effects.push(`Batterie +${b}`);
+
+                    wrapper.dataset.info = effects.join(' / ') || '';
+                    btn.parentNode.insertBefore(wrapper, btn);
+                    wrapper.appendChild(btn);
+                });
+            });
+            updateDisplay();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="hud"></div>
+    <div class="quest-card">
+        <h3>/// LE MANOIR DU SILENCE ///</h3>
+        <p style="color:#ffffff; font-size: 0.9em; font-style: italic;">"N'y entrez pas après minuit..."</p>
+
+        <div id="story">
+            <!-- 1. L'ENTRÉE -->
+            <div class="section">
+                <p><strong>00:00 - Le Portail</strong></p>
+                <p>La grille rouillée grince lugubrement. Le manoir se dresse devant vous, immense masse sombre contre
+                    le ciel nocturne. Une seule fenêtre, tout là-haut, est éclairée par une lueur vacillante.</p>
+                <button class="choice" data-battery="-5" onclick="applyChoice(this)">Allumer la lampe et pousser la
+                    grille.</button>
+                <button class="choice" data-sanity="-5" onclick="applyChoice(this); computeEnding('flee')">Faire
+                    demi-tour immédiatement (Abandonner).</button>
+            </div>
+
+            <!-- 2. LE HALL -->
+            <div class="section">
+                <p><strong>00:15 - Le Grand Hall</strong></p>
+                <p>Vous êtes à l'intérieur. L'air est glacé et sent la poussière ancienne. Des portraits aux yeux
+                    éteints semblent vous suivre du regard. Un escalier majestueux monte, et des portes s'ouvrent vers
+                    la cuisine et le sous-sol.</p>
+                <button class="choice" data-battery="-10" onclick="applyChoice(this)">Braquer la lampe sur les portraits
+                    (Inspection).</button>
+                <button class="choice" data-sanity="-5" onclick="applyChoice(this)">Avancer dans le noir vers la
+                    cuisine.</button>
+            </div>
+
+            <!-- 3. LA CUISINE -->
+            <div class="section">
+                <p><strong>00:30 - La Cuisine</strong></p>
+                <p>Des couteaux rouillés pendent au mur. Une odeur de viande avariée vous prend à la gorge. Sur une
+                    étagère, vous apercevez une vieille boîte.</p>
+                <button class="choice" data-battery="+15" onclick="applyChoice(this)">Fouiller la boîte (Peut-être des
+                    piles ?).</button>
+                <button class="choice" data-sanity="-10" onclick="applyChoice(this)">Inspecter le frigo entr'ouvert
+                    (Mauvaise idée).</button>
+            </div>
+
+            <!-- 4. LA SALLE A MANGER -->
+            <div class="section">
+                <p><strong>00:45 - La Salle à Manger</strong></p>
+                <p>Une longue table est dressée pour douze convives. La nourriture est pourrie, couverte de moisissures.
+                    Une chaise est renversée.</p>
+                <button class="choice" data-sanity="-10" data-battery="-5" onclick="applyChoice(this)">Remettre la
+                    chaise en place (Politesse aux esprits).</button>
+                <button class="choice" data-battery="-5" onclick="applyChoice(this)">Traverser rapidement vers la
+                    bibliothèque.</button>
+            </div>
+
+            <!-- 5. LA BIBLIOTHÈQUE -->
+            <div class="section">
+                <p><strong>01:00 - La Bibliothèque</strong></p>
+                <p>Des milliers de livres. L'atmosphère ici est étonnamment calme, presque apaisante. Un feu semble
+                    avoir brûlé dans la cheminée récemment.</p>
+                <button class="choice" data-sanity="+15" onclick="applyChoice(this)">Prendre un instant pour lire un
+                    livre (Repos).</button>
+                <button class="choice" data-sanity="-20" onclick="applyChoice(this)">Lire le grimoire ouvert sur le
+                    pupitre ("Rituel").</button>
+            </div>
+
+            <!-- 6. LA SERRE -->
+            <div class="section">
+                <p><strong>01:30 - La Serre</strong></p>
+                <p>Attenante à la bibliothèque, la serre est envahie par une végétation morte... qui semble bouger quand
+                    vous ne la regardez pas. Il y a une clé par terre.</p>
+                <button class="choice" data-battery="-10" onclick="applyChoice(this)">Chercher la clé dans les feuilles
+                    mortes.</button>
+                <button class="choice" data-sanity="-10" onclick="applyChoice(this)">Ignorer la clé et fuir les ombres
+                    végétales.</button>
+            </div>
+
+            <!-- 7. VERS LE SOUS-SOL -->
+            <div class="section">
+                <p><strong>01:45 - L'Escalier de la Cave</strong></p>
+                <p>Vous revenez vers le hall. La porte du sous-sol est maintenant entrouverte. Un courant d'air froid en
+                    remonte. Vous entendez... un bourdonnement.</p>
+                <button class="choice" data-battery="-5" onclick="applyChoice(this)">Descendre voir
+                    (Courageux).</button>
+                <button class="choice" data-sanity="+5" onclick="applyChoice(this)">Monter à l'étage plutôt (Fuir le
+                    noir).</button>
+            </div>
+
+            <!-- 8. LE SOUS-SOL -->
+            <div class="section">
+                <p><strong>02:00 - Le Sous-sol</strong></p>
+                <p>C'est humide. Au fond, un vieux générateur semble encore fonctionnel, relié à des câbles de fortune.
+                </p>
+                <button class="choice" data-battery="+30" data-sanity="-10" onclick="applyChoice(this)">Tenter de
+                    relancer le générateur (Bruit !).</button>
+                <button class="choice" data-battery="-10" onclick="applyChoice(this)">Chercher une sortie alternative
+                    (En vain).</button>
+            </div>
+
+            <!-- 9. L'ÉTAGE - CHAMBRE D'AMIS -->
+            <div class="section">
+                <p><strong>02:30 - La Chambre d'Amis</strong></p>
+                <p>À l'étage. Un lit à baldaquin trône au centre. Il a l'air propre, contrairement au reste.</p>
+                <button class="choice" data-sanity="+20" data-battery="-5" onclick="applyChoice(this)">S'allonger une
+                    minute pour calmer son cœur.</button>
+                <button class="choice" data-sanity="-20" onclick="applyChoice(this)">Regarder sous le lit
+                    (...).</button>
+            </div>
+
+            <!-- 10. LE COULOIR DES PORTRAITS -->
+            <div class="section">
+                <p><strong>02:45 - Le Couloir</strong></p>
+                <p>Le long couloir mène au grenier. Les murs semblent se resserrer. Vous entendez des chuchotements
+                    derrière vous.</p>
+                <button class="choice" data-sanity="-10" data-battery="-10" onclick="applyChoice(this)">Se retourner
+                    brusquement avec la lampe !</button>
+                <button class="choice" data-battery="-5" onclick="applyChoice(this)">Courir vers le grenier sans
+                    regarder.</button>
+            </div>
+
+            <!-- 11. LA SALLE DE BAIN -->
+            <div class="section">
+                <p><strong>03:00 - La Salle de Bain</strong></p>
+                <p>Une porte latérale. Un grand miroir fêlé au dessus du lavabo. L'eau goutte. <em>Ploc. Ploc.</em></p>
+                <button class="choice" data-sanity="-30" onclick="applyChoice(this)">Essuyer la buée sur le
+                    miroir.</button>
+                <button class="choice" data-battery="-5" onclick="applyChoice(this)">Fouiller l'armoire à pharmacie
+                    (Soins ?).</button>
+            </div>
+
+            <!-- 12. LE GRENIER -->
+            <div class="section">
+                <p><strong>03:30 - Le Grenier</strong></p>
+                <p>Vous y êtes. La lumière de la fenêtre venait d'ici. Une poupée de porcelaine est assise sur une
+                    chaise, face au mur. Elle tient une bougie... éteinte.</p>
+                <button class="choice" data-sanity="-20" onclick="applyChoice(this)">Toucher l'épaule de la
+                    poupée.</button>
+                <button class="choice" data-battery="-20" onclick="applyChoice(this)">Illuminer tout le grenier pour
+                    vérifier les coins.</button>
+            </div>
+
+            <!-- 13. LE TOIT (FINAL) -->
+            <div class="section">
+                <p><strong>04:00 - L'Aube Approche</strong></p>
+                <p>Vous grimpez sur le toit par une lucarne. L'air frais vous gifle le visage. Mais quelque chose vous
+                    agrippe la cheville.</p>
+                <button class="choice" data-sanity="-10" data-battery="-10"
+                    onclick="applyChoice(this); computeEnding()">Donner un coup de pied et sauter !</button>
+                <button class="choice" data-battery="-50" onclick="applyChoice(this); computeEnding()">Braquer la lampe
+                    à puissance maximale (Brûlure) !</button>
+            </div>
+        </div>
+
+        <div class="navigation-footer"
+            style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #333; text-align: center;">
+            <a href="../horror.html"
+                style="color: #aaa; text-decoration: none; margin-right: 1.5rem; transition: color 0.3s;">&larr; Retour
+                aux Histoires</a>
+            <a href="../index.html" style="color: #aaa; text-decoration: none; transition: color 0.3s;">Menu
+                Principal</a>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,219 @@
+/* Horror Theme - Gothic/Supernatural */
+:root {
+    --bg-color: #050505;
+    --text-color: #dcdcdc;
+    --accent-color: #c0392b;
+    /* Brighter Red for readability */
+    --secondary-color: #2b2b2b;
+    --font-main: 'Crimson Text', serif;
+    --font-header: 'Creepster', cursive;
+    /* Optional, need to check if available or use generic serif */
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Creepster&display=swap');
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    animation: flickerBg 10s infinite random;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Creepster', cursive, serif;
+    color: #fff;
+    /* White center for maximum brightness */
+    text-shadow:
+        0 0 5px #ff0000,
+        0 0 10px #ff0000,
+        0 0 20px #ff0000,
+        0 0 40px #ff0000;
+    /* Strong Neon Red Glow */
+    letter-spacing: 2px;
+    font-weight: normal;
+    /* Creepster is already bold/display */
+    position: relative;
+    z-index: 3;
+}
+
+.quest-card p {
+    position: relative;
+    z-index: 2;
+}
+
+.quest-card {
+    background-color: #111;
+    border: 1px solid #333;
+    border-top: 5px solid var(--accent-color);
+    padding: 2rem;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+    position: relative;
+}
+
+.quest-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.section {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #333;
+    /* Slightly brighter border */
+    animation: fadeIn 2s ease-in;
+}
+
+.section p {
+    font-size: 1.2em;
+    /* Slightly larger text */
+    margin-bottom: 1.5rem;
+    color: #eee;
+    /* Brighter white for main text */
+}
+
+.choice {
+    display: block;
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    background: #0f0f0f;
+    border: 1px solid #444;
+    color: #aeaeae;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-main);
+    font-size: 1em;
+}
+
+.choice:hover {
+    background: #1a0505;
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    transform: translateX(5px);
+}
+
+.choice.selected {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+
+/* Choice Wrapper and Impacts */
+.choice-wrapper {
+    position: relative;
+}
+
+.choice-wrapper::after {
+    content: attr(data-info);
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.8em;
+    color: #aaa;
+    /* Lighter grey for better visibility */
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.choice-wrapper:hover::after {
+    opacity: 1;
+}
+
+#hud {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--accent-color);
+    padding: 15px;
+    border-radius: 4px;
+    font-family: monospace;
+    /* Keep HUD readable */
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(138, 3, 3, 0.3);
+}
+
+#hud div {
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
+}
+
+#hud span:last-child {
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes flickerBg {
+    0% {
+        background-color: #050505;
+    }
+
+    5% {
+        background-color: #0a0000;
+    }
+
+    10% {
+        background-color: #050505;
+    }
+
+    100% {
+        background-color: #050505;
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    .quest-card {
+        padding: 1rem;
+    }
+
+    #hud {
+        position: static;
+        margin-bottom: 20px;
+        width: auto;
+    }
+
+    #hud div {
+        width: 100%;
+    }
+}
