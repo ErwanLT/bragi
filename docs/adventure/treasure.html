@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LE TRÉSOR DE L'ÎLE MAUDITE</title>
+    <link rel="stylesheet" href="../style/adventure.css">
+    <script>
+        const variables = { loyalte: 80, vivres: 100, or: 100 };
+        const choices = {};
+
+        function updateDisplay() {
+            const hud = document.getElementById('hud');
+            if (hud) {
+                hud.innerHTML = `
+                    <div><span>LOYAUTÉ:</span> <span>${variables.loyalte}%</span></div>
+                    <div><span>VIVRES:</span> <span>${variables.vivres}%</span></div>
+                    <div><span>OR:</span> <span>${variables.or} 💰</span></div>
+                `;
+            }
+        }
+
+        function applyChoice(btn) {
+            const section = btn.closest('.section');
+            const sections = Array.from(document.querySelectorAll('.section'));
+            const index = sections.indexOf(section);
+
+            // Get new values
+            const l = Number(btn.dataset.loyalte || 0);
+            const v = Number(btn.dataset.vivres || 0);
+            const o = Number(btn.dataset.or || 0);
+
+            // Store choice
+            choices[index] = { loyalte: l, vivres: v, or: o };
+
+            // Visual update
+            section.querySelectorAll('.choice').forEach(b => {
+                b.classList.remove('selected');
+            });
+            btn.classList.add('selected');
+
+            recalculateState();
+
+            // Scroll to next section if exists
+            if (sections[index + 1]) {
+                sections[index + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function recalculateState() {
+            variables.loyalte = 80;
+            variables.vivres = 100;
+            variables.or = 100;
+
+            const sortedIndices = Object.keys(choices).sort((a, b) => Number(a) - Number(b));
+
+            for (const idx of sortedIndices) {
+                const choice = choices[idx];
+                variables.loyalte += choice.loyalte;
+                variables.vivres += choice.vivres;
+                variables.or += choice.or;
+
+                // Clamp at each step to prevent hidden surplus
+                variables.loyalte = Math.max(0, Math.min(100, variables.loyalte));
+                variables.vivres = Math.max(0, Math.min(100, variables.vivres));
+                variables.or = Math.max(0, variables.or);
+            }
+
+            // Clamp
+
+
+            updateDisplay();
+        }
+
+        function computeEnding(forceEnding) {
+            let title = 'LA MER EST CALME';
+            let text = 'L\'aventure se termine ici.';
+            let color = '#3e2723';
+
+            if (forceEnding === 'rich') {
+                title = 'ROI DES PIRATES';
+                text = 'Avec ce trésor, vous construisez une flotte. Votre nom fera trembler les sept mers !';
+                color = '#ffd700';
+            } else if (variables.loyalte <= 0) {
+                title = 'MUTINERIE !';
+                text = 'L\'équipage vous abandonne sur un îlot désert. Ils partent avec le navire.';
+                color = '#8b0000';
+            } else if (variables.vivres <= 0) {
+                title = 'SCORBUT ET FAMINE';
+                text = 'Sans vivres, l\'équipage meurt lentement. Le navire devient un vaisseau fantôme.';
+                color = '#555';
+            } else if (forceEnding === 'cursed') {
+                title = 'MAUDIT POUR L\'ÉTERNITÉ';
+                text = 'Vous avez touché l\'or maudit. Vous rejoignez l\'équipage des damnés.';
+                color = '#4b0082';
+            } else {
+                title = 'RETOUR AU PORT';
+                text = 'Pas de gloire, mais pas de mort. Une histoire à raconter à la taverne.';
+                color = '#e6ccb2';
+            }
+
+            const story = document.getElementById('story');
+            const oldEnding = document.getElementById('ending-block');
+            if (oldEnding) oldEnding.remove();
+
+            story.insertAdjacentHTML('beforeend', `
+                <div id="ending-block" style="margin-top:40px; border-top: 2px dashed #8b0000; padding-top: 20px; animation: fadeIn 2s;">
+                    <h2 style="color:${color}; margin-bottom: 20px; border:none;">${title}</h2>
+                    <p style="text-align:center; font-style:italic;">${text}</p>
+                    <div style="text-align:center; margin-top:20px;">
+                        <a href="treasure.html" style="color: #3e2723; text-decoration: none; border-bottom: 1px solid #3e2723;">Hisser les voiles à nouveau</a>
+                    </div>
+                </div>
+            `);
+
+            // Scroll to ending
+            setTimeout(() => {
+                document.getElementById('ending-block').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.section').forEach(section => {
+                section.querySelectorAll('.choice').forEach(btn => {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('choice-wrapper');
+
+                    const l = Number(btn.dataset.loyalte || 0);
+                    const v = Number(btn.dataset.vivres || 0);
+                    const o = Number(btn.dataset.or || 0);
+
+                    const effects = [];
+                    if (l < 0) effects.push(`Loyauté ${l}%`);
+                    if (v < 0) effects.push(`Vivres ${v}%`);
+                    if (o < 0) effects.push(`Or ${o}`);
+                    if (l > 0) effects.push(`Loyauté +${l}%`);
+                    if (v > 0) effects.push(`Vivres +${v}%`);
+                    if (o > 0) effects.push(`Or +${o}`);
+
+                    wrapper.dataset.info = effects.join(' / ') || '';
+                    btn.parentNode.insertBefore(wrapper, btn);
+                    wrapper.appendChild(btn);
+                });
+            });
+            updateDisplay();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="hud"></div>
+    <div class="quest-card">
+        <h3>⚓ LE TRÉSOR DE L'ÎLE MAUDITE ⚓</h3>
+        <p style="text-align:center; font-style: italic; color: #8b0000;">Journal de bord du Capitaine Blackwood</p>
+
+        <div id="story">
+            <!-- 1. TAVERNE -->
+            <div class="section">
+                <p><strong>Jour 1 - La Taverne du "Chien Noyé"</strong></p>
+                <p>Un vieux marin borgne vous vend une carte. Elle mène à l'Île Maudite.</p>
+                <button class="choice" data-or="-50" onclick="applyChoice(this)">Acheter la carte honnêtement.</button>
+                <button class="choice" data-loyalte="-10" data-or="+20" onclick="applyChoice(this)">Voler la carte et le
+                    tabasser.</button>
+            </div>
+
+            <!-- 2. RECRUTEMENT -->
+            <div class="section">
+                <p><strong>Jour 2 - Recrutement sur les quais</strong></p>
+                <p>Il faut compléter l'équipage du <em>Black Heron</em>.</p>
+                <button class="choice" data-loyalte="-10" data-or="+100" onclick="applyChoice(this)">Engager des repris
+                    de justice (Moins cher, dangereux).</button>
+                <button class="choice" data-loyalte="+10" data-or="-50" onclick="applyChoice(this)">Engager des marins
+                    expérimentés (Fiables mais chers).</button>
+            </div>
+
+            <!-- 3. DEPART -->
+            <div class="section">
+                <p><strong>Jour 3 - En Haute Mer</strong></p>
+                <p>L'aventure commence. Le vent est bon. Comment motiver les hommes ?</p>
+                <button class="choice" data-vivres="-10" data-loyalte="+10" onclick="applyChoice(this)">Double ration de
+                    Rhum pour tous !</button>
+                <button class="choice" data-vivres="+5" data-loyalte="-5" onclick="applyChoice(this)">Rationnement
+                    strict dès le début.</button>
+            </div>
+
+            <!-- 4. TEMPETE -->
+            <div class="section">
+                <p><strong>Jour 7 - La Tempête</strong></p>
+                <p>Des vagues scélérates frappent la coque. Le mât craque.</p>
+                <button class="choice" data-vivres="-20" onclick="applyChoice(this)">Jeter une partie de la cargaison
+                    pour alléger.</button>
+                <button class="choice" data-loyalte="-15" onclick="applyChoice(this)">Forcer les hommes à la manoeuvre
+                    périlleuse.</button>
+            </div>
+
+            <!-- 5. CALME PLAT -->
+            <div class="section">
+                <p><strong>Jour 12 - Calme Plat</strong></p>
+                <p>Plus un souffle de vent. La chaleur est accablante.</p>
+                <button class="choice" data-vivres="-10" onclick="applyChoice(this)">Pêcher pour économiser les
+                    vivres.</button>
+                <button class="choice" data-loyalte="-10" onclick="applyChoice(this)">Punir ceux qui se
+                    plaignent.</button>
+            </div>
+
+            <!-- 6. NAVIRE ENNEMI -->
+            <div class="section">
+                <p><strong>Jour 15 - Voiles à l'horizon</strong></p>
+                <p>Un navire marchand espagnol, lourdement chargé.</p>
+                <button class="choice" data-or="+200" data-vivres="+20" data-loyalte="+10" onclick="applyChoice(this)">À
+                    l'abordage ! (Risque de blessures).</button>
+                <button class="choice" data-loyalte="-5" onclick="applyChoice(this)">Les éviter et rester concentré sur
+                    l'île.</button>
+            </div>
+
+            <!-- 7. L'ILE -->
+            <div class="section">
+                <p><strong>Jour 20 - Terre en vue !</strong></p>
+                <p>L'Île Maudite se dresse, sombre et menaçante.</p>
+                <button class="choice" data-vivres="-5" onclick="applyChoice(this)">Chercher un mouillage sûr (Prend du
+                    temps).</button>
+                <button class="choice" data-loyalte="-5" onclick="applyChoice(this)">Débarquer de nuit par les
+                    récifs.</button>
+            </div>
+
+            <!-- 8. JUNGLE -->
+            <div class="section">
+                <p><strong>Jour 21 - La Jungle Épaisse</strong></p>
+                <p>Machettes en main, vous vous frayez un chemin. C'est l'enfer vert.</p>
+                <button class="choice" data-vivres="+10" onclick="applyChoice(this)">Chercher des fruits et de l'eau
+                    douce.</button>
+                <button class="choice" data-loyalte="-5" onclick="applyChoice(this)">Avancer à marche forcée.</button>
+            </div>
+
+            <!-- 9. PIEGES -->
+            <div class="section">
+                <p><strong>Jour 22 - Les Pièges Anciens</strong></p>
+                <p>Le sol s'ouvre sous les pieds de votre second.</p>
+                <button class="choice" data-loyalte="+10" onclick="applyChoice(this)">Le sauver au péril de votre
+                    vie.</button>
+                <button class="choice" data-loyalte="-20" onclick="applyChoice(this)">Le laisser ("Il était
+                    incompétent").</button>
+            </div>
+
+            <!-- 10. CAMPEMENT -->
+            <div class="section">
+                <p><strong>Jour 22 - Nuit dans la jungle</strong></p>
+                <p>Des bruits étranges encerclent le camp.</p>
+                <button class="choice" data-vivres="-10" data-loyalte="+5" onclick="applyChoice(this)">Grand feu et
+                    festin pour garder le moral.</button>
+                <button class="choice" data-loyalte="-5" onclick="applyChoice(this)">Sifence total, pas de feu.</button>
+            </div>
+
+            <!-- 11. LA GROTTE -->
+            <div class="section">
+                <p><strong>Jour 23 - La Grotte du Crâne</strong></p>
+                <p>L'entrée est là, comme sur la carte.</p>
+                <button class="choice" data-or="+50" onclick="applyChoice(this)">Ramasser les pièces d'or semées à
+                    l'entrée.</button>
+                <button class="choice" onclick="applyChoice(this)">Ignorer les miettes, viser le gros lot.</button>
+            </div>
+
+            <!-- 12. ENIGME -->
+            <div class="section">
+                <p><strong>L'Énigme du Gardien</strong></p>
+                <p>Une porte de pierre bloque le chemin. "Je suis d'eau, mais je ne mouille pas. Qui suis-je ?"</p>
+                <button class="choice" data-loyalte="+5" onclick="applyChoice(this)">"Une carte" (Réflexion).</button>
+                <button class="choice" data-vivres="-20" data-or="-50" onclick="applyChoice(this)">Utiliser de la poudre
+                    noire pour tout faire sauter !</button>
+            </div>
+
+            <!-- 13. TRAHISON -->
+            <div class="section">
+                <p><strong>La salle du Trésor</strong></p>
+                <p>Des montagnes d'or ! Mais votre second sort son pistolet.</p>
+                <button class="choice" data-or="+500" data-loyalte="-100" onclick="applyChoice(this)">Lui proposer 50/50
+                    (Il accepte... peut-être).</button>
+                <button class="choice" data-loyalte="+20" onclick="applyChoice(this)">Duel au sabre ! (Pour
+                    l'honneur).</button>
+            </div>
+
+            <!-- 14. LE CHOIX FINAL -->
+            <div class="section">
+                <p><strong>Le Coffre Maudit</strong></p>
+                <p>Au centre, un coffre pulse d'une lueur violette.</p>
+                <button class="choice" data-or="+1000" onclick="applyChoice(this); computeEnding('cursed')">Ouvrir le
+                    coffre maudit (Cupidité absolue).</button>
+                <button class="choice" data-or="+300" onclick="applyChoice(this)">Ne prendre que l'or "sûr"
+                    autour.</button>
+            </div>
+
+            <!-- 15. RETOUR -->
+            <div class="section">
+                <p><strong>Jour 24 - Le Retour</strong></p>
+                <p>Vous regagnez le navire les bras chargés.</p>
+                <button class="choice" onclick="applyChoice(this); computeEnding('rich')">Partager équitablement et
+                    rentrer riche.</button>
+                <button class="choice" data-loyalte="-50" onclick="applyChoice(this); computeEnding()">Tenter de doubler
+                    l'équipage.</button>
+            </div>
+
+        </div>
+
+        <div class="navigation-footer"
+            style="margin-top: 3rem; padding-top: 2rem; border-top: 2px dashed #3e2723; text-align: center;">
+            <a href="../adventure.html" style="color: #3e2723; text-decoration: none; margin-right: 1.5rem;">&larr;
+                Carte des Aventures</a>
+            <a href="../index.html" style="color: #3e2723; text-decoration: none;">Menu Principal</a>
+        </div>
+    </div>
+</body>
+
+</html>
