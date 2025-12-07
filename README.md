@@ -10,8 +10,16 @@ Ce projet rend hommage à cet art du récit en proposant des expériences narrat
 ## Histoires disponibles
 Vous pouvez accéder aux histoires via notre [page d'accueil](https://erwanlt.github.io/bragi/) (ou localement via `docs/index.html`).
 
-*   **Section Horreur** : Une collection d'histoires frissonnantes, dont *KUBRICK-9 ORBITAL STATION*.
-*   **Section Fantasy** : Des aventures épiques, comme *La Quête du Code Ancestral*.
+*   🛸 **Science-Fiction**
+    *   *KUBRICK-9 ORBITAL STATION* - Une IA détraquée dans une station orbitale.
+*   👻 **Horreur**
+    *   *LE MANOIR DU SILENCE* - Survivez à une nuit dans un manoir hanté.
+*   🤠 **Western**
+    *   *LE DERNIER DUEL* - Une traque impitoyable au Far West.
+*   ⚓️ **Aventure**
+    *   *LE TRÉSOR DE L'ÎLE MAUDITE* - Piraterie, mutinerie et trésors maudits.
+*   🐉 **Fantasy**
+    *   *LA QUÊTE DU CODE ANCESTRAL* - Une aventure épique dans le donjon "Legacy".
 
 ## Structure du projet
 Le site est hébergé via GitHub Pages depuis le dossier `docs/`.
