@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LE LABYRINTHE OUBLIÉ</title>
+    <link rel="stylesheet" href="../style/horror.css">
+    <script>
+        const variables = { sanity: 100, light: 100, orientation: 0 };
+        const choices = {};
+
+        function updateDisplay() {
+            const hud = document.getElementById('hud');
+            if (hud) {
+                hud.innerHTML = `
+                    <div><span>SANTÉ MENTALE:</span> <span>${variables.sanity}%</span></div>
+                    <div><span>LUMIÈRE:</span> <span>${variables.light}%</span></div>
+                    <div><span>ORIENTATION:</span> <span>${variables.orientation}%</span></div>
+                `;
+            }
+        }
+
+        function applyChoice(btn) {
+            const section = btn.closest('.section');
+            const sections = Array.from(document.querySelectorAll('.section'));
+            const index = sections.indexOf(section);
+
+            // Get new values
+            const s = Number(btn.dataset.sanity || 0);
+            const l = Number(btn.dataset.light || 0);
+            const o = Number(btn.dataset.orientation || 0);
+
+            // Store choice
+            choices[index] = { sanity: s, light: l, orientation: o };
+
+            // Visual update
+            section.querySelectorAll('.choice').forEach(b => {
+                b.classList.remove('selected');
+            });
+            btn.classList.add('selected');
+
+            recalculateState();
+
+            // Scroll to next section if exists
+            if (sections[index + 1]) {
+                sections[index + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function recalculateState() {
+            variables.sanity = 100;
+            variables.light = 100;
+            variables.orientation = 0;
+
+            const sortedIndices = Object.keys(choices).sort((a, b) => Number(a) - Number(b));
+
+            for (const idx of sortedIndices) {
+                const choice = choices[idx];
+                variables.sanity += choice.sanity;
+                variables.light += choice.light;
+                variables.orientation += choice.orientation;
+
+                // Clamp at each step
+                variables.sanity = Math.max(0, Math.min(100, variables.sanity));
+                variables.light = Math.max(0, Math.min(100, variables.light));
+                variables.orientation = Math.max(0, Math.min(100, variables.orientation));
+            }
+
+            updateDisplay();
+        }
+
+        function computeEnding(forceEnding) {
+            let title = 'PERDU DANS LES TÉNÈBRES';
+            let text = 'Vos os rejoindront ceux des autres.';
+            let color = '#555';
+
+            if (forceEnding === 'escaped') {
+                title = 'LIBRE !';
+                text = 'Vous avez trouvé la sortie. La lumière du soleil n\'a jamais été aussi belle.';
+                color = '#dcdcdc'; // White/Grey
+            } else if (variables.light <= 0) {
+                title = 'DÉVORÉ PAR L\'OMBRE';
+                text = 'Votre lanterne s\'éteint. Vous n\'êtes plus seul dans le noir.';
+                color = '#000';
+            } else if (variables.sanity <= 0) {
+                title = 'ESPRIT BRISÉ';
+                text = 'Le labyrinthe est désormais votre maison. Vous riez dans le noir.';
+                color = '#8a0303';
+            } else if (variables.orientation >= 100) {
+                title = 'MAÎTRE DU DÉDALE';
+                text = 'Vous avez cartographié l\'impossible. Vous sortez, mais le labyrinthe reste en vous.';
+                color = '#ff3333';
+            } else {
+                title = 'UNE FIN ?';
+                text = 'Vous errez encore... Peut-être trouverez-vous la sortie un jour.';
+                color = '#666';
+            }
+
+            const story = document.getElementById('story');
+            const oldEnding = document.getElementById('ending-block');
+            if (oldEnding) oldEnding.remove();
+
+            story.insertAdjacentHTML('beforeend', `
+                <div id="ending-block" style="margin-top:40px; border-top: 2px dashed #8a0303; padding-top: 20px; animation: fadeIn 2s;">
+                    <h2 style="color:${color}; margin-bottom: 20px; border:none;">${title}</h2>
+                    <p style="text-align:center; font-style:italic;">${text}</p>
+                    <div style="text-align:center; margin-top:20px;">
+                        <a href="labyrinth.html" style="color: #dcdcdc; text-decoration: none; border-bottom: 1px solid #dcdcdc;">Rallumer la lanterne</a>
+                    </div>
+                </div>
+            `);
+
+            // Scroll to ending
+            setTimeout(() => {
+                document.getElementById('ending-block').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.section').forEach(section => {
+                section.querySelectorAll('.choice').forEach(btn => {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('choice-wrapper');
+
+                    const s = Number(btn.dataset.sanity || 0);
+                    const l = Number(btn.dataset.light || 0);
+                    const o = Number(btn.dataset.orientation || 0);
+
+                    const effects = [];
+                    if (s < 0) effects.push(`Santé ${s}%`);
+                    if (l < 0) effects.push(`Lumière ${l}%`);
+                    if (o < 0) effects.push(`Orientation ${o}%`);
+                    if (s > 0) effects.push(`Santé +${s}%`);
+                    if (l > 0) effects.push(`Lumière +${l}%`);
+                    if (o > 0) effects.push(`Orientation +${o}%`);
+
+                    wrapper.dataset.info = effects.join(' / ') || '';
+                    btn.parentNode.insertBefore(wrapper, btn);
+                    wrapper.appendChild(btn);
+                });
+            });
+            updateDisplay();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="hud"></div>
+    <div class="quest-card">
+        <h3>/// LE LABYRINTHE OUBLIÉ ///</h3>
+        <p style="text-align:center; font-style: italic; color: #888;">"N'éteignez jamais votre lanterne..."</p>
+
+        <div id="story">
+            <!-- 1. ENTRÉE -->
+            <div class="section">
+                <p><strong>L'Entrée Béante</strong></p>
+                <p>La porte de pierre s'est refermée derrière vous. L'air est vicié. Votre lanterne vacille.</p>
+                <button class="choice" data-light="-5" data-orientation="+10" onclick="applyChoice(this)">Marquer le mur
+                    avec de la craie.</button>
+                <button class="choice" data-light="-10" data-sanity="-5" onclick="applyChoice(this)">Courir droit
+                    devant, paniqué.</button>
+            </div>
+
+            <!-- 2. CARREFOUR -->
+            <div class="section">
+                <p><strong>Premier Carrefour</strong></p>
+                <p>Trois voies s'offrent à vous. L'une sent la putréfaction, l'autre le renfermé.</p>
+                <button class="choice" data-light="-5" data-orientation="+5" onclick="applyChoice(this)">Écouter les
+                    courants d'air.</button>
+                <button class="choice" data-sanity="-10" onclick="applyChoice(this)">Suivre l'odeur de pourriture
+                    (Curiosité morbide).</button>
+            </div>
+
+            <!-- 3. PIÈGE -->
+            <div class="section">
+                <p><strong>Le Couloir des Lames</strong></p>
+                <p>Un déclic sous votre pied. Des lames sortent des murs.</p>
+                <button class="choice" data-light="-10" onclick="applyChoice(this)">Se jeter au sol (Risque de casser la
+                    lanterne).</button>
+                <button class="choice" data-sanity="-10" data-orientation="+10" onclick="applyChoice(this)">Analyser le
+                    mécanisme calmement.</button>
+            </div>
+
+            <!-- 4. LUEUR -->
+            <div class="section">
+                <p><strong>Lueur Étrange</strong></p>
+                <p>Une mousse phosphorescente couvre les murs. C'est beau... et inquiétant.</p>
+                <button class="choice" data-light="+20" data-sanity="-5" onclick="applyChoice(this)">Éteindre la
+                    lanterne pour économiser l'huile.</button>
+                <button class="choice" data-light="-5" onclick="applyChoice(this)">Garder la lanterne allumée, on ne
+                    sait jamais.</button>
+            </div>
+
+            <!-- 5. ÉCHO -->
+            <div class="section">
+                <p><strong>L'Écho Déformé</strong></p>
+                <p>Vous entendez vos propres pas... avec un décalage.</p>
+                <button class="choice" data-sanity="-15" onclick="applyChoice(this)">Crier "QUI EST LÀ ?!"</button>
+                <button class="choice" data-light="-5" data-orientation="+5" onclick="applyChoice(this)">Siffler un air
+                    pour tester l'acoustique.</button>
+            </div>
+
+            <!-- 6. SALLE DES MIROIRS -->
+            <div class="section">
+                <p><strong>La Salle des Miroirs Anciens</strong></p>
+                <p>Des miroirs oxydés vous renvoient une image déformée. Votre reflet ne bouge pas en même temps que
+                    vous.</p>
+                <button class="choice" data-sanity="-20" onclick="applyChoice(this)">Fixer son reflet dans les
+                    yeux.</button>
+                <button class="choice" data-light="-5" data-orientation="+10" onclick="applyChoice(this)">Briser un
+                    miroir pour marquer le chemin.</button>
+            </div>
+
+            <!-- 7. CHUCHOTEMENTS -->
+            <div class="section">
+                <p><strong>Le Mur des Murmures</strong></p>
+                <p>Le mur semble suinter une substance noire. Des voix vous appellent.</p>
+                <button class="choice" data-sanity="+10" data-light="-10" onclick="applyChoice(this)">Fermer les yeux et
+                    prier (Repos).</button>
+                <button class="choice" data-orientation="+15" data-sanity="-10" onclick="applyChoice(this)">Écouter ce
+                    qu'ils disent (Indices ?).</button>
+            </div>
+
+            <!-- 8. L'HUILE -->
+            <div class="section">
+                <p><strong>Une Vieille Réserve</strong></p>
+                <p>Vous trouvez une fiole poussiéreuse. De l'huile ? Ou du poison ?</p>
+                <button class="choice" data-light="+30" onclick="applyChoice(this)">Remplir la lanterne
+                    (Risqué).</button>
+                <button class="choice" data-sanity="+5" onclick="applyChoice(this)">La laisser, c'est trop beau pour
+                    être vrai.</button>
+            </div>
+
+            <!-- 9. LA BÊTE -->
+            <div class="section">
+                <p><strong>La Bête de l'Ombre</strong></p>
+                <p>Deux yeux rouges brillent dans le noir devant vous. Un grognement sourd.</p>
+                <button class="choice" data-light="-20" onclick="applyChoice(this)">Braquer la lanterne vers elle pour
+                    l'aveugler.</button>
+                <button class="choice" data-orientation="-10" data-light="-5" onclick="applyChoice(this)">Reculer
+                    doucement et prendre un autre chemin.</button>
+            </div>
+
+            <!-- 10. PUITS -->
+            <div class="section">
+                <p><strong>Le Puits Sans Fond</strong></p>
+                <p>Un gouffre traverse le couloir. Une planche pourrie sert de pont.</p>
+                <button class="choice" data-orientation="+20" onclick="applyChoice(this)">Traverser en
+                    équilibre.</button>
+                <button class="choice" data-light="-10" data-orientation="-5" onclick="applyChoice(this)">Chercher un
+                    contournement</button>
+            </div>
+
+            <!-- 11. ENIGME -->
+            <div class="section">
+                <p><strong>La Porte Sphynx</strong></p>
+                <p>"Plus j'en ai, moins tu vois. Qui suis-je ?"</p>
+                <button class="choice" data-orientation="+20" onclick="applyChoice(this)">"L'Obscurité"</button>
+                <button class="choice" data-sanity="-10" onclick="applyChoice(this)">"Le Labyrinthe"</button>
+            </div>
+
+            <!-- 12. HALLUCINATION -->
+            <div class="section">
+                <p><strong>Visions</strong></p>
+                <p>Vous voyez la porte de votre maison d'enfance. Elle est là, dans le mur.</p>
+                <button class="choice" data-sanity="-20" onclick="applyChoice(this)">Ouvrir la porte (C'est un piège
+                    mental).</button>
+                <button class="choice" data-sanity="+10" onclick="applyChoice(this)">Se gifler pour se
+                    réveiller.</button>
+            </div>
+
+            <!-- 13. LA CARTE -->
+            <div class="section">
+                <p><strong>Le Cadavre de l'Explorateur</strong></p>
+                <p>Un squelette tient un parchemin. Une carte partielle ?</p>
+                <button class="choice" data-orientation="+30" onclick="applyChoice(this)">Prendre la carte.</button>
+                <button class="choice" data-light="+10" onclick="applyChoice(this)">Prendre son reste d'huile.</button>
+            </div>
+
+            <!-- 14. LA DERNIÈRE LIGNE -->
+            <div class="section">
+                <p><strong>Le Courant d'Air Frais</strong></p>
+                <p>Vous sentez l'air frais ! Mais votre lanterne vacille, presque vide.</p>
+                <button class="choice" data-light="-10" data-orientation="+20" onclick="applyChoice(this)">Courir vers
+                    l'air frais !</button>
+                <button class="choice" data-sanity="-5" onclick="applyChoice(this)">Avancer prudemment, ce pourrait être
+                    un piège.</button>
+            </div>
+
+            <!-- 15. SORTIE ? -->
+            <div class="section">
+                <p><strong>La Sortie</strong></p>
+                <p>Une lumière aveuglante au bout du tunnel. Est-ce le soleil ?</p>
+                <button class="choice" onclick="applyChoice(this); computeEnding('escaped')">Sortir (Si Orientation
+                    suffisante).</button>
+                <button class="choice" data-sanity="-100" onclick="applyChoice(this); computeEnding()">Retourner dans le
+                    noir (La folie vous tient).</button>
+            </div>
+
+        </div>
+
+        <div class="navigation-footer"
+            style="margin-top: 3rem; padding-top: 2rem; border-top: 2px dashed #8a0303; text-align: center;">
+            <a href="../horror.html" style="color: #8a0303; text-decoration: none; margin-right: 1.5rem;">&larr; Retour
+                aux Cauchemars</a>
+            <a href="../index.html" style="color: #8a0303; text-decoration: none;">Menu Principal</a>
+        </div>
+    </div>
+</body>
+
+</html>

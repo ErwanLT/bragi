@@ -14,6 +14,7 @@ Vous pouvez accéder aux histoires via notre [page d'accueil](https://erwanlt.gi
     *   *KUBRICK-9 ORBITAL STATION* - Une IA détraquée dans une station orbitale.
 *   👻 **Horreur**
     *   *LE MANOIR DU SILENCE* - Survivez à une nuit dans un manoir hanté.
+    *   *LE LABYRINTHE OUBLIÉ* - Perdu dans un dédale ancien (Lumière, Santé Mentale).
 *   🤠 **Western**
     *   *LE DERNIER DUEL* - Une traque impitoyable au Far West.
 *   ⚓️ **Aventure**
