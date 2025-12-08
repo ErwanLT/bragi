@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>OMBRES DE CHICAGO</title>
+    <link rel="stylesheet" href="../style/polar.css">
+    <script>
+        const variables = { indices: 0, respect: 50, sangFroid: 100 };
+        const choices = {};
+
+        function updateDisplay() {
+            const hud = document.getElementById('hud');
+            if (hud) {
+                hud.innerHTML = `
+                    <div><span>INDICES:</span> <span>${variables.indices}/100</span></div>
+                    <div><span>RESPECT:</span> <span>${variables.respect}%</span></div>
+                    <div><span>SANG-FROID:</span> <span>${variables.sangFroid}%</span></div>
+                `;
+            }
+        }
+
+        function applyChoice(btn) {
+            const section = btn.closest('.section');
+            const sections = Array.from(document.querySelectorAll('.section'));
+            const index = sections.indexOf(section);
+
+            // Get new values
+            const i = Number(btn.dataset.indices || 0);
+            const r = Number(btn.dataset.respect || 0);
+            const s = Number(btn.dataset.sangfroid || 0);
+
+            // Store choice
+            choices[index] = { indices: i, respect: r, sangFroid: s };
+
+            // Visual update
+            section.querySelectorAll('.choice').forEach(b => {
+                b.classList.remove('selected');
+            });
+            btn.classList.add('selected');
+
+            recalculateState();
+
+            // Scroll to next section if exists
+            if (sections[index + 1]) {
+                sections[index + 1].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function recalculateState() {
+            variables.indices = 0;
+            variables.respect = 50;
+            variables.sangFroid = 100;
+
+            const sortedIndices = Object.keys(choices).sort((a, b) => Number(a) - Number(b));
+
+            for (const idx of sortedIndices) {
+                const choice = choices[idx];
+                variables.indices += choice.indices;
+                variables.respect += choice.respect;
+                variables.sangFroid += choice.sangFroid;
+
+                // Clamp at each step
+                // INDICES is 0-100+
+                // RESPECT is 0-100 (0=Hated, 100=Godfather/Hero)
+                // SANGFROID is 0-100 (0=Panic)
+                variables.indices = Math.max(0, variables.indices);
+                variables.respect = Math.max(0, Math.min(100, variables.respect));
+                variables.sangFroid = Math.max(0, Math.min(100, variables.sangFroid));
+            }
+
+            updateDisplay();
+        }
+
+        function computeEnding(forceEnding) {
+            let title = 'AFFAIRE CLASSÉE';
+            let text = 'Le dossier prend la poussière.';
+            let color = '#333';
+
+            if (forceEnding === 'attempt_solve') {
+                if (variables.indices >= 80) {
+                    title = 'AFFAIRE RÉSOLUE';
+                    text = 'Capone ira en prison. Vous êtes le héros de Chicago.';
+                    color = '#000';
+                } else {
+                    title = 'PREUVES INSUFFISANTES';
+                    text = 'Le Capitaine secoue la tête. "C\'est tout ce que vous avez ?" Capone est relâché faute de preuves.';
+                    color = '#555';
+                }
+            } else if (variables.sangFroid <= 0) {
+                title = 'NERFS À VIF';
+                text = 'Vous avez craqué sous la pression. L\'alcool est votre seul ami maintenant.';
+                color = '#8a0303';
+            } else if (variables.respect <= 0) {
+                title = 'DANS LE LAC MICHIGAN';
+                text = 'On vous a retrouvé avec des chaussures en béton.';
+                color = '#555';
+            } else if (forceEnding === 'corrupted') {
+                title = 'NOUVEL ASSOCIÉ';
+                text = 'Vous avez vendu votre âme. Vous êtes riche, mais à quel prix ?';
+                color = '#666';
+            } else {
+                title = 'ENQUÊTE BACLÉE';
+                text = 'Pas assez de preuves. Le coupable court toujours.';
+                color = '#999';
+            }
+
+            const story = document.getElementById('story');
+            const oldEnding = document.getElementById('ending-block');
+            if (oldEnding) oldEnding.remove();
+
+            story.insertAdjacentHTML('beforeend', `
+                <div id="ending-block" style="margin-top:40px; border-top: 2px solid #000; padding-top: 20px; animation: fadeIn 2s;">
+                    <h2 style="color:${color}; margin-bottom: 20px; border:none; font-family: 'Special Elite', cursive;">${title}</h2>
+                    <p style="text-align:center; font-family: 'Courier Prime', monospace;">${text}</p>
+                    <div style="text-align:center; margin-top:20px;">
+                        <a href="prohibition.html" style="color: #8a0303; text-decoration: underline;">Rouvrir le dossier</a>
+                    </div>
+                </div>
+            `);
+
+            // Scroll to ending
+            setTimeout(() => {
+                document.getElementById('ending-block').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.section').forEach(section => {
+                section.querySelectorAll('.choice').forEach(btn => {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('choice-wrapper');
+
+                    const i = Number(btn.dataset.indices || 0);
+                    const r = Number(btn.dataset.respect || 0);
+                    const s = Number(btn.dataset.sangfroid || 0);
+
+                    const effects = [];
+                    if (i > 0) effects.push(`Indices +${i}`);
+                    if (r < 0) effects.push(`Respect ${r}%`);
+                    if (s < 0) effects.push(`Sang-froid ${s}%`);
+                    if (r > 0) effects.push(`Respect +${r}%`);
+                    if (s > 0) effects.push(`Sang-froid +${s}%`);
+
+                    wrapper.dataset.info = effects.join(' / ') || '';
+                    btn.parentNode.insertBefore(wrapper, btn);
+                    wrapper.appendChild(btn);
+                });
+            });
+            updateDisplay();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="hud"></div>
+    <div class="quest-card">
+        <h3>DOSSIER: OMBRES DE CHICAGO - 1932</h3>
+        <p style="text-align:right; font-family: 'Courier Prime'; font-size: 0.8em;">Détective: Jack Malone</p>
+
+        <div id="story">
+            <!-- 1. BUREAU -->
+            <div class="section">
+                <p><strong>22h00 - Bureau de Malone</strong></p>
+                <p>La pluie bat contre la vitre. Une femme fatale entre. Son mari a disparu.</p>
+                <button class="choice" data-indices="+10" onclick="applyChoice(this)">Accepter l'affaire et demander les
+                    détails.</button>
+                <button class="choice" data-respect="-10" data-sangfroid="+10" onclick="applyChoice(this)">Demander une
+                    avance en liquide d'abord (Cynique).</button>
+            </div>
+
+            <!-- 2. SCÈNE DE CRIME -->
+            <div class="section">
+                <p><strong>00h30 - Ruelle Sombre</strong></p>
+                <p>On a retrouvé la voiture du mari. Il y a du sang.</p>
+                <button class="choice" data-indices="+20" data-sangfroid="-10" onclick="applyChoice(this)">Examiner le
+                    siège arrière couvert de sang.</button>
+                <button class="choice" data-respect="+5" onclick="applyChoice(this)">Interroger le clochard témoin avec
+                    tact.</button>
+            </div>
+
+            <!-- 3. INDIC -->
+            <div class="section">
+                <p><strong>02h00 - Le Diner de Joe</strong></p>
+                <p>Votre indic a peur. Il demande de l'argent.</p>
+                <button class="choice" data-indices="+15" data-respect="-5" onclick="applyChoice(this)">Le menacer de le
+                    balancer aux flics.</button>
+                <button class="choice" data-respect="+10" onclick="applyChoice(this)">Lui payer un café et le
+                    rassurer.</button>
+            </div>
+
+            <!-- 4. SPEAKEASY -->
+            <div class="section">
+                <p><strong>08h00 - Le "Green Mill"</strong></p>
+                <p>C'est un bar clandestin tenu par la mafia. Il faut entrer.</p>
+                <button class="choice" data-sangfroid="-5" onclick="applyChoice(this)">Donner le mot de passe (Risqué si
+                    faux).</button>
+                <button class="choice" data-respect="-10" data-sangfroid="+5" onclick="applyChoice(this)">Montrer votre
+                    badge et entrer en force.</button>
+            </div>
+
+            <!-- 5. LE BARMAN -->
+            <div class="section">
+                <p><strong>Au comptoir</strong></p>
+                <p>Le barman nettoie un verre. Il sait quelque chose.</p>
+                <button class="choice" data-sangfroid="+10" onclick="applyChoice(this)">Commander un whisky et attendre
+                    qu'il parle.</button>
+                <button class="choice" data-indices="+10" data-respect="-10" onclick="applyChoice(this)">Lui mettre la
+                    tête sur le comptoir.</button>
+            </div>
+
+            <!-- 6. JAZZ SINGER -->
+            <div class="section">
+                <p><strong>La Chanteuse de Jazz</strong></p>
+                <p>Elle vous fait un signe discret. C'est la maîtresse du disparu.</p>
+                <button class="choice" data-indices="+20" onclick="applyChoice(this)">La rejoindre dans sa
+                    loge.</button>
+                <button class="choice" data-sangfroid="-10" onclick="applyChoice(this)">Refuser, c'est un piège
+                    évident.</button>
+            </div>
+
+            <!-- 7. EMBUSCADE -->
+            <div class="section">
+                <p><strong>Sortie de service</strong></p>
+                <p>Deux gros bras vous attendent. "Le patron veut te voir."</p>
+                <button class="choice" data-sangfroid="-20" data-respect="+10" onclick="applyChoice(this)">Se battre
+                    (Boxe à l'ancienne).</button>
+                <button class="choice" data-sangfroid="+5" onclick="applyChoice(this)">Les suivre calmement.</button>
+            </div>
+
+            <!-- 8. LE PARRAIN -->
+            <div class="section">
+                <p><strong>Bureau de Big Al</strong></p>
+                <p>Al Capone fume un cigare. Il vous offre un verre.</p>
+                <button class="choice" data-respect="+20" data-sangfroid="+10" onclick="applyChoice(this)">Accepter et
+                    discuter business.</button>
+                <button class="choice" data-respect="-20" onclick="applyChoice(this)">Refuser ("Je ne bois pas avec les
+                    tueurs").</button>
+            </div>
+
+            <!-- 9. PROPOSITION -->
+            <div class="section">
+                <p><strong>L'Offre</strong></p>
+                <p>Il vous propose d'oublier cette affaire contre une grosse enveloppe.</p>
+                <button class="choice" data-sangfroid="+20"
+                    onclick="applyChoice(this); computeEnding('corrupted')">Accepter l'argent (Fin Corrompu).</button>
+                <button class="choice" data-indices="+10" onclick="applyChoice(this)">Refuser poliment et
+                    partir.</button>
+            </div>
+
+            <!-- 10. FUSILLADE -->
+            <div class="section">
+                <p><strong>Drive-by Shooting</strong></p>
+                <p>Une voiture passe en trombe devant votre bureau. Les Thompson crépitent.</p>
+                <button class="choice" data-sangfroid="-20" onclick="applyChoice(this)">Plonger sous le bureau
+                    !</button>
+                <button class="choice" data-respect="+10" data-sangfroid="-10" onclick="applyChoice(this)">Riposter avec
+                    votre .38 Special !</button>
+            </div>
+
+            <!-- 11. MORGUE -->
+            <div class="section">
+                <p><strong>La Morgue</strong></p>
+                <p>Le légiste a trouvé quelque chose sur un corps repêché.</p>
+                <button class="choice" data-indices="+30" data-sangfroid="-10" onclick="applyChoice(this)">Examiner le
+                    corps (Estomac retourné).</button>
+                <button class="choice" onclick="applyChoice(this)">Lire juste le rapport.</button>
+            </div>
+
+            <!-- 12. ENTREPÔT -->
+            <div class="section">
+                <p><strong>Les Docks (Minuit)</strong></p>
+                <p>C'est là que la contrebande arrive. Et là qu'est le mari.</p>
+                <button class="choice" data-indices="+20" onclick="applyChoice(this)">S'infiltrer par le toit.</button>
+                <button class="choice" data-respect="-10" onclick="applyChoice(this)">Appeler la police en renfort
+                    (Lâcheté ? ou Prudence ?).</button>
+            </div>
+
+            <!-- 13. CONFRONTATION -->
+            <div class="section">
+                <p><strong>Le Grand Final</strong></p>
+                <p>Le bras droit de Capone tient le mari en otage.</p>
+                <button class="choice" data-sangfroid="-20" data-respect="+20" onclick="applyChoice(this)">Tirer pour
+                    désarmer (Risqué).</button>
+                <button class="choice" data-indices="+10" onclick="applyChoice(this)">Négocier en bluffant.</button>
+            </div>
+
+            <!-- 14. PREUVES -->
+            <div class="section">
+                <p><strong>Le Coffre-Fort</strong></p>
+                <p>Le livre de comptes est ouvert. La preuve ultime.</p>
+                <button class="choice" data-indices="+50" onclick="applyChoice(this)">Prendre le livre et
+                    courir.</button>
+                <button class="choice" data-sangfroid="+10" onclick="applyChoice(this)">Brûler l'entrepôt pour effacer
+                    les traces.</button>
+            </div>
+
+            <!-- 15. CONCLUSION -->
+            <div class="section">
+                <p><strong>Le Lendemain Matin</strong></p>
+                <p>Vous êtes au commissariat. Le Capitaine attend votre rapport.</p>
+                <button class="choice" onclick="applyChoice(this); computeEnding('attempt_solve')">Donner toutes les
+                    preuves
+                    (Si Indices > 80).</button>
+                <button class="choice" onclick="applyChoice(this); computeEnding()">Dire que c'était un accident (Si
+                    Respect Mafia élevé).</button>
+            </div>
+
+        </div>
+
+        <div class="navigation-footer"
+            style="margin-top: 3rem; padding-top: 2rem; border-top: 1px dotted #666; text-align: center;">
+            <a href="../polar.html"
+                style="color: #000; text-decoration: none; margin-right: 1.5rem; border-bottom:1px solid #000;">&larr;
+                Archives de la Police</a>
+            <a href="../index.html" style="color: #000; text-decoration: none; border-bottom:1px solid #000;">Menu
+                Principal</a>
+        </div>
+    </div>
+</body>
+
+</html>

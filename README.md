@@ -21,6 +21,8 @@ Vous pouvez accéder aux histoires via notre [page d'accueil](https://erwanlt.gi
     *   *LE TRÉSOR DE L'ÎLE MAUDITE* - Piraterie, mutinerie et trésors maudits.
 *   🐉 **Fantasy**
     *   *LA QUÊTE DU CODE ANCESTRAL* - Une aventure épique dans le donjon "Legacy".
+*   🕵️‍♂️ **Polar**
+    *   *OMBRES DE CHICAGO* - Enquête dans les années 30. Capone, Jazz et Prohibition.
 
 ## Structure du projet
 Le site est hébergé via GitHub Pages depuis le dossier `docs/`.
