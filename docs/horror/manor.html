@@ -65,11 +65,11 @@
                 const choice = choices[idx];
                 variables.sanity += choice.sanity;
                 variables.battery += choice.battery;
-            }
 
-            // Clamp
-            variables.sanity = Math.max(0, Math.min(100, variables.sanity));
-            variables.battery = Math.max(0, Math.min(100, variables.battery));
+                // Clamp at each step to prevent overflow
+                variables.sanity = Math.max(0, Math.min(100, variables.sanity));
+                variables.battery = Math.max(0, Math.min(100, variables.battery));
+            }
 
             updateDisplay();
         }
