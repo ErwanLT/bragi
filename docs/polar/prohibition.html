@@ -6,6 +6,28 @@
     <title>OMBRES DE CHICAGO</title>
     <link rel="stylesheet" href="../style/polar.css">
     <script>
+        document.addEventListener('keydown', function (event) {
+            // F12
+            if (event.key === 'F12' || event.keyCode === 123) {
+                event.preventDefault();
+                window.location.href = "../magic_word.html";
+                return;
+            }
+            // Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C (Chrome dev tools shortcuts)
+            if (event.ctrlKey && event.shiftKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) {
+                event.preventDefault();
+                window.location.href = "../magic_word.html";
+                return;
+            }
+            // Mac specific Cmd+Opt+I, Cmd+Opt+J
+            if (event.metaKey && event.altKey && (event.key === 'I' || event.key === 'J' || event.key === 'C')) {
+                event.preventDefault();
+                window.location.href = "../magic_word.html";
+                return;
+            }
+        });
+    </script>
+    <script>
         const variables = { indices: 0, respect: 50, sangFroid: 100 };
         const choices = {};
 

@@ -6,6 +6,16 @@
     <title>LE TRÉSOR DE L'ÎLE MAUDITE</title>
     <link rel="stylesheet" href="../style/adventure.css">
     <script>
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'F12' || event.keyCode === 123 ||
+                (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(event.key)) ||
+                (event.metaKey && event.altKey && ['I', 'J', 'C'].includes(event.key))) {
+                event.preventDefault();
+                window.location.href = "../magic_word.html";
+            }
+        });
+    </script>
+    <script>
         const variables = { loyalte: 80, vivres: 100, or: 100 };
         const choices = {};
 

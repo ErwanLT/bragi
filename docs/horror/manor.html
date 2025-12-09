@@ -6,6 +6,16 @@
     <title>LE MANOIR DU SILENCE</title>
     <link rel="stylesheet" href="../style/horror.css">
     <script>
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'F12' || event.keyCode === 123 ||
+                (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(event.key)) ||
+                (event.metaKey && event.altKey && ['I', 'J', 'C'].includes(event.key))) {
+                event.preventDefault();
+                window.location.href = "../magic_word.html";
+            }
+        });
+    </script>
+    <script>
         const variables = { sanity: 100, battery: 100 };
         const choices = {};
 

@@ -6,6 +6,16 @@
     <title>KUBRICK-9 ORBITAL STATION</title>
     <link rel="stylesheet" href="../style/scienceFiction.css">
     <script>
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'F12' || event.keyCode === 123 ||
+                (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(event.key)) ||
+                (event.metaKey && event.altKey && ['I', 'J', 'C'].includes(event.key))) {
+                event.preventDefault();
+                window.location.href = "../magic_word.html";
+            }
+        });
+    </script>
+    <script>
         const variables = { sanity: 90, integrity: 90, pulse: 65 };
         const choices = {}; // Stores chosen values for each section index
 
