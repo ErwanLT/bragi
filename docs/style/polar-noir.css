@@ -1,0 +1,90 @@
+/* Polar - Noir Theme */
+/* 1930s Detective, Film Noir, Chicago */
+
+:root {
+    --bg-dark: #0a0a0a;
+    --bg-paper: #e8e8e8;
+    --text-dark: #1a1a1a;
+    --accent-grey: #666;
+    --accent-gold: #d4af37;
+    --font-heading: 'Special Elite', cursive;
+    --font-body: 'Courier Prime', monospace;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&display=swap');
+
+body {
+    background-color: var(--bg-dark);
+    background-image:
+        repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0px, transparent 2px, transparent 4px),
+        linear-gradient(90deg, rgba(10, 10, 10, 1) 0%, rgba(20, 20, 20, 1) 100%);
+    color: var(--text-dark);
+    font-family: var(--font-body);
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-heading);
+    color: var(--text-dark);
+    text-shadow: 2px 2px 0 rgba(212, 175, 55, 0.3);
+    text-align: center;
+    border-bottom: 2px solid var(--accent-grey);
+    letter-spacing: 2px;
+}
+
+.quest-card {
+    background-color: var(--bg-paper);
+    background-image:
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.02) 0px, transparent 1px, transparent 2px);
+    border: 1px solid var(--accent-grey);
+    box-shadow:
+        0 0 0 10px rgba(0, 0, 0, 0.8),
+        inset 0 0 100px rgba(0, 0, 0, 0.05);
+}
+
+.quest-card::before {
+    content: "🕵️";
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 3rem;
+    opacity: 0.1;
+    filter: grayscale(100%);
+}
+
+.section {
+    border-bottom: 1px solid var(--accent-grey);
+}
+
+.choice {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: var(--text-dark);
+    color: var(--text-dark);
+    font-family: var(--font-body);
+}
+
+.choice:hover {
+    background: var(--text-dark);
+    color: var(--bg-paper);
+    border-color: var(--text-dark);
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.choice.selected {
+    background: var(--accent-grey);
+    color: var(--bg-paper);
+    border-color: var(--accent-grey);
+}
+
+.choice-wrapper::after {
+    color: var(--accent-grey);
+    font-weight: bold;
+}
+
+#hud {
+    background: rgba(10, 10, 10, 0.95);
+    border: 2px solid var(--accent-gold);
+    color: var(--accent-gold);
+    font-family: var(--font-heading);
+}

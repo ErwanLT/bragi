@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JURASSIC PARK - ISLA NUBLAR</title>
+    <link rel="stylesheet" href="../../style/base.css">
+    <link rel="stylesheet" href="../../style/thriller-prehistoric.css">
+    <script>
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'F12' || event.keyCode === 123 ||
+                (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(event.key)) ||
+                (event.metaKey && event.altKey && ['I', 'J', 'C'].includes(event.key))) {
+                event.preventDefault();
+                window.location.href = "../../magic_word.html";
+            }
+        });
+    </script>
+    <script>
+        const variables = { sante: 100, munitions: 50, securite: 80 };
+        const choices = {};
+
+        function updateDisplay() {
+            const hud = document.getElementById('hud');
+            if (hud) {
+                hud.innerHTML = `
+                    <div><span>SANTÉ:</span> <span style="color: ${variables.sante < 30 ? '#8b0000' : '#2ecc71'}">${variables.sante}%</span></div>
+                    <div><span>MUNITIONS:</span> <span>${variables.munitions}</span></div>
+                    <div><span>SÉCURITÉ:</span> <span>${variables.securite}%</span></div>
+                `;
+            }
+        }
+
+        function applyChoice(btn) {
+            const section = btn.closest('.section');
+            const sections = Array.from(document.querySelectorAll('.section'));
+            const index = sections.indexOf(section);
+
+            const s = Number(btn.dataset.sante || 0);
+            const m = Number(btn.dataset.munitions || 0);
+            const sec = Number(btn.dataset.securite || 0);
+
+            choices[index] = { sante: s, munitions: m, securite: sec };
+
+            section.querySelectorAll('.choice').forEach(b => {
+                b.classList.remove('selected');
+            });
+            btn.classList.add('selected');
+
+            recalculateState();
+        }
+
+        function recalculateState() {
+            variables.sante = 100;
+            variables.munitions = 50;
+            variables.securite = 80;
+
+            const sortedIndices = Object.keys(choices).sort((a, b) => Number(a) - Number(b));
+
+            for (const idx of sortedIndices) {
+                const choice = choices[idx];
+                variables.sante += choice.sante;
+                variables.munitions += choice.munitions;
+                variables.securite += choice.securite;
+
+                variables.sante = Math.max(0, Math.min(100, variables.sante));
+                variables.munitions = Math.max(0, variables.munitions);
+                variables.securite = Math.max(0, Math.min(100, variables.securite));
+            }
+
+            updateDisplay();
+        }
+
+        function computeEnding(forceEnding) {
+            let title = 'FIN INCONNUE';
+            let text = 'Votre histoire se termine ici...';
+            let color = '#ff8c00';
+
+            if (forceEnding === 'hero') {
+                title = '🦸 HÉROS DE NUBLAR';
+                text = 'Vous avez sauvé tout le monde et restauré la sécurité. InGen vous propose un poste de directeur de la sécurité. Vous refusez poliment et prenez le premier hélicoptère.';
+                color = '#2ecc71';
+            } else if (forceEnding === 'escape') {
+                title = '🚁 ÉVACUATION RÉUSSIE';
+                text = 'Vous avez survécu et quitté l\'île. Les cauchemars de dinosaures vous hanteront, mais vous êtes vivant. C\'est déjà ça.';
+                color = '#3498db';
+            } else if (forceEnding === 'sacrifice') {
+                title = '💔 SACRIFICE HÉROÏQUE';
+                text = 'Vous avez donné votre vie pour sauver les autres. Votre nom sera gravé sur une plaque commémorative... que personne ne verra jamais car l\'île est fermée.';
+                color = '#e74c3c';
+            } else if (variables.sante <= 0) {
+                title = '☠️ DÉVORÉ';
+                text = 'Un Velociraptor vous a eu. Vos dernières pensées : "Clever girl..."';
+                color = '#8b0000';
+            } else if (variables.securite <= 10) {
+                title = '🦖 CHAOS TOTAL';
+                text = 'Le parc est devenu un enfer. Les dinosaures règnent en maîtres. Vous errez, perdu, attendant l\'inévitable.';
+                color = '#ff6b6b';
+            } else if (variables.munitions <= 0 && variables.sante < 50) {
+                title = '🔫 SANS DÉFENSE';
+                text = 'Plus de munitions, blessé, épuisé. Un Dilophosaure vous crache son venin. Game over.';
+                color = '#9b59b6';
+            } else {
+                title = '🏝️ SURVIE PRÉCAIRE';
+                text = 'Vous survivez... pour l\'instant. Mais combien de temps tiendrez-vous sur cette île maudite ?';
+                color = '#f39c12';
+            }
+
+            const story = document.getElementById('story');
+            const oldEnding = document.getElementById('ending-block');
+            if (oldEnding) oldEnding.remove();
+
+            story.insertAdjacentHTML('beforeend', `
+                <div id="ending-block" style="margin-top:40px; border-top: 3px solid ${color}; padding-top: 20px; animation: fadeIn 2s;">
+                    <h2 style="color:${color}; margin-bottom: 20px; text-align: center;">${title}</h2>
+                    <p style="text-align:center; font-size: 1.1em;">${text}</p>
+                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap:15px; margin-top:30px; padding-top:20px; border-top:2px dashed ${color};">
+                        <div style="text-align:center">
+                            <div style="font-size:0.8rem; color:#666">SANTÉ</div>
+                            <div style="font-size:1.3rem; color:${variables.sante < 30 ? '#8b0000' : '#2ecc71'}">${variables.sante}%</div>
+                        </div>
+                        <div style="text-align:center">
+                            <div style="font-size:0.8rem; color:#666">MUNITIONS</div>
+                            <div style="font-size:1.3rem; color:#ff8c00">${variables.munitions}</div>
+                        </div>
+                        <div style="text-align:center">
+                            <div style="font-size:0.8rem; color:#666">SÉCURITÉ</div>
+                            <div style="font-size:1.3rem; color:#2d5016">${variables.securite}%</div>
+                        </div>
+                    </div>
+                    <div style="text-align:center; margin-top:25px;">
+                        <a href="jurassic.html" style="color: ${color}; text-decoration: none; border: 2px solid ${color}; padding: 10px 20px; display: inline-block; border-radius: 5px; font-weight: bold;">🔄 RECOMMENCER</a>
+                    </div>
+                </div>
+            `);
+
+            setTimeout(() => {
+                document.getElementById('ending-block').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.section').forEach(section => {
+                section.querySelectorAll('.choice').forEach(btn => {
+                    const wrapper = document.createElement('div');
+                    wrapper.classList.add('choice-wrapper');
+
+                    const s = Number(btn.dataset.sante || 0);
+                    const m = Number(btn.dataset.munitions || 0);
+                    const sec = Number(btn.dataset.securite || 0);
+
+                    const effects = [];
+                    if (s < 0) effects.push(`Santé ${s}%`);
+                    if (m < 0) effects.push(`Munitions ${m}`);
+                    if (sec < 0) effects.push(`Sécurité ${sec}%`);
+                    if (s > 0) effects.push(`Santé +${s}%`);
+                    if (m > 0) effects.push(`Munitions +${m}`);
+                    if (sec > 0) effects.push(`Sécurité +${sec}%`);
+
+                    wrapper.dataset.info = effects.join(' / ') || '';
+                    btn.parentNode.insertBefore(wrapper, btn);
+                    wrapper.appendChild(btn);
+                });
+            });
+            updateDisplay();
+        });
+    </script>
+</head>
+
+<body>
+    <div id="hud"></div>
+    <div class="quest-card">
+        <h3>🦖 JURASSIC PARK - ISLA NUBLAR 🦕</h3>
+        <p style="text-align:center; font-style: italic; color: #2d5016;">« La vie trouve toujours un chemin... »</p>
+
+        <div id="story">
+
+            <!-- 1. ARRIVÉE -->
+            <div class="section">
+                <p><strong>Jour 1 - 08h00 - Héliport</strong></p>
+                <p>L'hélicoptère se pose sur Isla Nublar. John Hammond vous accueille avec un sourire. "Bienvenue à
+                    Jurassic Park ! Vous allez adorer ça."</p>
+                <button class="choice" data-securite="+10" onclick="applyChoice(this)">Écouter attentivement le briefing
+                    sécurité.</button>
+                <button class="choice" data-munitions="+10" onclick="applyChoice(this)">Vérifier discrètement votre
+                    équipement.</button>
+            </div>
+
+            <!-- 2. VISITE DU CENTRE -->
+            <div class="section">
+                <p><strong>09h00 - Centre des visiteurs</strong></p>
+                <p>Le Dr. Grant observe les fossiles. Le Dr. Malcolm marmonne quelque chose sur la théorie du chaos.</p>
+                <button class="choice" data-securite="+5" onclick="applyChoice(this)">Poser des questions sur les
+                    protocoles de sécurité.</button>
+                <button class="choice" data-sante="+5" onclick="applyChoice(this)">Prendre un café et des
+                    provisions.</button>
+            </div>
+
+            <!-- 3. PREMIER DINOSAURE -->
+            <div class="section">
+                <p><strong>10h00 - Enclos des Brachiosaures</strong></p>
+                <p>Un Brachiosaure géant broute paisiblement. C'est magnifique... et terrifiant.</p>
+                <button class="choice" data-securite="-5" onclick="applyChoice(this)">S'approcher pour une meilleure
+                    photo (Imprudent).</button>
+                <button class="choice" data-securite="+5" onclick="applyChoice(this)">Rester à distance de
+                    sécurité.</button>
+            </div>
+
+            <!-- 4. SALLE DE CONTRÔLE -->
+            <div class="section">
+                <p><strong>11h00 - Salle de contrôle</strong></p>
+                <p>Ray Arnold vous montre les systèmes. Dennis Nedry tape furieusement sur son clavier, l'air suspect.
+                </p>
+                <button class="choice" data-securite="+15" onclick="applyChoice(this)">Mémoriser l'emplacement des
+                    commandes d'urgence.</button>
+                <button class="choice" data-munitions="+5" onclick="applyChoice(this)">Demander où sont stockées les
+                    armes.</button>
+            </div>
+
+            <!-- 5. ENCLOS DES RAPTORS -->
+            <div class="section">
+                <p><strong>12h00 - Enclos des Velociraptors</strong></p>
+                <p>Robert Muldoon vous avertit : "Ce sont des tueuses. Ne les sous-estimez jamais."</p>
+                <button class="choice" data-securite="+10" onclick="applyChoice(this)">Écouter attentivement ses
+                    conseils de survie.</button>
+                <button class="choice" data-securite="-10" data-munitions="+15" onclick="applyChoice(this)">Demander à
+                    tester le fusil tranquillisant.</button>
+            </div>
+
+            <!-- 6. LA TEMPÊTE -->
+            <div class="section">
+                <p><strong>14h00 - Safari en Jeep</strong></p>
+                <p>Une tempête tropicale approche. Le ciel s'assombrit dangereusement.</p>
+                <button class="choice" data-securite="+10" onclick="applyChoice(this)">Suggérer de rentrer
+                    immédiatement.</button>
+                <button class="choice" data-securite="-5" onclick="applyChoice(this)">Continuer le tour (On est venus
+                    pour voir des dinos !).</button>
+            </div>
+
+            <!-- 7. PANNE DE COURANT -->
+            <div class="section">
+                <p><strong>15h30 - Panne générale</strong></p>
+                <p>Toutes les lumières s'éteignent. Nedry a désactivé les systèmes de sécurité !</p>
+                <button class="choice" data-securite="-20" data-munitions="+10" onclick="applyChoice(this)">Sortir de la
+                    Jeep pour inspecter.</button>
+                <button class="choice" data-securite="-10" onclick="applyChoice(this)">Rester dans la Jeep et
+                    verrouiller les portes.</button>
+            </div>
+
+            <!-- 8. LE T-REX -->
+            <div class="section">
+                <p><strong>16h00 - Rencontre avec le T-Rex</strong></p>
+                <p>Des pas lourds. L'eau dans le verre vibre. Le Tyrannosaurus Rex sort de son enclos.</p>
+                <button class="choice" data-sante="-20" data-securite="-15" onclick="applyChoice(this)">Courir vers la
+                    jungle !</button>
+                <button class="choice" data-sante="-10" onclick="applyChoice(this)">Ne pas bouger. Il voit le
+                    mouvement...</button>
+            </div>
+
+            <!-- 9. FUITE DANS LA JUNGLE -->
+            <div class="section">
+                <p><strong>17h00 - Jungle dense</strong></p>
+                <p>Vous êtes perdu dans la jungle. Des cris de dinosaures résonnent partout.</p>
+                <button class="choice" data-sante="+10" onclick="applyChoice(this)">Chercher des fruits et de
+                    l'eau.</button>
+                <button class="choice" data-securite="+10" onclick="applyChoice(this)">Grimper à un arbre pour repérer
+                    le centre.</button>
+            </div>
+
+            <!-- 10. DILOPHOSAURE -->
+            <div class="section">
+                <p><strong>18h00 - Rencontre inattendue</strong></p>
+                <p>Un petit Dilophosaure vous observe, la tête penchée. Il a l'air... mignon ?</p>
+                <button class="choice" data-sante="-30" data-munitions="-10" onclick="applyChoice(this)">Lui lancer un
+                    bâton (Mauvaise idée).</button>
+                <button class="choice" data-munitions="-5" onclick="applyChoice(this)">Tirer une fusée de détresse pour
+                    l'effrayer.</button>
+            </div>
+
+            <!-- 11. RETOUR AU CENTRE -->
+            <div class="section">
+                <p><strong>19h00 - Centre des visiteurs abandonné</strong></p>
+                <p>Le centre est plongé dans le noir. Vous entendez des griffes sur le sol.</p>
+                <button class="choice" data-securite="+15" onclick="applyChoice(this)">Aller à la salle de contrôle
+                    restaurer l'électricité.</button>
+                <button class="choice" data-munitions="+20" onclick="applyChoice(this)">Fouiller l'armurerie
+                    d'abord.</button>
+            </div>
+
+            <!-- 12. LES RAPTORS -->
+            <div class="section">
+                <p><strong>20h00 - Cuisine</strong></p>
+                <p>Deux Velociraptors vous traquent. Ils communiquent entre eux. Vous êtes pris en tenaille.</p>
+                <button class="choice" data-sante="-15" data-munitions="-20" onclick="applyChoice(this)">Tirer sur le
+                    premier raptor.</button>
+                <button class="choice" data-sante="-5" onclick="applyChoice(this)">Se cacher dans le
+                    congélateur.</button>
+            </div>
+
+            <!-- 13. RESTAURATION DU SYSTÈME -->
+            <div class="section">
+                <p><strong>21h00 - Salle de contrôle</strong></p>
+                <p>Lex réussit à redémarrer le système. "It's a UNIX system, I know this !"</p>
+                <button class="choice" data-securite="+30" onclick="applyChoice(this)">Réactiver toutes les clôtures
+                    électriques.</button>
+                <button class="choice" data-securite="+20" data-munitions="+10" onclick="applyChoice(this)">Appeler les
+                    secours en priorité.</button>
+            </div>
+
+            <!-- 14. SAUVETAGE -->
+            <div class="section">
+                <p><strong>22h00 - Héliport</strong></p>
+                <p>Un hélicoptère de secours approche. Mais un T-Rex bloque le chemin !</p>
+                <button class="choice" data-sante="-20" data-munitions="-30" onclick="applyChoice(this)">Créer une
+                    diversion avec les fusées.</button>
+                <button class="choice" data-securite="-10" onclick="applyChoice(this)">Attendre qu'il parte
+                    (Risqué).</button>
+            </div>
+
+            <!-- 15. CHOIX FINAL -->
+            <div class="section">
+                <p><strong>23h00 - Le Choix Final</strong></p>
+                <p>Vous êtes à l'hélicoptère. Mais vous entendez des cris... Il reste des survivants dans le bunker !
+                </p>
+                <button class="choice" data-sante="-30" data-securite="-20"
+                    onclick="applyChoice(this); computeEnding('hero')">Retourner les sauver (Héroïque).</button>
+                <button class="choice" onclick="applyChoice(this); computeEnding('escape')">Monter dans l'hélico et
+                    partir (Survie).</button>
+                <button class="choice" data-sante="-100" onclick="applyChoice(this); computeEnding('sacrifice')">Rester
+                    pour détruire le labo (Sacrifice).</button>
+            </div>
+
+            <p style="margin-top:40px; text-align: center; color: #ff8c00;"><strong>/// FIN DE LA VISITE ///</strong>
+            </p>
+            <div class="actions">
+                <button class="choice" id="report-btn"
+                    style="text-align:center; background-color: #2d5016; color: #ff8c00; border-color: #ff8c00;"
+                    onclick="computeEnding()">RAPPORT FINAL</button>
+            </div>
+        </div>
+
+        <div class="navigation-footer"
+            style="margin-top: 3rem; padding-top: 2rem; border-top: 2px dashed #2d5016; text-align: center;">
+            <a href="../../thriller.html" style="color: #666; text-decoration: none; margin-right: 1.5rem;">&larr;
+                Retour
+                aux Thrillers</a>
+            <a href="../../index.html" style="color: #666; text-decoration: none;">Menu Principal</a>
+        </div>
+    </div>
+</body>
+
+</html>

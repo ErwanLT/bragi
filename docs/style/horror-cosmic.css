@@ -1,0 +1,98 @@
+/* Horror - Cosmic Theme */
+/* Lovecraftian, Stars, Purple Void */
+
+:root {
+    --bg-void: #0a0015;
+    --text-color: #d0d0ff;
+    --accent-purple: #9b59b6;
+    --accent-cyan: #3498db;
+    --font-main: 'Crimson Text', serif;
+    --font-header: 'Creepster', cursive;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Creepster&display=swap');
+
+body {
+    background-color: var(--bg-void);
+    background-image:
+        radial-gradient(2px 2px at 20% 30%, white, transparent),
+        radial-gradient(2px 2px at 60% 70%, white, transparent),
+        radial-gradient(1px 1px at 50% 50%, white, transparent),
+        radial-gradient(1px 1px at 80% 10%, white, transparent),
+        radial-gradient(2px 2px at 90% 60%, white, transparent),
+        radial-gradient(circle at 50% 50%, rgba(155, 89, 182, 0.1) 0%, transparent 50%);
+    background-size: 200% 200%;
+    background-position: 0% 0%;
+    animation: cosmicDrift 60s ease-in-out infinite;
+    color: var(--text-color);
+    font-family: var(--font-main);
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Creepster', cursive, serif;
+    color: #fff;
+    text-shadow:
+        0 0 5px var(--accent-purple),
+        0 0 10px var(--accent-purple),
+        0 0 20px var(--accent-purple),
+        0 0 40px var(--accent-cyan);
+    letter-spacing: 2px;
+    font-weight: normal;
+}
+
+.quest-card {
+    background-color: rgba(10, 0, 21, 0.9);
+    border: 1px solid var(--accent-purple);
+    border-top: 3px solid var(--accent-cyan);
+    box-shadow:
+        0 0 30px rgba(155, 89, 182, 0.5),
+        inset 0 0 50px rgba(52, 152, 219, 0.1);
+}
+
+.section {
+    border-bottom: 1px solid rgba(155, 89, 182, 0.3);
+}
+
+.choice {
+    background: rgba(20, 0, 40, 0.6);
+    border-color: var(--accent-purple);
+    color: var(--text-color);
+}
+
+.choice:hover {
+    background: rgba(155, 89, 182, 0.3);
+    border-color: var(--accent-cyan);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+}
+
+.choice.selected {
+    background: var(--accent-purple);
+    color: #fff;
+    border-color: var(--accent-cyan);
+}
+
+.choice-wrapper::after {
+    color: var(--accent-cyan);
+}
+
+#hud {
+    background: rgba(10, 0, 21, 0.95);
+    border: 1px solid var(--accent-purple);
+    box-shadow: 0 0 20px rgba(155, 89, 182, 0.4);
+    color: var(--accent-cyan);
+}
+
+@keyframes cosmicDrift {
+
+    0%,
+    100% {
+        background-position: 0% 0%;
+    }
+
+    50% {
+        background-position: 100% 100%;
+    }
+}

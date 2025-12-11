@@ -1,0 +1,78 @@
+/* Science-Fiction - Space Theme */
+/* Orbital Station, Futuristic, Tech */
+
+:root {
+    --bg-space: #0d1b2a;
+    --bg-panel: #1b263b;
+    --text-light: #e0e1dd;
+    --accent-cyan: #4db6ac;
+    --accent-blue: #3498db;
+    --font-main: 'Roboto Mono', monospace;
+    --font-header: 'Orbitron', sans-serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Roboto+Mono:wght@400;700&display=swap');
+
+body {
+    background-color: var(--bg-space);
+    background-image:
+        linear-gradient(rgba(77, 182, 172, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77, 182, 172, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    color: var(--text-light);
+    font-family: var(--font-main);
+}
+
+h1,
+h2,
+h3 {
+    font-family: var(--font-header);
+    color: var(--accent-cyan);
+    text-shadow: 0 0 10px rgba(77, 182, 172, 0.5);
+    letter-spacing: 2px;
+    text-align: center;
+    border-bottom: 2px solid var(--accent-cyan);
+}
+
+.quest-card {
+    background-color: var(--bg-panel);
+    border: 1px solid var(--accent-cyan);
+    box-shadow:
+        0 0 20px rgba(77, 182, 172, 0.3),
+        inset 0 0 50px rgba(0, 0, 0, 0.5);
+}
+
+.section {
+    border-bottom: 1px solid #333;
+}
+
+.choice {
+    background: rgba(13, 27, 42, 0.8);
+    border-color: var(--accent-cyan);
+    color: var(--text-light);
+    font-family: var(--font-main);
+}
+
+.choice:hover {
+    background: rgba(77, 182, 172, 0.2);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    box-shadow: 0 0 10px rgba(77, 182, 172, 0.5);
+}
+
+.choice.selected {
+    background: var(--accent-cyan);
+    color: #000;
+    border-color: var(--accent-cyan);
+}
+
+.choice-wrapper::after {
+    color: var(--accent-blue);
+}
+
+#hud {
+    background: rgba(15, 30, 45, 0.95);
+    border: 2px solid var(--accent-cyan);
+    font-family: var(--font-main);
+    color: var(--accent-cyan);
+}

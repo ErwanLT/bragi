@@ -1,0 +1,120 @@
+/* Horror - Psychological Theme */
+/* Gothic, Supernatural, Dark */
+
+:root {
+    --bg-color: #050505;
+    --text-color: #dcdcdc;
+    --accent-color: #c0392b;
+    --secondary-color: #2b2b2b;
+    --font-main: 'Crimson Text', serif;
+    --font-header: 'Creepster', cursive;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Creepster&display=swap');
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    animation: flickerBg 10s infinite;
+}
+
+h1,
+h2,
+h3 {
+    font-family: 'Creepster', cursive, serif;
+    color: #fff;
+    text-shadow:
+        0 0 5px #ff0000,
+        0 0 10px #ff0000,
+        0 0 20px #ff0000,
+        0 0 40px #ff0000;
+    letter-spacing: 2px;
+    font-weight: normal;
+    position: relative;
+    z-index: 3;
+}
+
+.quest-card {
+    background-color: #111;
+    border: 1px solid #333;
+    border-top: 5px solid var(--accent-color);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
+}
+
+.quest-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.quest-card p {
+    position: relative;
+    z-index: 2;
+    color: #eee;
+}
+
+.section {
+    z-index: 2;
+    border-bottom: 1px solid #333;
+    animation: fadeIn 2s ease-in;
+}
+
+.choice {
+    background: #0f0f0f;
+    border-color: #444;
+    color: #aeaeae;
+    font-family: var(--font-main);
+}
+
+.choice:hover {
+    background: #1a0505;
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    transform: translateX(5px);
+}
+
+.choice.selected {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+}
+
+.choice-wrapper::after {
+    color: #aaa;
+}
+
+#hud {
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--accent-color);
+    font-family: monospace;
+    box-shadow: 0 0 10px rgba(138, 3, 3, 0.3);
+}
+
+#hud span:last-child {
+    color: #fff;
+}
+
+@keyframes flickerBg {
+    0% {
+        background-color: #050505;
+    }
+
+    5% {
+        background-color: #0a0000;
+    }
+
+    10% {
+        background-color: #050505;
+    }
+
+    100% {
+        background-color: #050505;
+    }
+}
