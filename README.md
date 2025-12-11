@@ -12,18 +12,28 @@ Ce projet rend hommage à cet art du récit en proposant des expériences narrat
 Vous pouvez accéder aux histoires via notre [page d'accueil](https://erwanlt.github.io/bragi/) (ou localement via `docs/index.html`).
 
 *   🛸 **Science-Fiction**
-    *   *KUBRICK-9 ORBITAL STATION* - Une IA détraquée dans une station orbitale.
+    *   *Spatial*
+        *   **KUBRICK-9 ORBITAL STATION** - Une IA détraquée dans une station orbitale.
 *   👻 **Horreur**
-    *   *LE MANOIR DU SILENCE* - Survivez à une nuit dans un manoir hanté.
-    *   *LE LABYRINTHE OUBLIÉ* - Perdu dans un dédale ancien (Lumière, Santé Mentale).
+    *   *Psychologique*
+        *   **LE MANOIR DU SILENCE** - Survivez à une nuit dans un manoir hanté.
+    *   *Cosmique*
+        *   **LE LABYRINTHE OUBLIÉ** - Perdu dans un dédale ancien.
 *   🤠 **Western**
-    *   *LE DERNIER DUEL* - Une traque impitoyable au Far West.
+    *   *Classique*
+        *   **LE DERNIER DUEL** - Une traque impitoyable au Far West.
 *   ⚓️ **Aventure**
-    *   *LE TRÉSOR DE L'ÎLE MAUDITE* - Piraterie, mutinerie et trésors maudits.
+    *   *Piraterie*
+        *   **LE TRÉSOR DE L'ÎLE MAUDITE** - Piraterie, mutinerie et trésors maudits.
 *   🐉 **Fantasy**
-    *   *LA QUÊTE DU CODE ANCESTRAL* - Une aventure épique dans le donjon "Legacy".
+    *   *Médiéval*
+        *   **LA QUÊTE DU CODE ANCESTRAL** - Une aventure épique dans le donjon "Legacy".
 *   🕵️‍♂️ **Polar**
-    *   *OMBRES DE CHICAGO* - Enquête dans les années 30. Capone, Jazz et Prohibition.
+    *   *Noir*
+        *   **OMBRES DE CHICAGO** - Enquête dans les années 30. Capone, Jazz et Prohibition.
+*   🎬 **Thriller**
+    *   *Préhistorique*
+        *   **JURASSIC PARK - ISLA NUBLAR** - Survivez à l'île où les dinosaures règnent en maîtres.
 
 ## Structure du projet
 Le site est hébergé via GitHub Pages depuis le dossier `docs/`.
