@@ -77,8 +77,10 @@ h3 {
 }
 
 .choice-wrapper::after {
-    color: var(--accent-red);
+    background: rgba(26, 15, 10, 0.95);
+    color: var(--accent-gold);
     font-weight: bold;
+    border: 1px solid var(--accent-red);
 }
 
 #hud {

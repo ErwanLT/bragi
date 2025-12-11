@@ -65,15 +65,20 @@ body {
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 0.9em;
+    font-size: 0.85em;
     font-weight: bold;
     pointer-events: none;
     opacity: 0;
     transition: opacity 0.3s;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
 }
 
 .choice-wrapper:hover::after {
-    opacity: 1;
+    opacity: 0.95;
 }
 
 /* ============================================
@@ -111,6 +116,7 @@ body {
         opacity: 0;
         transform: translateY(10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
