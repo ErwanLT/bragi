@@ -1,4 +1,5 @@
 # Bragi - Histoires Interactives
+![Bragi](bragi.png)
 
 Bienvenue dans le dépôt **Bragi**, un recueil d'histoires interactives où vos choix déterminent la suite du récit.
 
