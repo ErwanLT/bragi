@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Camp du Lac Sanglant</title>
+    <link rel="stylesheet" href="../../style/base.css">
+    <link rel="stylesheet" href="../../style/horror-slasher.css">
+    <script src="../../js/security.js"></script>
+    <script src="../../js/horror/slasher/summer_camp.js"></script>
+</head>
+
+<body>
+    <div id="hud"></div>
+    <div class="quest-card">
+        <h3>🔪 Le Camp du Lac Sanglant 🔪</h3>
+        <p style="text-align: center; color: #888; font-style: italic; margin-bottom: 2rem;">"Ils pensaient passer un
+            été inoubliable... Ils avaient raison."</p>
+
+        <div id="story">
+
+            <!-- 1. ARRIVEE -->
+            <div class="section">
+                <p><strong>1. L'Arrivée</strong></p>
+                <p>Le van s'arrête devant le panneau "Camp Crystal Lake" (rayé avec de la peinture rouge). Vous êtes 5
+                    moniteurs : Vous, Jake (le sportif), Sally (la pom-pom girl), Nerd (le geek), et Stoner (le fumeur).
+                </p>
+                <button class="choice" onclick="applyChoice(this)">Faire une blague sur les films d'horreur.</button>
+                <button class="choice" data-panique="+5" onclick="applyChoice(this)">Noter que le panneau est
+                    flippant.</button>
+            </div>
+
+            <!-- 2. FEU DE CAMP -->
+            <div class="section">
+                <p><strong>2. Le Feu de Camp</strong></p>
+                <p>La nuit tombe. Stoner propose de raconter une histoire de fantôme sur le "Tueur au Masque de Hockey".
+                </p>
+                <button class="choice" data-panique="+10" onclick="applyChoice(this)">Écouter attentivement (Grosse
+                    erreur).</button>
+                <button class="choice" data-vie="+5" onclick="applyChoice(this)">Aller chercher des bières dans la
+                    cabane (Seul).</button>
+            </div>
+
+            <!-- 3. LE BRUIT -->
+            <div class="section">
+                <p><strong>3. Un Bruit dans les Buissons</strong></p>
+                <p>CRAC. Une branche casse. Stoner dit : "C'est sûrement un écureuil". Il se lève pour aller voir.</p>
+                <button class="choice" data-panique="+5" onclick="applyChoice(this)">Lui dire de se rasseoir.</button>
+                <button class="choice" data-survivants="-1" data-panique="+20" onclick="applyChoice(this)">Le laisser y
+                    aller (Adieu Stoner).</button>
+            </div>
+
+            <!-- 4. LA DECOUVERTE -->
+            <div class="section">
+                <p><strong>4. La Découverte</strong></p>
+                <p>Stoner ne revient pas. Vous allez voir. Vous trouvez son bonnet... couvert de sang.</p>
+                <button class="choice" data-panique="+30" onclick="applyChoice(this)">HURLER.</button>
+                <button class="choice" data-panique="+10" onclick="applyChoice(this)">Courir prévenir les autres en
+                    silence.</button>
+            </div>
+
+            <!-- 5. LE TUEUR APPARAIT -->
+            <div class="section">
+                <p><strong>5. Il est là</strong></p>
+                <p>Une silhouette massive surgit, armée d'une machette rouillée. Il porte un masque.</p>
+                <button class="choice" data-vie="-10" data-panique="+10" onclick="applyChoice(this)">Rester figé de
+                    peur.</button>
+                <button class="choice" data-vie="-5" onclick="applyChoice(this)">S'enfuir vers les cabanes.</button>
+            </div>
+
+            <!-- 6. SEPARATION -->
+            <div class="section">
+                <p><strong>6. "On se sépare !"</strong></p>
+                <p>Jake crie : "On couvre plus de terrain si on se sépare !". Classique.</p>
+                <button class="choice" data-survivants="-1" onclick="applyChoice(this)">Accepter (Mauvaise
+                    idée).</button>
+                <button class="choice" data-vie="+5" onclick="applyChoice(this)">Rester groupés (La sécurité par le
+                    nombre).</button>
+            </div>
+
+            <!-- 7. LA CABANE A OUTILS -->
+            <div class="section">
+                <p><strong>7. La Cabane à Outils</strong></p>
+                <p>Vous vous cachez dans la remise. Il y a des armes potentielles.</p>
+                <button class="choice" data-vie="+10" onclick="applyChoice(this)">Prendre une tronçonneuse (Pas
+                    d'essence).</button>
+                <button class="choice" data-vie="+5" onclick="applyChoice(this)">Prendre un tournevis.</button>
+            </div>
+
+            <!-- 8. NERD EN DANGER -->
+            <div class="section">
+                <p><strong>8. Nerd coincé</strong></p>
+                <p>Nerd a perdu ses lunettes en courant. Le tueur approche.</p>
+                <button class="choice" data-vie="-10" data-survivants="0" onclick="applyChoice(this)">L'aider
+                    (Risqué).</button>
+                <button class="choice" data-survivants="-1" data-panique="+10" onclick="applyChoice(this)">Le laisser
+                    (Sacrifice).</button>
+            </div>
+
+            <!-- 9. LE GENERATEUR -->
+            <div class="section">
+                <p><strong>9. Plus de lumière</strong></p>
+                <p>Le courant saute. Il faut rallumer le générateur au sous-sol de la maison principale.</p>
+                <button class="choice" data-panique="+20" onclick="applyChoice(this)">Descendre dans le noir.</button>
+                <button class="choice" data-vie="-5" onclick="applyChoice(this)">Utiliser la lampe torche de votre
+                    téléphone (Batterie faible).</button>
+            </div>
+
+            <!-- 10. LE CHAT -->
+            <div class="section">
+                <p><strong>10. Fausse Alerte</strong></p>
+                <p>Quelque chose vous saute dessus ! C'est juste un chat.</p>
+                <button class="choice" data-vie="+5" data-panique="-10" onclick="applyChoice(this)">Ouf...
+                    (Soulagement).</button>
+                <button class="choice" data-panique="+5" onclick="applyChoice(this)">Tuer le chat par réflexe
+                    (Cruel).</button>
+            </div>
+
+            <!-- 11. LA BLESSURE -->
+            <div class="section">
+                <p><strong>11. La Chute</strong></p>
+                <p>Vous trébuchez sur une racine (ou un cadavre, dur à dire).</p>
+                <button class="choice" data-vie="-10" onclick="applyChoice(this)">Se tordre la cheville.</button>
+                <button class="choice" data-vie="-5" onclick="applyChoice(this)">Se relever en boitant.</button>
+            </div>
+
+            <!-- 12. SALLY CRIE -->
+            <div class="section">
+                <p><strong>12. Le Cri de Sally</strong></p>
+                <p>Sally hurle près du lac. Elle est en maillot de bain (évidemment).</p>
+                <button class="choice" data-survivants="-1" data-panique="+10" onclick="applyChoice(this)">Arriver trop
+                    tard (Décapitée).</button>
+                <button class="choice" data-vie="-20" data-survivants="0" onclick="applyChoice(this)">Intervenir et
+                    prendre un coup.</button>
+            </div>
+
+            <!-- 13. LA VOITURE -->
+            <div class="section">
+                <p><strong>13. La Voiture</strong></p>
+                <p>Vous atteignez la voiture. Les clés sont introuvables.</p>
+                <button class="choice" data-panique="+10" onclick="applyChoice(this)">Chercher sous le siège.</button>
+                <button class="choice" data-vie="-5" onclick="applyChoice(this)">Essayer de démarrer aux fils.</button>
+            </div>
+
+            <!-- 14. LE MOTEUR -->
+            <div class="section">
+                <p><strong>14. Le Moteur Cale</strong></p>
+                <p>Le tueur est sur le capot ! Il tape sur le pare-brise.</p>
+                <button class="choice" data-vie="-10" data-panique="+10" onclick="applyChoice(this)">Accélérer en marche
+                    arrière.</button>
+                <button class="choice" data-vie="-15" onclick="applyChoice(this)">Freiner sec pour l'éjecter.</button>
+            </div>
+
+            <!-- 15. L'ACCIDENT -->
+            <div class="section">
+                <p><strong>15. L'Accident</strong></p>
+                <p>Vous rentrez dans un arbre. La voiture est HS.</p>
+                <button class="choice" data-vie="-10" onclick="applyChoice(this)">Sortir en rampant.</button>
+                <button class="choice" data-vie="-5" onclick="applyChoice(this)">Faire le mort (Mais il
+                    vérifie).</button>
+            </div>
+
+            <!-- 16. LA TROUSSE DE SOINS -->
+            <div class="section">
+                <p><strong>16. Une Pause</strong></p>
+                <p>Vous trouvez une trousse de secours dans les toilettes du camping.</p>
+                <button class="choice" data-vie="+30" data-panique="-10" onclick="applyChoice(this)">Se soigner
+                    (Bandages et antiseptique).</button>
+                <button class="choice" data-vie="+10" onclick="applyChoice(this)">Prendre juste des
+                    antidouleurs.</button>
+            </div>
+
+            <!-- 17. LE PIEGE -->
+            <div class="section">
+                <p><strong>17. Le Piège</strong></p>
+                <p>Vous décidez d'arrêter de fuir. Il faut le piéger.</p>
+                <button class="choice" data-panique="-5" onclick="applyChoice(this)">Préparer un piège à ours.</button>
+                <button class="choice" data-vie="-10" onclick="applyChoice(this)">S'utiliser comme appât.</button>
+            </div>
+
+            <!-- 18. LA CONFRONTATION -->
+            <div class="section">
+                <p><strong>18. Face à Face</strong></p>
+                <p>Il est là. Il ne court jamais, mais il vous rattrape toujours.</p>
+                <button class="choice" data-vie="-20" onclick="applyChoice(this)">Lui planter le tournevis dans
+                    l'épaule.</button>
+                <button class="choice" data-vie="-30" onclick="applyChoice(this)">Essayer de lui retirer son
+                    masque.</button>
+            </div>
+
+            <!-- 19. LE COUP DE GRACE ? -->
+            <div class="section">
+                <p><strong>19. Il est à terre</strong></p>
+                <p>Il tombe. Il semble mort.</p>
+                <button class="choice" data-panique="+10" onclick="applyChoice(this)">Lâcher l'arme et soupirer (Erreur
+                    classique).</button>
+                <button class="choice" data-vie="-5" onclick="applyChoice(this)">Lui mettre une deuxième balle (ou coup)
+                    pour être sûr.</button>
+            </div>
+
+            <!-- 20. LA POLICE -->
+            <div class="section">
+                <p><strong>20. La Sirène</strong></p>
+                <p>On entend les sirènes au loin. Il bouge encore un doigt.</p>
+                <button class="choice" onclick="applyChoice(this); computeEnding('police')">Courir vers la
+                    police.</button>
+                <button class="choice" onclick="applyChoice(this); computeEnding()">L'achever une bonne fois pour
+                    toutes.</button>
+            </div>
+
+        </div>
+
+        <div class="footer-nav"
+            style="margin-top: 3rem; border-top: 1px solid var(--border-color); padding-top: 1rem; text-align: center;">
+            <a href="../../horror/slasher.html" style="color: #666;">&larr; Retour aux Slashers</a> |
+            <a href="../../index.html" style="color: #666;">Menu Principal</a>
+        </div>
+    </div>
+</body>
