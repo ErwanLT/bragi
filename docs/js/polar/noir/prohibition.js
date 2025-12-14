@@ -1,14 +1,12 @@
+// Setup security
+setupF12Protection('../../magic_word.html');
+
+// Expose functions to global scope
+window.applyChoice = applyChoice;
+window.computeEnding = computeEnding;
+
 const variables = { indices: 0, respect: 50, sangFroid: 100 };
 const choices = {};
-
-document.addEventListener('keydown', function (event) {
-    if (event.key === 'F12' || event.keyCode === 123 ||
-        (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(event.key)) ||
-        (event.metaKey && event.altKey && ['I', 'J', 'C'].includes(event.key))) {
-        event.preventDefault();
-        window.location.href = "../../magic_word.html";
-    }
-});
 
 function updateDisplay() {
     const hud = document.getElementById('hud');

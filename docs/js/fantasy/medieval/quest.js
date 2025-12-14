@@ -1,14 +1,12 @@
+// Setup security
+setupF12Protection('../../magic_word.html');
+
+// Expose functions to global scope for HTML access
+window.applyChoice = applyChoice;
+window.computeEnding = computeEnding;
+
 const variables = { mana: 50, xp: 0, karma: 50 };
 const choices = {}; // Stores chosen values for each section index
-
-document.addEventListener('keydown', function (event) {
-    if (event.key === 'F12' || event.keyCode === 123 ||
-        (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(event.key)) ||
-        (event.metaKey && event.altKey && ['I', 'J', 'C'].includes(event.key))) {
-        event.preventDefault();
-        window.location.href = "../../magic_word.html";
-    }
-});
 
 function updateDisplay() {
     const hud = document.getElementById('hud');
