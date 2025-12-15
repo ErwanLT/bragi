@@ -1,5 +1,5 @@
 // Setup security
-setupF12Protection('../../../magic_word.html');
+setupF12Protection('../../magic_word.html');
 
 // Expose functions to global scope
 window.applyChoice = applyChoice;
