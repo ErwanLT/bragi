@@ -11,4 +11,10 @@ window.setupF12Protection = function (redirectUrl) {
             window.location.href = redirectUrl;
         }
     });
+
+    // Disable right-click and redirect
+    document.addEventListener('contextmenu', function (event) {
+        event.preventDefault();
+        window.location.href = redirectUrl;
+    });
 };
