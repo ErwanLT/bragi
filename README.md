@@ -19,6 +19,8 @@ Vous pouvez accéder aux histoires via notre [page d'accueil](https://erwanlt.gi
         *   **LE MANOIR DU SILENCE** - Survivez à une nuit dans un manoir hanté.
     *   *Cosmique*
         *   **LE LABYRINTHE OUBLIÉ** - Perdu dans un dédale ancien.
+    *   *Slasher*
+        *   **LE CAMP DU LAC SANGLANT** - Survivez à la nuit au Camp du Lac Sanglant.
 *   🤠 **Western**
     *   *Classique*
         *   **LE DERNIER DUEL** - Une traque impitoyable au Far West.
