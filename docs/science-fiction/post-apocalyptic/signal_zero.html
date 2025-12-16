@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SIGNAL ZÉRO - COMM LINK</title>
+    <link rel="icon" type="image/png" href="../../favicon.png">
+    <link rel="stylesheet" href="../../style/base.css">
+    <link rel="stylesheet" href="../../style/scifi-post-apocalyptic.css">
+    <script src="../../js/security.js"></script>
+    <script src="../../js/science-fiction/post-apocalyptic/signal_zero.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div id="hud"></div>
+    <div class="quest-card">
+        <h3>/// SIGNAL ZÉRO - TRANSMISSION ///</h3>
+        <p>FREQ: 104.5 MHz | ENCRYPTION: NONE | DATE: UNKNOWN</p>
+
+        <div id="story">
+            <!-- PHASE 1: L'APPROCHE -->
+
+            <!-- 1. CONTACT -->
+            <div class="section">
+                <p><strong>08:00 - Établissement de la liaison</strong></p>
+                <div class="radio-log">"Ici Alpha-1. Check radio. On est à l'entrée de la Zone. Le ciel est noir."</div>
+                <p>Votre terminal s'illumine. Vous êtes leur seul lien avec la survie.</p>
+
+                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"5 sur 5, Alpha-1. Restez
+                    groupés."</button>
+                <button class="choice" data-signal="-5" onclick="applyChoice(this)">"Reçu. Activez les capteurs
+                    biométriques."</button>
+            </div>
+
+            <!-- 2. LE PÉRIMÈTRE -->
+            <div class="section">
+                <p><strong>08:15 - Le Périmètre</strong></p>
+                <div class="radio-log">"Les grillages sont fondus. Le compteur Geiger s'affole légèrement."</div>
+
+                <button class="choice" data-signal="-2" data-squad="0" onclick="applyChoice(this)">"Avancez rapidement.
+                    Ne traînez pas ici."</button>
+                <button class="choice" data-signal="-5" data-squad="0" onclick="applyChoice(this)">"Prenez des mesures
+                    de radiation précises." (Coût: Signal)</button>
+            </div>
+
+            <!-- 3. CARTE 1 (Entrée) -->
+            <div class="section">
+                <p><strong>08:30 - Position Actuelle</strong></p>
+                <pre class="map">
+      [ ZONE MORTE ]
+            ^
+            |
+      +-----+-----+
+      | PERIMETRE | <--- VOUS ETES ICI
+      +-----+-----+
+            |
+      [ BUNKER Q.G. ]
+</pre>
+                <div class="radio-log">"On a franchi la première ligne. On aperçoit un pont détruit devant nous."</div>
+                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"Continuez vers le pont."</button>
+            </div>
+
+            <!-- 4. LE PONT DÉTRUIT -->
+            <div class="section">
+                <p><strong>08:45 - Le Pont Détruit</strong></p>
+                <div class="radio-log">"Le pont est effondré. On peut descendre dans le lit de la rivière asseché
+                    (rapide mais à découvert) ou faire un détour par la forêt (lent mais couvert)."</div>
+
+                <button class="choice" data-signal="-2" data-squad="-1" onclick="applyChoice(this)">Descendre dans la
+                    rivière. (Risque de chute/tir)</button>
+                <button class="choice" data-signal="-10" data-squad="0" onclick="applyChoice(this)">Contourner par la
+                    forêt. (Coût: Temps/Signal)</button>
+            </div>
+
+            <!-- 5. LA STATION SERVICE -->
+            <div class="section">
+                <p><strong>09:10 - La Station Service</strong></p>
+                <div class="radio-log">"On passe près d'une vieille station. On pourrait fouiller pour des piles ou des
+                    vivres."</div>
+
+                <button class="choice" data-signal="+15" data-ammo="+5" data-squad="-1"
+                    onclick="applyChoice(this)">Fouiller le bâtiment principal. (Gain: Signal/Ammo, Risque:
+                    Piège)</button>
+                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"Ignorer. On a une
+                    mission."</button>
+            </div>
+
+            <!-- PHASE 2: LES FAUBOURGS -->
+
+            <!-- 6. CARTE 2 (Faubourgs) -->
+            <div class="section">
+                <p><strong>09:30 - Les Faubourgs</strong></p>
+                <pre class="map">
+      [ VILLE - CENTRE ]
+            ^
+            |
+      +-----+-----+
+      |   METRO   |
+      +-----+-----+
+            |
+      +-----+-----+
+      | FAUBOURGS | <--- VOUS ETES ICI
+      +-----------+
+</pre>
+                <div class="radio-log">"On entre dans la zone urbaine dense. L'entrée du métro est devant nous."</div>
+                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"Entrez dans le métro. C'est plus
+                    sûr que la rue."</button>
+            </div>
+
+            <!-- 7. LE TUNNEL -->
+            <div class="section">
+                <p><strong>09:45 - Le Tunnel</strong></p>
+                <div class="radio-log">"Il fait noir total. Nos lampes vacillent."</div>
+                <button class="choice" data-signal="-5" data-squad="0" onclick="applyChoice(this)">Allumer les torches
+                    chimiques.</button>
+                <button class="choice" data-signal="-2" data-squad="-1" onclick="applyChoice(this)">Avancer dans le noir
+                    (Risque de blessure).</button>
+            </div>
+
+            <!-- 8. LES RATS -->
+            <div class="section">
+                <p><strong>10:00 - Nuée</strong></p>
+                <div class="radio-log">"DES YEUX ! PARTOUT ! UNE NUÉE DE RATS MUTANTS !"</div>
+                <button class="choice" data-ammo="-3" data-squad="0" onclick="applyChoice(this)">"Utilisez les
+                    lance-flammes !" (Coût: Ammo)</button>
+                <button class="choice" data-squad="-2" onclick="applyChoice(this)">"Courez ! Fuyez !" (Risque:
+                    Escouade)</button>
+            </div>
+
+            <!-- 9. CARTE 3 (Métro) -->
+            <div class="section">
+                <p><strong>10:20 - Quai de Métro</strong></p>
+                <pre class="map">
+      [ SORTIE ]
+          ^
+          |
+    +-----+------+
+    |    QUAI    | <--- VOUS ETES ICI
+    +-----+------+
+          |
+      [ TUNNEL ]
+</pre>
+                <div class="radio-log">"On est sur le quai. C'est calme. Trop calme."</div>
+                <button class="choice" data-signal="+10" onclick="applyChoice(this)">Faire une pause pour recalibrer la
+                    radio. (+Signal)</button>
+                <button class="choice" data-signal="-2" onclick="applyChoice(this)">Continuer vers la surface.</button>
+            </div>
+
+            <!-- 10. LE SORTIE -->
+            <div class="section">
+                <p><strong>10:40 - Lumière du Jour</strong></p>
+                <div class="radio-log">"On est sortis. La ville est en ruines. C'est... terrifiant."</div>
+                <button class="choice" data-signal="-5" onclick="applyChoice(this)">"Concentrez-vous. Rapport de
+                    situation."</button>
+            </div>
+
+            <!-- PHASE 3: ZONE HOSTILE -->
+
+            <!-- 11. LE CARREFOUR (CHOIX STRATEGIQUE) -->
+            <div class="section">
+                <p><strong>11:00 - Le Carrefour</strong></p>
+                <pre class="map">
+      [ EXTRACTION ]
+            ^
+            |
+      +-----+-----+      +---------+
+      |  RUINES   |  OU  |  PLACE  |
+      +-----+-----+      +---------+
+            ^                 ^
+            |                 |
+      +-----+-----------------+
+      |        CARREFOUR      | <--- VOUS ETES ICI
+      +-----------------------+
+</pre>
+                <div class="radio-log">"On doit traverser. À gauche, les ruines industrielles (couvert mais piégé). À
+                    droite, la grande place (rapide mais exposée)."</div>
+
+                <button class="choice" data-signal="-10" data-ammo="-2" onclick="applyChoice(this)">[GAUCHE] Les Ruines
+                    (Lent + Besoin Kit Démineur/Ammo)</button>
+                <button class="choice" data-signal="-2" data-squad="-1" onclick="applyChoice(this)">[DROITE] La Place
+                    (Rapide + Risque Snipers)</button>
+            </div>
+
+            <!-- 12. L'EMBUSCADE (Place) / LE PIEGE (Ruines) -->
+            <div class="section">
+                <p><strong>11:30 - Contact</strong></p>
+                <div class="radio-log">"CONTACT ! CONTACT ! ON EST PRIS A PARTIE !"</div>
+                <p>Que vous soyez dans les ruines ou sur la place, ils vous ont trouvés.</p>
+
+                <button class="choice" data-ammo="-5" data-squad="0" onclick="applyChoice(this)">"Feu nourri ! Suppress
+                    them !" (Coût: Max Ammo)</button>
+                <button class="choice" data-squad="-2" onclick="applyChoice(this)">"Fumigènes et repli !" (Risque
+                    élevé)</button>
+            </div>
+
+            <!-- 13. L'HOPITAL -->
+            <div class="section">
+                <p><strong>12:00 - L'Hôpital de Campagne</strong></p>
+                <div class="radio-log">"On peut se réfugier dans cet hôpital en ruines pour soigner les blessés."</div>
+
+                <button class="choice" data-squad="+1" data-signal="-10" onclick="applyChoice(this)">Prendre le temps de
+                    soigner. (+Escouade, -Signal)</button>
+                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"Négatif. On continue."</button>
+            </div>
+
+            <!-- 14. LA TOUR RADIO -->
+            <div class="section">
+                <p><strong>12:30 - Relais Radio</strong></p>
+                <div class="radio-log">"Il y a une antenne relais sur ce toit. On pourrait booster votre signal, mais
+                    c'est haut et exposé."</div>
+
+                <button class="choice" data-signal="+40" data-squad="-1" onclick="applyChoice(this)">Monter réparer
+                    l'antenne. (Gros gain Signal, Risque chute)</button>
+                <button class="choice" data-signal="-5" onclick="applyChoice(this)">Ignorer.</button>
+            </div>
+
+            <!-- 15. CARTE 4 (Zone Indu) -->
+            <div class="section">
+                <p><strong>13:00 - Zone Industrielle</strong></p>
+                <pre class="map">
+      [ HELIPAD ]
+           ^
+           |
+    +------+------+
+    |    USINE    | <--- VOUS ETES ICI
+    +------+------+
+           |
+       [ VILLE ]
+</pre>
+                <div class="radio-log">"Dernière ligne droite. L'usine chimique."</div>
+                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"Mettez vos masques."</button>
+            </div>
+
+            <!-- PHASE 4: EXTRACTION -->
+
+            <!-- 16. GAZ TOXIQUE -->
+            <div class="section">
+                <p><strong>13:15 - Fuite de Gaz</strong></p>
+                <div class="radio-log">"Les filtres ne tiennent pas ! Le gaz est corrosif !"</div>
+                <button class="choice" data-squad="-1" onclick="applyChoice(this)">Courir à travers le nuage.</button>
+                <button class="choice" data-signal="-10" data-ammo="-2" onclick="applyChoice(this)">Chercher une vanne
+                    pour couper le gaz.</button>
+            </div>
+
+            <!-- 17. LE SILO -->
+            <div class="section">
+                <p><strong>13:30 - Le Silo</strong></p>
+                <div class="radio-log">"La zone d'extraction est au sommet du silo. L'ascenseur est mort."</div>
+                <button class="choice" data-signal="-5" onclick="applyChoice(this)">Monter les escaliers
+                    (Épuisant).</button>
+            </div>
+
+            <!-- 18. DERNIER CARRE - CARTE FINALE -->
+            <div class="section">
+                <p><strong>13:45 - Le Sommet</strong></p>
+                <pre class="map">
+       \_/
+     -- H --  <--- HELICO EN APPROCHE
+       / \
+    
+    [ TOIT SILO ] <--- VOUS ETES ICI
+</pre>
+                <div class="radio-log">"On est sur le toit ! L'hélico arrive ! Mais la porte d'accès est en train de
+                    céder sous les coups !"</div>
+                <button class="choice" data-ammo="-10" data-squad="0" onclick="applyChoice(this)">"Videz vos chargeurs
+                    sur la porte !" (Toutes les munitions)</button>
+                <button class="choice" data-squad="-1" onclick="applyChoice(this)">"Barricadez avec ce que vous trouvez
+                    !" (Risque humain)</button>
+            </div>
+
+            <!-- 19. LE CHOIX FINAL -->
+            <div class="section">
+                <p><strong>13:55 - Sacrifice</strong></p>
+                <div class="radio-log">"Il n'y a pas assez de place pour tout le monde et le matériel ! Il faut choisir
+                    !"</div>
+
+                <button class="choice" data-squad="-1" onclick="applyChoice(this); computeEnding()">Sauver les données
+                    (Sacrifier un homme).</button>
+                <button class="choice" data-signal="-50" onclick="applyChoice(this); computeEnding()">Sauver les hommes
+                    (Abandonner les données).</button>
+                <button class="choice" data-squad="-4" onclick="applyChoice(this); computeEnding('abandon')">Rester pour
+                    couvrir le décollage. (Tout le monde meurt).</button>
+            </div>
+
+            <div class="actions" style="margin-top: 50px; text-align: center;">
+                <a href="../post-apocalyptic.html" style="color: #666; text-decoration: none;">&larr; Retour au
+                    menu</a>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

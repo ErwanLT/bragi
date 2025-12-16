@@ -1,0 +1,108 @@
+/* Post-Apocalyptic Theme */
+/* Amber Monochrome, Terminal Style */
+
+:root {
+    --bg-color: #0d1117;
+    --text-color: #ff9800;
+    --accent-color: #ff9800;
+    --font-terminal: 'VT323', monospace;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-terminal);
+    font-size: 1.2rem;
+}
+
+.quest-card {
+    border: 1px solid var(--accent-color);
+    box-shadow: 0 0 20px rgba(255, 152, 0, 0.2);
+    background-color: #000;
+}
+
+h1,
+h2,
+h3 {
+    color: var(--accent-color);
+    text-transform: uppercase;
+    font-family: var(--font-terminal);
+}
+
+.section {
+    border-bottom: 1px dashed #555;
+}
+
+.choice {
+    background: transparent;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    font-family: var(--font-terminal);
+    font-size: 1.1rem;
+}
+
+.choice:hover {
+    background: rgba(255, 152, 0, 0.1);
+    box-shadow: 0 0 10px rgba(255, 152, 0, 0.4);
+    transform: none;
+}
+
+.choice.selected {
+    background: var(--accent-color);
+    color: #000;
+}
+
+/* Tooltip Customization */
+.choice-wrapper::after {
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    background: #000;
+    font-family: var(--font-terminal);
+}
+
+#hud {
+    background: #000;
+    border: 1px solid var(--accent-color);
+    color: var(--accent-color);
+    font-family: var(--font-terminal);
+}
+
+.map {
+    border: 1px solid var(--accent-color);
+    padding: 15px;
+    margin: 15px 0;
+    white-space: pre;
+    background: #001100;
+    color: var(--accent-color);
+    font-family: 'Menlo', 'Consolas', 'Monaco', 'Courier New', monospace;
+    /* Strict monospace */
+    font-weight: normal;
+    letter-spacing: 0;
+    line-height: 1.2;
+    box-shadow: inset 0 0 20px rgba(255, 152, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Scanline effect for the map */
+.map::before {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 2;
+    background-size: 100% 2px, 3px 100%;
+    pointer-events: none;
+}
+
+.radio-log {
+    font-style: italic;
+    color: #ccc;
+    border-left: 2px solid #555;
+    padding-left: 10px;
+    margin: 10px 0;
+}
