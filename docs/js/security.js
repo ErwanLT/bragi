@@ -17,4 +17,14 @@ window.setupF12Protection = function (redirectUrl) {
         event.preventDefault();
         window.location.href = redirectUrl;
     });
+
+    // Detect if DevTools is open by checking execution time around a debugger statement
+    setInterval(function () {
+        const start = performance.now();
+        debugger;
+        const end = performance.now();
+        if (end - start > 100) {
+            window.location.href = redirectUrl;
+        }
+    }, 1000);
 };
