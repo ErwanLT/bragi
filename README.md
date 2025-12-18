@@ -3,41 +3,54 @@
 
 Bienvenue dans le dépôt **Bragi**, un recueil d'histoires interactives où vos choix déterminent la suite du récit.
 
-## À propos de Bragi
-Dans la mythologie nordique, **Bragi** est le dieu de la poésie, de l'éloquence et de la musique. Fils d'Odin et de la géante Gunnlod, il est le skald (poète) des dieux, célèbre pour sa sagesse et ses talents de conteur exceptionnels. Il est souvent représenté avec une harpe, chantant les exploits des guerriers et des dieux.
+## 📖 À propos de Bragi
+Dans la mythologie nordique, **Bragi** est le dieu de la poésie, de l'éloquence et de la musique. Fils d'Odin et de la géante Gunnlod, il est le skald (poète) des dieux, célèbre pour sa sagesse et ses talents de conteur exceptionnels.
 
 Ce projet rend hommage à cet art du récit en proposant des expériences narratives modernes et immersives.
 
-## Histoires disponibles
-Vous pouvez accéder aux histoires via notre [page d'accueil](https://erwanlt.github.io/bragi/) (ou localement via `docs/index.html`).
+## ✨ Fonctionnalités
+- 📚 **Bibliothèque Interactive** : Un hub central ([stories.html](https://erwanlt.github.io/bragi/stories.html)) pour explorer et filtrer les récits par genre.
+- 💾 **Persistance de la Progression** : Votre progression est sauvegardée localement. Les histoires terminées sont marquées par un badge spécial dans la bibliothèque.
+- 🛡️ **Immersion Totale** : Interface épurée, ambiances thématiques par genre et protection contre les spoils (anti-F12).
+
+## 🚀 Histoires disponibles
+Accédez à la [Bibliothèque complète](https://erwanlt.github.io/bragi/stories.html) pour explorer nos mondes :
 
 *   🛸 **Science-Fiction**
-    *   *Spatial*
-        *   **KUBRICK-9 ORBITAL STATION** - Une IA détraquée dans une station orbitale.
-    *   *Post-Apocalyptique*
-        *   **SIGNAL ZÉRO** - Guider une escouade à travers une ville en ruines via radio.
+    *   *Spatiale*
+        *   **Kubrick 9 - Station orbitale** : Une IA détraquée, une station en perdition.
+    *   *Post-Apocalypse*
+        *   **Signal Zéro - Transmission** : Guidez une escouade à distance dans un monde en ruines.
 *   👻 **Horreur**
     *   *Psychologique*
-        *   **LE MANOIR DU SILENCE** - Survivez à une nuit dans un manoir hanté.
+        *   **Le Manoir du Silence** : Survivez à l'oppression d'une demeure hantée.
     *   *Cosmique*
-        *   **LE LABYRINTHE OUBLIÉ** - Perdu dans un dédale ancien.
+        *   **Le Labyrinthe Oublié** : Ne laissez pas votre lanterne s'éteindre.
     *   *Slasher*
-        *   **LE CAMP DU LAC SANGLANT** - Survivez à la nuit au Camp du Lac Sanglant.
+        *   **Le Camp du Lac Sanglant** : Un classique du genre, restez groupés.
 *   🤠 **Western**
     *   *Classique*
-        *   **LE DERNIER DUEL** - Une traque impitoyable au Far West.
+        *   **Le Dernier Duel** : Honneur, fortune et poudre à canon.
 *   ⚓️ **Aventure**
     *   *Piraterie*
-        *   **LE TRÉSOR DE L'ÎLE MAUDITE** - Piraterie, mutinerie et trésors maudits.
+        *   **Le Trésor de l'Île Maudite** : Hissez les voiles, la mutinerie guette.
 *   🐉 **Fantasy**
-    *   *Médiéval*
-        *   **LA QUÊTE DU CODE ANCESTRAL** - Une aventure épique dans le donjon "Legacy".
+    *   *Médiévale*
+        *   **La Quête du Code Ancestral** : Le donjon "Legacy" n'attend que vous.
 *   🕵️‍♂️ **Polar**
     *   *Noir*
-        *   **OMBRES DE CHICAGO** - Enquête dans les années 30. Capone, Jazz et Prohibition.
+        *   **Dossier: Ombres de Chicago - 1932** : Capone, Jazz et Prohibition.
 *   🎬 **Thriller**
     *   *Préhistorique*
-        *   **JURASSIC PARK - ISLA NUBLAR** - Survivez à l'île où les dinosaures règnent en maîtres.
+        *   **Jurassic Park - Isla Nublar** : "La vie trouve toujours un chemin."
 
-## Structure du projet
-Le site est hébergé via GitHub Pages depuis le dossier `docs/`.
+## 🛠 Structure du projet
+Le projet est un site statique moderne (HTML/JS/CSS) hébergé via GitHub Pages.
+
+- `docs/` : Dossier racine du site.
+- `docs/stories.html` : La Bibliothèque (Hub central).
+- `docs/js/` : Moteurs de jeu et utilitaires (Persistence, Sécurité).
+- `docs/style/` : Design system et thèmes visuels.
+
+---
+*Projet développé avec passion pour l'art de raconter des histoires.*
