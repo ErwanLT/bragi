@@ -29,28 +29,33 @@ new StoryEngine({
         let text = 'Le croque-mort a déjà pris vos mesures.';
         let color = '#555';
         let isSuccess = false;
+        let isTerminal = false;
 
-        if (vars.honneur >= 80 && vars.fortune >= 100) {
+        if (vars.honneur >= 80 && vars.fortune >= 100 && forceEnding) {
             title = 'LÉGENDE DE L\'OUEST';
             text = 'Riche et respecté. Votre nom restera gravé dans l\'histoire.';
             color = '#ffd700';
             isSuccess = true;
+            isTerminal = true;
         } else if (vars.honneur <= 20) {
             title = 'HORS-LA-LOI';
             text = 'Votre tête est mise à prix. Vous fuyez vers le Mexique.';
             color = '#8a0303';
             isSuccess = true;
+            isTerminal = true;
         } else if (vars.munitions <= 0) {
             title = 'À SEC';
             text = 'Un duel sans balles est une exécution. Vous n\'avez pas tiré le premier.';
             color = '#333';
-        } else {
+            isTerminal = true;
+        } else if (forceEnding) {
             title = 'JUSTICE EST FAITE';
             text = 'Le bandit est sous les verrous. Chicago respire... enfin, le saloon.';
             color = '#2ecc71';
             isSuccess = true;
+            isTerminal = true;
         }
 
-        return { title, text, color, isSuccess };
+        return isTerminal ? { title, text, color, isSuccess, isTerminal } : null;
     }
 });

@@ -29,28 +29,33 @@ new StoryEngine({
         let text = 'Votre quête s\'arrête ici.';
         let color = '#555';
         let isSuccess = false;
+        let isTerminal = false;
 
-        if (vars.xp >= 100) {
+        if (vars.xp >= 100 && forceEnding) {
             title = 'Grand Archimage (CTO Légendaire)';
             text = 'Vous avez maîtrisé le code et le destin. Le royaume est sauvé.';
             color = '#ffd700';
             isSuccess = true;
+            isTerminal = true;
         } else if (vars.mana <= 0) {
             title = 'BURN-OUT MAGIQUE';
             text = 'Plus d\'énergie pour coder les sorts. Vous devenez un simple villageois.';
             color = '#7f8c8d';
+            isTerminal = true;
         } else if (vars.karma <= 20) {
             title = 'SORCIER NOIR';
             text = 'Le pouvoir vous a corrompu. Vous régnez par la terreur.';
             color = '#8a0303';
             isSuccess = true;
-        } else {
+            isTerminal = true;
+        } else if (forceEnding) {
             title = 'DÉVELOPPEUR JUNIOR';
             text = 'Vous avez survécu au donjon, mais il vous reste tant à apprendre.';
             color = '#2ecc71';
             isSuccess = true;
+            isTerminal = true;
         }
 
-        return { title, text, color, isSuccess };
+        return isTerminal ? { title, text, color, isSuccess, isTerminal } : null;
     }
 });

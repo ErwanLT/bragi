@@ -29,26 +29,31 @@ new StoryEngine({
         let text = 'La station devient votre cercueil d\'acier.';
         let color = '#555';
         let isSuccess = false;
+        let isTerminal = false;
 
         if (vars.integrity <= 0) {
             title = 'DÉCOMPRESSION';
             text = 'La coque a cédé. Votre dernier souffle gèle instantanément.';
             color = '#2980b9';
+            isTerminal = true;
         } else if (vars.sanity <= 0) {
             title = 'ISOLEMENT TOTAL';
             text = 'L\'IA n\'est pas la seule à avoir perdu la raison.';
             color = '#8a0303';
+            isTerminal = true;
         } else if (vars.pulse >= 180) {
             title = 'ARRÊT CARDIAQUE';
             text = 'La peur a été plus forte que votre cœur.';
             color = '#c0392b';
-        } else {
+            isTerminal = true;
+        } else if (forceEnding) {
             title = 'DEPLOYMENT SUCCESSFUL';
             text = 'Vous avez repris le contrôle. Kubrick-9 est à nouveau silencieuse.';
             color = '#2ecc71';
             isSuccess = true;
+            isTerminal = true;
         }
 
-        return { title, text, color, isSuccess };
+        return isTerminal ? { title, text, color, isSuccess, isTerminal } : null;
     }
 });

@@ -29,26 +29,31 @@ new StoryEngine({
         let text = ' Chicago a raison de vous. Le crime paie, mais pas pour vous.';
         let color = '#555';
         let isSuccess = false;
+        let isTerminal = false;
 
-        if (vars.indices >= 80) {
+        if (vars.indices >= 80 && forceEnding) {
             title = 'AFFAIRE RÉSOLUE';
             text = 'Capone ira en prison. Vous êtes le héros de Chicago.';
             color = '#000';
             isSuccess = true;
+            isTerminal = true;
         } else if (vars.sangFroid <= 0) {
             title = 'CRAQUAGE';
             text = 'La pression était trop forte. Vous avez rendu votre badge et votre arme.';
             color = '#8a0303';
+            isTerminal = true;
         } else if (vars.respect <= 0) {
             title = 'DESCENDU';
             text = 'Vous avez posé trop de questions aux mauvaises personnes. Sans respect, on ne survit pas longtemps.';
             color = '#333';
-        } else {
+            isTerminal = true;
+        } else if (forceEnding) {
             title = 'PREUVES INSUFFISANTES';
             text = 'Le Capitaine secoue la tête. "C\'est tout ce que vous avez ?" Capone est relâché faute de preuves.';
             color = '#666';
+            isTerminal = true;
         }
 
-        return { title, text, color, isSuccess };
+        return isTerminal ? { title, text, color, isSuccess, isTerminal } : null;
     }
 });

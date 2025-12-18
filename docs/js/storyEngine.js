@@ -75,9 +75,22 @@ class StoryEngine {
 
         this.recalculateState();
 
+        // Check for auto-ending
+        this.checkAutoEnding();
+
         // Scroll
-        if (sections[index + 1]) {
+        if (sections[index + 1] && !document.getElementById('ending-block')) {
             sections[index + 1].scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    checkAutoEnding() {
+        if (!this.onComputeEnding) return;
+
+        // We call onComputeEnding without a forceEnding to see if the current state is terminal
+        const result = this.onComputeEnding(this.variables);
+        if (result && result.isTerminal) {
+            this.renderEnding(result);
         }
     }
 
@@ -122,6 +135,10 @@ class StoryEngine {
         const result = this.onComputeEnding(this.variables, forceEnding);
         if (!result) return;
 
+        this.renderEnding(result);
+    }
+
+    renderEnding(result) {
         const { title, text, color, isSuccess } = result;
 
         // Persistence
@@ -144,7 +161,8 @@ class StoryEngine {
         `);
 
         setTimeout(() => {
-            document.getElementById('ending-block').scrollIntoView({ behavior: 'smooth' });
+            const endingBlock = document.getElementById('ending-block');
+            if (endingBlock) endingBlock.scrollIntoView({ behavior: 'smooth' });
         }, 100);
     }
 }
