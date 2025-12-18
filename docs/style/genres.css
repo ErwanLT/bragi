@@ -1,0 +1,61 @@
+/* Centralized Genre Styles */
+
+/* Genre-specific Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Creepster&family=Orbitron:wght@700&family=Rye&family=Pirata+One&family=Cinzel:wght@700&family=Special+Elite&family=Bebas+Neue&display=swap');
+
+/* Genre Typography */
+.card-horror h2,
+.card-horror .story-genre,
+.genre-title-horror {
+    font-family: 'Creepster', cursive !important;
+    letter-spacing: 2px;
+}
+
+.card-scifi h2,
+.card-scifi .story-genre,
+.genre-title-scifi {
+    font-family: 'Orbitron', sans-serif !important;
+    letter-spacing: 1px;
+}
+
+.card-western h2,
+.card-western .story-genre,
+.genre-title-western {
+    font-family: 'Rye', serif !important;
+}
+
+.card-adventure h2,
+.card-adventure .story-genre,
+.genre-title-adventure {
+    font-family: 'Pirata One', cursive !important;
+}
+
+.card-fantasy h2,
+.card-fantasy .story-genre,
+.genre-title-fantasy {
+    font-family: 'Cinzel', serif !important;
+}
+
+.card-polar h2,
+.card-polar .story-genre,
+.genre-title-polar {
+    font-family: 'Special Elite', cursive !important;
+}
+
+.card-thriller h2,
+.card-thriller .story-genre,
+.genre-title-thriller {
+    font-family: 'Bebas Neue', sans-serif !important;
+    letter-spacing: 2px;
+}
+
+/* Genre Accent Colors (Optional but helpful for consistency) */
+:root {
+    --color-horror: #ff4d4d;
+    --color-scifi: #00d4ff;
+    --color-western: #d4a373;
+    --color-adventure: #008080;
+    --color-fantasy: #9b59b6;
+    --color-polar: #95a5a6;
+    --color-thriller: #f39c12;
+}

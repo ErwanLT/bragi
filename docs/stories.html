@@ -4,156 +4,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bragi - Toutes les histoires</title>
+    <title>Bragi - La Bibliothèque</title>
     <link rel="icon" type="image/png" href="favicon.png">
-    <meta name="description" content="Toutes les histoires interactives de Bragi.">
-    <link rel="stylesheet" href="style/base.css">
+    <meta name="description" content="Explorez la bibliothèque d'histoires interactives de Bragi.">
     <link rel="stylesheet" href="style/index.css">
+    <link rel="stylesheet" href="style/genres.css">
+    <link rel="stylesheet" href="style/stories.css">
     <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Orbitron:wght@700&family=Rye&family=Pirata+One&family=Cinzel:wght@700&family=Special+Elite&display=swap"
-            rel="stylesheet">
-    <style>
-        :root {
-            /* Override font with Google Font 'Inter' for that premium feel */
-            --font-main: 'Inter', sans-serif;
-        }
-
-        h2 {
-            text-align: center;
-        }
-        /* Genre Title Fonts */
-        .card-horror h2 {
-            font-family: 'Creepster', cursive;
-            letter-spacing: 2px;
-        }
-
-        .card-scifi h2 {
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1px;
-        }
-
-        .card-western h2 {
-            font-family: 'Rye', serif;
-        }
-
-        .card-adventure h2 {
-            font-family: 'Pirata One', cursive;
-            font-size: 1.8em;
-        }
-
-        .card-fantasy h2 {
-            font-family: 'Cinzel', serif;
-        }
-
-        .card-polar h2 {
-            font-family: 'Special Elite', cursive;
-        }
-
-        .card-thriller h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 2px;
-        }
-        ul:before{
-            content:attr(aria-label);
-            font-size:120%;
-            font-weight:bold;
-            margin-left:-15px;
-        }
-        a {
-            color: #4db6ac;
-        }
-    </style>
 </head>
 
 <body>
     <header>
-        <h1>Nos histoires</h1>
-        <p class="subtitle">Plongez dans des récits interactifs où vos choix façonnent le dénouement.</p>
+        <h1>La Bibliothèque</h1>
+        <p class="subtitle">Choisissez votre prochaine aventure parmi nos récits interactifs.</p>
     </header>
 
-    <main>
-        <div class="card card-horror">
-            <div class="card-icon">💀</div>
-            <h2>Horreur</h2>
-            <ul aria-label="Cosmic">
-                <li><a href="horror/cosmic/labyrinth.html">Le labyrinthe oublié</a></li>
-            </ul>
-            <ul aria-label="Psychologique">
-                <li><a href="horror/psychological/manor.html">Le manoir du silence</a></li>
-            </ul>
-            <ul aria-label="Slasher">
-                <li><a href="horror/slasher/summer_camp.html">Le Camp du Lac Sanglant</a></li>
-            </ul>
-        </div>
+    <nav class="filter-bar">
+        <button class="filter-btn active" data-filter="all">Tous</button>
+        <button class="filter-btn" data-filter="horror">Horreur</button>
+        <button class="filter-btn" data-filter="scifi">Science-Fiction</button>
+        <button class="filter-btn" data-filter="western">Western</button>
+        <button class="filter-btn" data-filter="adventure">Aventure</button>
+        <button class="filter-btn" data-filter="fantasy">Fantasy</button>
+        <button class="filter-btn" data-filter="polar">Polar</button>
+        <button class="filter-btn" data-filter="thriller">Thriller</button>
+    </nav>
 
-        <div class="card card-scifi">
-            <div class="card-icon">🛸</div>
-            <h2>Science-Fiction</h2>
-            <ul aria-label="Post-apocalyptique">
-                <li><a href="science-fiction/post-apocalyptic/signal_zero.html">Signal zéro - Transmission</a></li>
-            </ul>
-            <ul aria-label="Espace">
-                <li><a href="science-fiction/space/kubrick9.html">Kubrick 9 - Station orbitale</a></li>
-            </ul>
+    <main class="stories-grid">
+        <!-- Horreur -->
+        <article class="story-card card-horror" data-genre="horror">
+            <div class="story-header">
+                <span class="story-icon">💀</span>
+                <div>
+                    <span class="story-genre">Horreur</span>
+                    <div class="sub-genre">Cosmic</div>
+                </div>
+            </div>
+            <a href="horror/cosmic/labyrinth.html" class="story-title">Le labyrinthe oublié</a>
+        </article>
 
-        </div>
+        <article class="story-card card-horror" data-genre="horror">
+            <div class="story-header">
+                <span class="story-icon">💀</span>
+                <div>
+                    <span class="story-genre">Horreur</span>
+                    <div class="sub-genre">Psychologique</div>
+                </div>
+            </div>
+            <a href="horror/psychological/manor.html" class="story-title">Le manoir du silence</a>
+        </article>
 
-        <div class="card card-western">
-            <div class="card-icon">🤠</div>
-            <h2>Western</h2>
-            <ul aria-label="Classique">
-                <li><a href="western/classic/duel.html">Le dernier duel</a></li>
-            </ul>
+        <article class="story-card card-horror" data-genre="horror">
+            <div class="story-header">
+                <span class="story-icon">💀</span>
+                <div>
+                    <span class="story-genre">Horreur</span>
+                    <div class="sub-genre">Slasher</div>
+                </div>
+            </div>
+            <a href="horror/slasher/summer_camp.html" class="story-title">Le Camp du Lac Sanglant</a>
+        </article>
 
-        </div>
+        <!-- Sci-Fi -->
+        <article class="story-card card-scifi" data-genre="scifi">
+            <div class="story-header">
+                <span class="story-icon">🛸</span>
+                <div>
+                    <span class="story-genre">Science-Fiction</span>
+                    <div class="sub-genre">Post-apo</div>
+                </div>
+            </div>
+            <a href="science-fiction/post-apocalyptic/signal_zero.html" class="story-title">Signal zéro -
+                Transmission</a>
+        </article>
 
-        <div class="card card-adventure">
-            <div class="card-icon">⚓️</div>
-            <h2>Aventure</h2>
-            <ul aria-label="Piraterie">
-                <li><a href="adventure/piracy/treasure.html">Le trésor de l'ile maudite</a></li>
-            </ul>
+        <article class="story-card card-scifi" data-genre="scifi">
+            <div class="story-header">
+                <span class="story-icon">🛸</span>
+                <div>
+                    <span class="story-genre">Science-Fiction</span>
+                    <div class="sub-genre">Espace</div>
+                </div>
+            </div>
+            <a href="science-fiction/space/kubrick9.html" class="story-title">Kubrick 9 - Station orbitale</a>
+        </article>
 
-        </div>
+        <!-- Western -->
+        <article class="story-card card-western" data-genre="western">
+            <div class="story-header">
+                <span class="story-icon">🤠</span>
+                <div>
+                    <span class="story-genre">Western</span>
+                    <div class="sub-genre">Classique</div>
+                </div>
+            </div>
+            <a href="western/classic/duel.html" class="story-title">Le dernier duel</a>
+        </article>
 
-        <div class="card card-fantasy">
-            <div class="card-icon">🐉</div>
-            <h2>Fantasy</h2>
-            <ul aria-label="Médiéval">
-                <li><a href="fantasy/medieval/quest.html">La quête du code ancestral</a></li>
-            </ul>
+        <!-- Aventure -->
+        <article class="story-card card-adventure" data-genre="adventure">
+            <div class="story-header">
+                <span class="story-icon">⚓️</span>
+                <div>
+                    <span class="story-genre">Aventure</span>
+                    <div class="sub-genre">Piraterie</div>
+                </div>
+            </div>
+            <a href="adventure/piracy/treasure.html" class="story-title">Le trésor de l'ile maudite</a>
+        </article>
 
-        </div>
+        <!-- Fantasy -->
+        <article class="story-card card-fantasy" data-genre="fantasy">
+            <div class="story-header">
+                <span class="story-icon">🐉</span>
+                <div>
+                    <span class="story-genre">Fantasy</span>
+                    <div class="sub-genre">Médiéval</div>
+                </div>
+            </div>
+            <a href="fantasy/medieval/quest.html" class="story-title">La quête du code ancestral</a>
+        </article>
 
-        <div class="card card-polar">
-            <div class="card-icon">🕵️‍♂️</div>
-            <h2>Polar</h2>
-            <ul aria-label="Noir">
-                <li><a href="polar/noir/prohibition.html">Dossier: ombres de Chicago - 1932</a></li>
-            </ul>
+        <!-- Polar -->
+        <article class="story-card card-polar" data-genre="polar">
+            <div class="story-header">
+                <span class="story-icon">🕵️‍♂️</span>
+                <div>
+                    <span class="story-genre">Polar</span>
+                    <div class="sub-genre">Noir</div>
+                </div>
+            </div>
+            <a href="polar/noir/prohibition.html" class="story-title">Dossier: ombres de Chicago - 1932</a>
+        </article>
 
-        </div>
-
-        <div class="card card-thriller">
-            <div class="card-icon">🦖</div>
-            <h2>Thriller</h2>
-            <ul aria-label="Préhistorique">
-                <li><a href="thriller/prehistoric/jurassic.html">JURASSIC PARK - ISLA NUBLAR</a></li>
-            </ul>
-
-        </div>
+        <!-- Thriller -->
+        <article class="story-card card-thriller" data-genre="thriller">
+            <div class="story-header">
+                <span class="story-icon">🦖</span>
+                <div>
+                    <span class="story-genre">Thriller</span>
+                    <div class="sub-genre">Préhistorique</div>
+                </div>
+            </div>
+            <a href="thriller/prehistoric/jurassic.html" class="story-title">JURASSIC PARK - ISLA NUBLAR</a>
+        </article>
     </main>
 
     <footer>
-        <p>&copy; 2025 <a href="index.html" style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;">Histoires Bragi</a>.
-            <a href="stories.html" style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;">Histoires</a>
-            <a href="about.html" style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;">À propos</a>
-            <a href="https://github.com/ErwanLT/bragi" style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;" target="_blank">Voir sur GitHub</a></p>
+        <p>&copy; 2025 <a href="index.html"
+                style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;">Histoires Bragi</a>.
+            <a href="stories.html"
+                style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;">Histoires</a>
+            <a href="about.html" style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;">À
+                propos</a>
+            <a href="https://github.com/ErwanLT/bragi"
+                style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;" target="_blank">Voir sur
+                GitHub</a>
+        </p>
     </footer>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const filters = document.querySelectorAll('.filter-btn');
+            const cards = document.querySelectorAll('.story-card');
+
+            filters.forEach(filter => {
+                filter.addEventListener('click', () => {
+                    // Update active button
+                    filters.forEach(btn => btn.classList.remove('active'));
+                    filter.classList.add('active');
+
+                    const category = filter.getAttribute('data-filter');
+
+                    cards.forEach(card => {
+                        const cardGenre = card.getAttribute('data-genre');
+
+                        if (category === 'all' || category === cardGenre) {
+                            card.classList.remove('hidden');
+                            // Small delay for staggered animation feel
+                            card.style.animation = 'none';
+                            card.offsetHeight; // trigger reflow
+                            card.style.animation = null;
+                        } else {
+                            card.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
