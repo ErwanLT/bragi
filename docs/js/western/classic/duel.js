@@ -1,145 +1,56 @@
-// Setup security
+/**
+ * Le Dernier Duel
+ * Refactored using StoryEngine
+ */
+
 setupF12Protection('../../magic_word.html');
 
-// Expose functions to global scope
-window.applyChoice = applyChoice;
-window.computeEnding = computeEnding;
-
-const variables = { fortune: 50, honneur: 50, munitions: 6 };
-const choices = {};
-
-function updateDisplay() {
-    const hud = document.getElementById('hud');
-    if (hud) {
-        hud.innerHTML = `
-            <div><span>FORTUNE:</span> <span>$${variables.fortune}</span></div>
-            <div><span>HONNEUR:</span> <span>${variables.honneur}</span></div>
-            <div><span>MUNITIONS:</span> <span>${variables.munitions} ⦾</span></div>
+new StoryEngine({
+    storyId: 'duel',
+    initialVariables: {
+        fortune: 50,
+        honneur: 50,
+        munitions: 6
+    },
+    clamping: {
+        fortune: [0, 1000],
+        honneur: [0, 100],
+        munitions: [0, 20]
+    },
+    onUpdateHUD: (vars) => {
+        return `
+            <div><span>FORTUNE:</span> <span>$${vars.fortune}</span></div>
+            <div><span>HONNEUR:</span> <span>${vars.honneur}%</span></div>
+            <div><span>MUNITIONS:</span> <span>${vars.munitions}</span></div>
         `;
+    },
+    onComputeEnding: (vars, forceEnding) => {
+        let title = 'MORT DANS LA POUSSIÈRE';
+        let text = 'Le croque-mort a déjà pris vos mesures.';
+        let color = '#555';
+        let isSuccess = false;
+
+        if (vars.honneur >= 80 && vars.fortune >= 100) {
+            title = 'LÉGENDE DE L\'OUEST';
+            text = 'Riche et respecté. Votre nom restera gravé dans l\'histoire.';
+            color = '#ffd700';
+            isSuccess = true;
+        } else if (vars.honneur <= 20) {
+            title = 'HORS-LA-LOI';
+            text = 'Votre tête est mise à prix. Vous fuyez vers le Mexique.';
+            color = '#8a0303';
+            isSuccess = true;
+        } else if (vars.munitions <= 0) {
+            title = 'À SEC';
+            text = 'Un duel sans balles est une exécution. Vous n\'avez pas tiré le premier.';
+            color = '#333';
+        } else {
+            title = 'JUSTICE EST FAITE';
+            text = 'Le bandit est sous les verrous. Chicago respire... enfin, le saloon.';
+            color = '#2ecc71';
+            isSuccess = true;
+        }
+
+        return { title, text, color, isSuccess };
     }
-}
-
-function applyChoice(btn) {
-    const section = btn.closest('.section');
-    const sections = Array.from(document.querySelectorAll('.section'));
-    const index = sections.indexOf(section);
-
-    // Get new values
-    const f = Number(btn.dataset.fortune || 0);
-    const h = Number(btn.dataset.honneur || 0);
-    const m = Number(btn.dataset.munitions || 0);
-
-    // Store choice
-    choices[index] = { fortune: f, honneur: h, munitions: m };
-
-    // Visual update
-    section.querySelectorAll('.choice').forEach(b => {
-        b.classList.remove('selected');
-    });
-    btn.classList.add('selected');
-
-    recalculateState();
-
-    // Scroll to next section if exists
-    if (sections[index + 1]) {
-        sections[index + 1].scrollIntoView({ behavior: 'smooth' });
-    }
-}
-
-function recalculateState() {
-    variables.fortune = 50;
-    variables.honneur = 50;
-    variables.munitions = 6;
-
-    const sortedIndices = Object.keys(choices).sort((a, b) => Number(a) - Number(b));
-
-    for (const idx of sortedIndices) {
-        const choice = choices[idx];
-        variables.fortune += choice.fortune;
-        variables.honneur += choice.honneur;
-        variables.munitions += choice.munitions;
-    }
-
-    // Clamp
-    variables.fortune = Math.max(0, variables.fortune);
-    variables.honneur = Math.max(0, Math.min(100, variables.honneur));
-    variables.munitions = Math.max(0, variables.munitions);
-
-    updateDisplay();
-}
-
-function computeEnding(forceEnding) {
-    let title = 'LE SOLEIL SE COUCHE';
-    let text = 'L\'histoire se termine ici.';
-    let color = '#5d4037';
-
-    if (forceEnding === 'rich') {
-        title = 'RETRAITE DORÉE';
-        text = 'Avec tout cet or, vous achetez un ranch au Mexique. Adieu la vie de chasseur de primes.';
-        color = '#ffb300';
-    } else if (variables.munitions <= 0) {
-        title = 'CLICK... CLICK...';
-        text = 'Votre barillet est vide. Le bandit sourit. C\'est la fin pour vous, gringo.';
-        color = '#d84315';
-    } else if (variables.honneur <= 10) {
-        title = 'HORS-LA-LOI';
-        text = 'Vous avez tué le bandit, mais vous êtes devenu comme lui. Votre tête est mise à prix.';
-        color = '#3e2723';
-        if (window.BragiStorage) BragiStorage.markAsFinished('duel');
-    } else if (variables.honneur >= 90) {
-        title = 'LÉGENDE DE L\'OUEST';
-        text = 'Vous ramenez le bandit vivant. Le shérif vous serre la main. Les enfants joueront à être vous.';
-        color = '#ffd700';
-        if (window.BragiStorage) BragiStorage.markAsFinished('duel');
-    } else {
-        title = 'JUSTICE EST FAITE';
-        text = 'Une prime empochée, une tombe creusée. Juste une autre journée dans l\'Ouest.';
-        color = '#8d6e63';
-        if (window.BragiStorage) BragiStorage.markAsFinished('duel');
-    }
-
-    const story = document.getElementById('story');
-    const oldEnding = document.getElementById('ending-block');
-    if (oldEnding) oldEnding.remove();
-
-    story.insertAdjacentHTML('beforeend', `
-        <div id="ending-block" style="margin-top:40px; border-top: 2px dashed #5d4037; padding-top: 20px; animation: fadeIn 2s;">
-            <h2 style="color:${color}; margin-bottom: 20px; border:none;">${title}</h2>
-            <p style="text-align:center; font-style:italic;">${text}</p>
-            <div style="text-align:center; margin-top:20px;">
-                <a href="duel.html" style="color: #5d4037; text-decoration: none; border-bottom: 1px solid #5d4037;">Recharger la partie</a>
-            </div>
-        </div>
-    `);
-
-    // Scroll to ending
-    setTimeout(() => {
-        document.getElementById('ending-block').scrollIntoView({ behavior: 'smooth' });
-    }, 100);
-}
-
-window.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.section').forEach(section => {
-        section.querySelectorAll('.choice').forEach(btn => {
-            const wrapper = document.createElement('div');
-            wrapper.classList.add('choice-wrapper');
-
-            const f = Number(btn.dataset.fortune || 0);
-            const h = Number(btn.dataset.honneur || 0);
-            const m = Number(btn.dataset.munitions || 0);
-
-            const effects = [];
-            if (f < 0) effects.push(`-$${Math.abs(f)}`);
-            if (h < 0) effects.push(`Honneur ${h}`);
-            if (m < 0) effects.push(`Balle ${m}`);
-            if (f > 0) effects.push(`+$${f}`);
-            if (h > 0) effects.push(`Honneur +${h}`);
-            if (m > 0) effects.push(`Balle +${m}`);
-
-            wrapper.dataset.info = effects.join(' / ') || '';
-            btn.parentNode.insertBefore(wrapper, btn);
-            wrapper.appendChild(btn);
-        });
-    });
-    updateDisplay();
 });
