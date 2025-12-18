@@ -84,6 +84,7 @@ function computeEnding(forceEnding) {
         title = 'SURVIVANT';
         text = 'Le soleil se lève enfin. Vous sortez, tremblant mais vivant. Les ombres reculent, pour l\'instant. Personne ne vous croira.';
         color = '#4caf50';
+        if (window.BragiStorage) BragiStorage.markAsFinished('manor');
     }
 
     const story = document.getElementById('story');

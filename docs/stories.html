@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="style/index.css">
     <link rel="stylesheet" href="style/genres.css">
     <link rel="stylesheet" href="style/stories.css">
+    <!-- Storage Utility -->
+    <script src="js/security.js"></script>
     <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +37,7 @@
 
     <main class="stories-grid">
         <!-- Horreur -->
-        <article class="story-card card-horror" data-genre="horror">
+        <article class="story-card card-horror" data-genre="horror" id="labyrinth">
             <div class="story-header">
                 <span class="story-icon">💀</span>
                 <div>
@@ -46,7 +48,7 @@
             <a href="horror/cosmic/labyrinth.html" class="story-title">Le labyrinthe oublié</a>
         </article>
 
-        <article class="story-card card-horror" data-genre="horror">
+        <article class="story-card card-horror" data-genre="horror" id="manor">
             <div class="story-header">
                 <span class="story-icon">💀</span>
                 <div>
@@ -57,7 +59,7 @@
             <a href="horror/psychological/manor.html" class="story-title">Le manoir du silence</a>
         </article>
 
-        <article class="story-card card-horror" data-genre="horror">
+        <article class="story-card card-horror" data-genre="horror" id="summer_camp">
             <div class="story-header">
                 <span class="story-icon">💀</span>
                 <div>
@@ -69,7 +71,7 @@
         </article>
 
         <!-- Sci-Fi -->
-        <article class="story-card card-scifi" data-genre="scifi">
+        <article class="story-card card-scifi" data-genre="scifi" id="signal_zero">
             <div class="story-header">
                 <span class="story-icon">🛸</span>
                 <div>
@@ -81,7 +83,7 @@
                 Transmission</a>
         </article>
 
-        <article class="story-card card-scifi" data-genre="scifi">
+        <article class="story-card card-scifi" data-genre="scifi" id="kubrick9">
             <div class="story-header">
                 <span class="story-icon">🛸</span>
                 <div>
@@ -93,7 +95,7 @@
         </article>
 
         <!-- Western -->
-        <article class="story-card card-western" data-genre="western">
+        <article class="story-card card-western" data-genre="western" id="duel">
             <div class="story-header">
                 <span class="story-icon">🤠</span>
                 <div>
@@ -105,7 +107,7 @@
         </article>
 
         <!-- Aventure -->
-        <article class="story-card card-adventure" data-genre="adventure">
+        <article class="story-card card-adventure" data-genre="adventure" id="treasure">
             <div class="story-header">
                 <span class="story-icon">⚓️</span>
                 <div>
@@ -117,7 +119,7 @@
         </article>
 
         <!-- Fantasy -->
-        <article class="story-card card-fantasy" data-genre="fantasy">
+        <article class="story-card card-fantasy" data-genre="fantasy" id="quest">
             <div class="story-header">
                 <span class="story-icon">🐉</span>
                 <div>
@@ -129,7 +131,7 @@
         </article>
 
         <!-- Polar -->
-        <article class="story-card card-polar" data-genre="polar">
+        <article class="story-card card-polar" data-genre="polar" id="prohibition">
             <div class="story-header">
                 <span class="story-icon">🕵️‍♂️</span>
                 <div>
@@ -141,7 +143,7 @@
         </article>
 
         <!-- Thriller -->
-        <article class="story-card card-thriller" data-genre="thriller">
+        <article class="story-card card-thriller" data-genre="thriller" id="jurassic">
             <div class="story-header">
                 <span class="story-icon">🦖</span>
                 <div>
@@ -170,6 +172,15 @@
         document.addEventListener('DOMContentLoaded', () => {
             const filters = document.querySelectorAll('.filter-btn');
             const cards = document.querySelectorAll('.story-card');
+
+            // Show progress
+            if (window.BragiStorage) {
+                cards.forEach(card => {
+                    if (BragiStorage.isCompleted(card.id)) {
+                        card.classList.add('completed');
+                    }
+                });
+            }
 
             filters.forEach(filter => {
                 filter.addEventListener('click', () => {

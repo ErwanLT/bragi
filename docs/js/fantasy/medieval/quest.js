@@ -76,12 +76,15 @@ function computeEnding() {
     } else if (variables.xp >= 80 && variables.karma >= 70) {
         title = '🧙 Grand Archimage (CTO Légendaire)';
         text = 'Vous avez vaincu le Dragon Monolithique avec élégance et sagesse. Le Code Ancestral est propre, documenté, et testé. Les bardes chanteront vos louanges sur HackerNews.';
+        if (window.BragiStorage) BragiStorage.markAsFinished('quest');
     } else if (variables.xp >= 60 && variables.karma <= 30) {
         title = '💀 Nécromancien du Spaghetti';
         text = 'Le Dragon est mort, mais à quel prix ? Votre code est un labyrinthe de hacks obscurs et de magie noire. Ça marche, mais personne n\'ose relire votre travail. Vous régnez sur un royaume de Chaos.';
+        if (window.BragiStorage) BragiStorage.markAsFinished('quest');
     } else {
         title = '🛡️ Garde du Donjon (Le "Ça Passe")';
         text = 'Vous avez survécu. Le projet est en prod. Ce n\'est pas parfait, il y a des bugs, mais le client paie. Vous êtes un aventurier honnête, ni héros ni vilain.';
+        if (window.BragiStorage) BragiStorage.markAsFinished('quest');
     }
 
     const story = document.getElementById('story');

@@ -82,6 +82,7 @@ function computeEnding(forceEnding) {
         title = 'MISSION ACCOMPLISHED';
         text = 'Ils ont atteint la zone d\'extraction. Vous entendez le rotor de l\'hélico. Bon travail, Opérateur.';
         color = '#4caf50';
+        if (window.BragiStorage) BragiStorage.markAsFinished('signal_zero');
     }
 
     const story = document.getElementById('story');

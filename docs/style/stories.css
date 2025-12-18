@@ -104,6 +104,26 @@
     display: none !important;
 }
 
+/* Completion Badge */
+.story-card.completed {
+    border-color: #2ea043;
+}
+
+.story-card.completed::after {
+    content: '✓ Complété';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #2ea043;
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    z-index: 2;
+}
+
 @media (max-width: 600px) {
     .stories-grid {
         grid-template-columns: 1fr;

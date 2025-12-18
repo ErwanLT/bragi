@@ -80,6 +80,7 @@ function computeEnding(forceEnding) {
         title = 'ROI DES PIRATES';
         text = 'Avec ce trésor, vous construisez une flotte. Votre nom fera trembler les sept mers !';
         color = '#ffd700';
+        if (window.BragiStorage) BragiStorage.markAsFinished('treasure');
     } else if (variables.loyalte <= 0) {
         title = 'MUTINERIE !';
         text = 'L\'équipage vous abandonne sur un îlot désert. Ils partent avec le navire.';
@@ -96,6 +97,7 @@ function computeEnding(forceEnding) {
         title = 'RETOUR AU PORT';
         text = 'Pas de gloire, mais pas de mort. Une histoire à raconter à la taverne.';
         color = '#e6ccb2';
+        if (window.BragiStorage) BragiStorage.markAsFinished('treasure');
     }
 
     const story = document.getElementById('story');

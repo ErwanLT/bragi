@@ -77,6 +77,7 @@ function computeEnding(forceEnding) {
         title = 'LIBRE !';
         text = 'Vous avez trouvé la sortie. La lumière du soleil n\'a jamais été aussi belle.';
         color = '#dcdcdc'; // White/Grey
+        if (window.BragiStorage) BragiStorage.markAsFinished('labyrinth');
     } else if (variables.light <= 0) {
         title = 'DÉVORÉ PAR L\'OMBRE';
         text = 'Votre lanterne s\'éteint. Vous n\'êtes plus seul dans le noir.';

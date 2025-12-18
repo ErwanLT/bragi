@@ -105,10 +105,12 @@ function computeEnding(forceEnding) {
         title = 'FINAL GIRL/BOY';
         text = 'Vous avez non seulement survécu, mais vous avez sauvé presque tout le monde. Vous êtes une légende.';
         color = '#2ecc71';
+        if (window.BragiStorage) BragiStorage.markAsFinished('summer_camp');
     } else {
         title = 'SURVIVANT TRAUMATISÉ';
         text = 'Vous vous en êtes sorti. Mais vous ne dormirez plus jamais sans vérifier sous votre lit.';
         color = '#e67e22';
+        if (window.BragiStorage) BragiStorage.markAsFinished('summer_camp');
     }
 
     const story = document.getElementById('story');

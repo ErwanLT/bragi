@@ -68,10 +68,12 @@ function computeEnding(forceEnding) {
         title = '🦸 HÉROS DE NUBLAR';
         text = 'Vous avez sauvé tout le monde et restauré la sécurité. InGen vous propose un poste de directeur de la sécurité. Vous refusez poliment et prenez le premier hélicoptère.';
         color = '#2ecc71';
+        if (window.BragiStorage) BragiStorage.markAsFinished('jurassic');
     } else if (forceEnding === 'escape') {
         title = '🚁 ÉVACUATION RÉUSSIE';
         text = 'Vous avez survécu et quitté l\'île. Les cauchemars de dinosaures vous hanteront, mais vous êtes vivant. C\'est déjà ça.';
         color = '#3498db';
+        if (window.BragiStorage) BragiStorage.markAsFinished('jurassic');
     } else if (forceEnding === 'sacrifice') {
         title = '💔 SACRIFICE HÉROÏQUE';
         text = 'Vous avez donné votre vie pour sauver les autres. Votre nom sera gravé sur une plaque commémorative... que personne ne verra jamais car l\'île est fermée.';

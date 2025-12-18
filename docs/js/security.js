@@ -28,3 +28,58 @@ window.setupF12Protection = function (redirectUrl) {
         }
     }, 1000);
 };
+
+/**
+ * Bragi Storage Utility
+ * Manages game progress and achievements using localStorage.
+ */
+const STORAGE_KEY = 'bragi_progress';
+
+window.BragiStorage = {
+    /**
+     * Mark a story as completed.
+     * @param {string} storyId - Unique identifier for the story (e.g., 'labyrinth').
+     */
+    markAsFinished: function (storyId) {
+        const progress = this.getProgress();
+        if (!progress.completedStories.includes(storyId)) {
+            progress.completedStories.push(storyId);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            console.log(`Story "${storyId}" marked as completed.`);
+        }
+    },
+
+    /**
+     * Check if a story is completed.
+     * @param {string} storyId 
+     * @returns {boolean}
+     */
+    isCompleted: function (storyId) {
+        const progress = this.getProgress();
+        return progress.completedStories.includes(storyId);
+    },
+
+    /**
+     * Get the full progress object.
+     * @returns {Object}
+     */
+    getProgress: function () {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (data) {
+            try {
+                return JSON.parse(data);
+            } catch (e) {
+                console.error("Error parsing Bragi progress, resetting.", e);
+            }
+        }
+        return { completedStories: [] };
+    },
+
+    /**
+     * Reset all progress (for debugging).
+     */
+    resetProgress: function () {
+        localStorage.removeItem(STORAGE_KEY);
+        console.log("Bragi progress reset.");
+    }
+};

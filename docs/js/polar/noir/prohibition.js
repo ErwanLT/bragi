@@ -81,6 +81,7 @@ function computeEnding(forceEnding) {
             title = 'AFFAIRE RÉSOLUE';
             text = 'Capone ira en prison. Vous êtes le héros de Chicago.';
             color = '#000';
+            if (window.BragiStorage) BragiStorage.markAsFinished('prohibition');
         } else {
             title = 'PREUVES INSUFFISANTES';
             text = 'Le Capitaine secoue la tête. "C\'est tout ce que vous avez ?" Capone est relâché faute de preuves.';

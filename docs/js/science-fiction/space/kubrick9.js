@@ -107,6 +107,7 @@ function computeEnding(forceEnding) {
         title = '🚀 DEPLOYMENT SUCCESSFUL';
         text = 'Le correctif est en ligne. Le système est stable. Vous retournez en hyper-sommeil, en espérant ne pas rêver de merge conflicts.';
         color = '#2ecc71'; // Green
+        if (window.BragiStorage) BragiStorage.markAsFinished('kubrick9');
     }
 
     const story = document.getElementById('story');

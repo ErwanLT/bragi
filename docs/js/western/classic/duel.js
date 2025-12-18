@@ -85,14 +85,17 @@ function computeEnding(forceEnding) {
         title = 'HORS-LA-LOI';
         text = 'Vous avez tué le bandit, mais vous êtes devenu comme lui. Votre tête est mise à prix.';
         color = '#3e2723';
+        if (window.BragiStorage) BragiStorage.markAsFinished('duel');
     } else if (variables.honneur >= 90) {
         title = 'LÉGENDE DE L\'OUEST';
         text = 'Vous ramenez le bandit vivant. Le shérif vous serre la main. Les enfants joueront à être vous.';
         color = '#ffd700';
+        if (window.BragiStorage) BragiStorage.markAsFinished('duel');
     } else {
         title = 'JUSTICE EST FAITE';
         text = 'Une prime empochée, une tombe creusée. Juste une autre journée dans l\'Ouest.';
         color = '#8d6e63';
+        if (window.BragiStorage) BragiStorage.markAsFinished('duel');
     }
 
     const story = document.getElementById('story');
