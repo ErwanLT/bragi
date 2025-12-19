@@ -104,9 +104,9 @@ class StoryEngine {
             }
 
             // Disable interaction with "future" sections
-            if (index > lastChoiceIndex || isTerminated) {
-                // Keep the current choice section interactive, but anything after is locked if terminated
-                if (index > lastChoiceIndex) section.classList.add('locked');
+            const maxInteractiveIndex = isTerminated ? lastChoiceIndex : lastChoiceIndex + 1;
+            if (index > maxInteractiveIndex) {
+                section.classList.add('locked');
             } else {
                 section.classList.remove('locked');
             }
