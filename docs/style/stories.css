@@ -42,48 +42,71 @@
 }
 
 .story-card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 1.5rem;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    height: 380px;
+    border-radius: 16px;
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    position: relative;
-    overflow: hidden;
+    justify-content: flex-end;
     animation: fadeInUp 0.6s ease-out both;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.story-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.8), #000);
+    z-index: 1;
 }
 
 .story-card:hover {
-    transform: translateY(-8px);
-    border-color: var(--accent-color);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
 .story-header {
+    position: relative;
+    z-index: 2;
+    padding: 1.5rem;
+    width: 100%;
+    margin: 0;
     display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.story-icon {
-    font-size: 2rem;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .story-genre {
-    font-size: 0.9rem;
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    order: -1;
 }
 
 .story-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin: 0;
-    color: var(--text-primary);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
     text-decoration: none;
+    line-height: 1.2;
+    margin-top: 0.5rem;
 }
 
 .story-title:after {
@@ -95,9 +118,10 @@
 
 .sub-genre {
     font-size: 0.85rem;
-    color: var(--accent-color);
-    opacity: 0.8;
+    color: rgba(255, 255, 255, 0.7);
+    margin-top: 0.25rem;
 }
+
 
 /* Hidden state for filtering */
 .hidden {

@@ -68,60 +68,103 @@ main {
 
 /* Card Styles */
 .card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 2rem;
+    position: relative;
     width: 350px;
+    height: 480px;
+    border-radius: 16px;
+    overflow: hidden;
     text-decoration: none;
-    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    justify-content: flex-end;
     animation: fadeInUp 0.8s ease-out;
     animation-fill-mode: backwards;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.card:nth-child(1) {
-    animation-delay: 0.1s;
-}
-
-.card:nth-child(2) {
-    animation-delay: 0.2s;
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.8), #000);
+    z-index: 1;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    border-color: var(--accent-color);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+    border-color: rgba(255, 255, 255, 0.3);
 }
 
-.card:hover h2 {
-    color: var(--accent-color);
+.card-content {
+    position: relative;
+    z-index: 2;
+    padding: 2rem;
+    width: 100%;
 }
 
-.card-icon {
-    font-size: 2.5rem;
+.card-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
     margin-bottom: 1rem;
-    color: var(--text-secondary);
-    transition: color 0.3s ease;
-}
-
-.card:hover .card-icon {
-    color: var(--accent-color);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    color: #fff;
 }
 
 .card h2 {
-    font-size: 1.5rem;
+    font-size: 2rem;
     margin-bottom: 0.5rem;
-    color: var(--text-primary);
-    transition: color 0.3s ease;
+    color: #fff;
+    font-weight: 700;
 }
 
 .card p {
-    color: var(--text-secondary);
+    color: rgba(255, 255, 255, 0.8);
     font-size: 0.95rem;
+    line-height: 1.4;
 }
+
+/* Specific Genre Colors for Badges */
+.card-horror .card-badge {
+    background: rgba(183, 28, 28, 0.6);
+}
+
+.card-scifi .card-badge {
+    background: rgba(26, 35, 126, 0.6);
+}
+
+.card-western .card-badge {
+    background: rgba(78, 52, 46, 0.6);
+}
+
+.card-adventure .card-badge {
+    background: rgba(0, 77, 64, 0.6);
+}
+
+.card-fantasy .card-badge {
+    background: rgba(74, 20, 140, 0.6);
+}
+
+.card-polar .card-badge {
+    background: rgba(38, 50, 56, 0.6);
+}
+
+.card-thriller .card-badge {
+    background: rgba(230, 81, 0, 0.6);
+}
+
 
 /* Footer Styles */
 footer {
