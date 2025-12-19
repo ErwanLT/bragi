@@ -88,24 +88,48 @@ class StoryEngine {
         const lastChoiceIndex = Math.max(-1, ...Object.keys(this.choices).map(Number));
         const isTerminated = document.getElementById('ending-block') !== null;
 
-        sections.forEach((section, index) => {
-            const hasChoice = this.choices.hasOwnProperty(index);
+        let highestVisibleIndex = -1;
 
-            // Show sections that have a choice, OR the next section if not terminated
-            if (index <= lastChoiceIndex || (index === lastChoiceIndex + 1 && !isTerminated)) {
+        sections.forEach((section, index) => {
+            const hasChoiceInRecord = this.choices.hasOwnProperty(index);
+
+            // Logic: Section is visible if:
+            // 1. A choice has already been made in or after it (for history)
+            // 2. OR it's a narrative section (no choices) between the last choice and the next interactive section
+            // 3. OR it's the next available interactive section
+
+            let isVisible = index <= lastChoiceIndex;
+
+            if (!isVisible && !isTerminated) {
+                // Check if all sections between lastChoiceIndex and this one (exclusive) are choice-less
+                let allPreviousChoiceless = true;
+                for (let i = lastChoiceIndex + 1; i < index; i++) {
+                    if (sections[i].querySelectorAll('.choice').length > 0) {
+                        allPreviousChoiceless = false;
+                        break;
+                    }
+                }
+                if (allPreviousChoiceless) {
+                    isVisible = true;
+                }
+            }
+
+            if (isVisible) {
                 section.classList.add('visible');
+                highestVisibleIndex = index;
             } else {
                 section.classList.remove('visible');
             }
 
             // Always clear the buttons if the section has no recorded choice in this.choices or is hidden
-            if (!hasChoice || !section.classList.contains('visible')) {
+            if (!hasChoiceInRecord || !section.classList.contains('visible')) {
                 section.querySelectorAll('.choice').forEach(btn => btn.classList.remove('selected'));
             }
+        });
 
-            // Disable interaction with "future" sections
-            const maxInteractiveIndex = isTerminated ? lastChoiceIndex : lastChoiceIndex + 1;
-            if (index > maxInteractiveIndex) {
+        // Disable interaction with "future" sections (those beyond the highest visible index)
+        sections.forEach((section, index) => {
+            if (index > highestVisibleIndex) {
                 section.classList.add('locked');
             } else {
                 section.classList.remove('locked');
