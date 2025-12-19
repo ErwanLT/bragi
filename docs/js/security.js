@@ -81,5 +81,45 @@ window.BragiStorage = {
     resetProgress: function () {
         localStorage.removeItem(STORAGE_KEY);
         console.log("Bragi progress reset.");
+    },
+
+    /**
+     * Export progress as a Base64 encoded file.
+     */
+    exportProgress: function () {
+        const progress = this.getProgress();
+        const json = JSON.stringify(progress);
+        const encoded = btoa(unescape(encodeURIComponent(json))); // Support Unicode
+
+        const blob = new Blob([encoded], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `bragi_backup_${new Date().toISOString().split('T')[0]}.brg`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    },
+
+    /**
+     * Import progress from encoded content.
+     * @param {string} encodedContent 
+     */
+    importProgress: function (encodedContent) {
+        try {
+            const json = decodeURIComponent(escape(atob(encodedContent)));
+            const data = JSON.parse(json);
+
+            // Basic validation
+            if (data && Array.isArray(data.completedStories)) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                return true;
+            }
+            throw new Error("Invalid structure");
+        } catch (e) {
+            console.error("Import failed:", e);
+            return false;
+        }
     }
 };

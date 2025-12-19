@@ -35,6 +35,16 @@
         <button class="filter-btn" data-filter="thriller">Thriller</button>
     </nav>
 
+    <div class="data-mgmt">
+        <button id="export-progress" class="data-btn">
+            <span class="icon">💾</span> Sauvegarder ma progression
+        </button>
+        <button id="import-progress-trigger" class="data-btn">
+            <span class="icon">📤</span> Charger une sauvegarde
+        </button>
+        <input type="file" id="import-progress-file" style="display: none;" accept=".brg">
+    </div>
+
     <main class="stories-grid">
         <!-- Horreur -->
         <article class="story-card card-horror" data-genre="horror" id="labyrinth">
@@ -179,6 +189,36 @@
                     if (BragiStorage.isCompleted(card.id)) {
                         card.classList.add('completed');
                     }
+                });
+            }
+
+            // Data Management
+            const exportBtn = document.getElementById('export-progress');
+            const importBtn = document.getElementById('import-progress-trigger');
+            const fileInput = document.getElementById('import-progress-file');
+
+            if (exportBtn && window.BragiStorage) {
+                exportBtn.addEventListener('click', () => BragiStorage.exportProgress());
+            }
+
+            if (importBtn && fileInput) {
+                importBtn.addEventListener('click', () => fileInput.click());
+
+                fileInput.addEventListener('change', (e) => {
+                    const file = e.target.files[0];
+                    if (!file) return;
+
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        const content = event.target.result;
+                        if (BragiStorage.importProgress(content)) {
+                            alert("Progression importée avec succès !");
+                            window.location.reload();
+                        } else {
+                            alert("Erreur lors de l'importation. Le fichier est peut-être corrompu.");
+                        }
+                    };
+                    reader.readAsText(file);
                 });
             }
 
