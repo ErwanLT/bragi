@@ -3,7 +3,7 @@
  * Refactored using StoryEngine
  */
 
-setupF12Protection('../../../magic_word.html');
+setupF12Protection('../../magic_word.html');
 
 new StoryEngine({
     storyId: 'jurassic',
@@ -18,10 +18,53 @@ new StoryEngine({
         securite: [0, 100]
     },
     onUpdateHUD: (vars) => {
+        // Calculate colors based on values
+        const santeColor = vars.sante > 50 ? 'bg-secondary' : (vars.sante > 20 ? 'bg-primary' : 'bg-red-600');
+        const securiteColor = vars.securite > 50 ? 'text-secondary' : (vars.securite > 20 ? 'text-primary' : 'text-red-500');
+
         return `
-            <div><span>SANTÉ:</span> <span>${vars.sante}%</span></div>
-            <div><span>MUNITIONS:</span> <span>${vars.munitions}</span></div>
-            <div><span>SÉCURITÉ:</span> <span>${vars.securite}%</span></div>
+        <!-- Character Status Card -->
+        <div class="bg-surface-dark rounded-xl p-6 border border-surface-highlight sticky top-24">
+            <h3 class="text-white font-bold text-lg mb-4 flex items-center justify-between font-display">
+                État du Parc
+                <span class="material-symbols-outlined text-text-secondary">monitor_heart</span>
+            </h3>
+            <div class="space-y-4">
+                <!-- Health -->
+                <div class="flex flex-col gap-1">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-text-secondary flex items-center gap-2"><span class="material-symbols-outlined text-rose-500 text-[18px]">favorite</span> Santé</span>
+                        <span class="text-white font-bold">${vars.sante}%</span>
+                    </div>
+                    <div class="h-1.5 w-full bg-surface-highlight rounded-full">
+                        <div class="h-full ${santeColor} rounded-full transition-all duration-500" style="width: ${vars.sante}%"></div>
+                    </div>
+                </div>
+                
+                <!-- Security -->
+                <div class="flex items-center justify-between p-3 bg-surface-highlight/30 rounded-lg border border-white/5">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-primary/20 text-primary p-1.5 rounded-md material-symbols-outlined">security</span>
+                        <div>
+                            <p class="text-text-secondary text-xs uppercase font-bold">Sécurité</p>
+                            <p class="text-white text-sm font-medium ${securiteColor}">${vars.securite}%</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Ammo -->
+                <div class="flex items-center justify-between p-3 bg-surface-highlight/30 rounded-lg border border-white/5">
+                    <div class="flex items-center gap-3">
+                        <span class="bg-amber-500/20 text-amber-500 p-1.5 rounded-md material-symbols-outlined">my_location</span>
+                        <div>
+                            <p class="text-text-secondary text-xs uppercase font-bold">Munitions</p>
+                            <p class="text-white text-sm font-medium">${vars.munitions}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
         `;
     },
     onComputeEnding: (vars, forceEnding) => {

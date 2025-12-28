@@ -1,213 +1,68 @@
 /* Thriller - Prehistoric Theme */
 /* Jurassic Park: Jungle, Amber, Danger */
 
-:root {
-    --bg-jungle: #0d1f0d;
-    --bg-card: #f5f0e8;
-    --text-dark: #1a2a1a;
-    --accent-amber: #ff8c00;
-    --accent-green: #2d5016;
-    --accent-red: #8b0000;
-    --font-heading: 'Bebas Neue', sans-serif;
-    --font-body: 'Roboto', sans-serif;
-}
-
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap');
-
-body {
-    background-color: var(--bg-jungle);
-    background-image:
-        repeating-linear-gradient(45deg, rgba(45, 80, 22, 0.1) 0px, transparent 2px, transparent 10px),
-        repeating-linear-gradient(-45deg, rgba(45, 80, 22, 0.1) 0px, transparent 2px, transparent 10px),
-        radial-gradient(circle at 30% 40%, rgba(255, 140, 0, 0.05) 0%, transparent 50%);
-    background-attachment: fixed;
-    color: var(--text-dark);
-    font-family: var(--font-body);
-}
-
-h1,
-h2,
-h3 {
-    font-family: var(--font-heading);
-    color: var(--text-dark);
-    text-shadow:
-        2px 2px 0 rgba(255, 140, 0, 0.3),
-        0 0 20px rgba(255, 140, 0, 0.2);
-    text-align: center;
-    border-bottom: 3px solid var(--accent-amber);
-    letter-spacing: 3px;
-}
-
-.quest-card {
-    background-color: var(--bg-card);
-    background-image:
-        linear-gradient(rgba(45, 80, 22, 0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(45, 80, 22, 0.02) 1px, transparent 1px);
-    background-size: 20px 20px;
-    border: 3px solid var(--accent-green);
-    box-shadow:
-        0 0 0 8px rgba(255, 140, 0, 0.3),
-        0 0 30px rgba(45, 80, 22, 0.5),
-        inset 0 0 100px rgba(255, 140, 0, 0.05);
-}
-
-.quest-card::before {
-    content: "🦖";
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    font-size: 4rem;
-    opacity: 0.1;
-    filter: sepia(50%);
-}
-
-.section {
-    border-bottom: 2px dashed var(--accent-green);
-}
-
-.section p {
-    color: var(--text-dark);
-}
-
-.choice {
-    background: linear-gradient(135deg, rgba(255, 140, 0, 0.1) 0%, rgba(45, 80, 22, 0.1) 100%);
-    border-color: var(--accent-green);
-    color: var(--text-dark);
-    font-family: var(--font-body);
-    font-weight: 500;
-    position: relative;
-    overflow: hidden;
-}
-
-.choice::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 140, 0, 0.3), transparent);
-    transition: left 0.5s;
-}
-
-.choice:hover::before {
-    left: 100%;
-}
-
-.choice:hover {
-    background: var(--accent-amber);
-    color: #fff;
-    border-color: var(--accent-amber);
-    box-shadow:
-        0 0 20px rgba(255, 140, 0, 0.6),
-        inset 0 0 20px rgba(255, 140, 0, 0.3);
-    transform: translateY(-3px);
-}
-
-.choice.selected {
-    background: var(--accent-red);
-    color: #fff;
-    border-color: var(--accent-red);
-    box-shadow: 0 0 15px rgba(139, 0, 0, 0.8);
-}
-
-.choice-wrapper::after {
-    background: rgba(45, 80, 22, 0.95);
-    color: var(--accent-amber);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-    font-weight: bold;
-    border: 1px solid var(--accent-amber);
-}
-
-#hud {
-    background: linear-gradient(135deg, rgba(13, 31, 13, 0.95) 0%, rgba(45, 80, 22, 0.95) 100%);
-    border: 2px solid var(--accent-amber);
-    color: var(--accent-amber);
-    font-family: var(--font-heading);
+/* ============================================
+   TYPOGRAPHY SPECIFICS
+   ============================================ */
+.story-title {
+    font-family: "Bebas Neue", sans-serif;
     letter-spacing: 2px;
-    box-shadow:
-        0 0 20px rgba(255, 140, 0, 0.4),
-        inset 0 0 20px rgba(0, 0, 0, 0.3);
 }
 
-#hud div {
-    text-shadow: 0 0 5px rgba(255, 140, 0, 0.5);
+/* ============================================
+   CUSTOM SCROLLBAR (Jungle Theme)
+   ============================================ */
+::-webkit-scrollbar {
+    width: 8px;
 }
 
-/* Danger pulse animation for low health */
-@keyframes dangerPulse {
-
-    0%,
-    100% {
-        box-shadow: 0 0 20px rgba(139, 0, 0, 0.4);
-    }
-
-    50% {
-        box-shadow: 0 0 30px rgba(139, 0, 0, 0.8);
-    }
+::-webkit-scrollbar-track {
+    background: #0d1f0d;
 }
 
-/* Dinosaur Claw Marks for Immersion */
-/* Three-toed dinosaur track effect using CSS shapes */
-.section::after {
-    content: '';
-    position: absolute;
-    right: 20px;
-    bottom: 15px;
-    width: 30px;
-    height: 40px;
-    opacity: 0.1;
-    background:
-        radial-gradient(ellipse 8px 15px at 50% 0%, var(--accent-green) 0%, transparent 100%),
-        radial-gradient(ellipse 6px 12px at 20% 30%, var(--accent-green) 0%, transparent 100%),
-        radial-gradient(ellipse 6px 12px at 80% 30%, var(--accent-green) 0%, transparent 100%);
-    background-repeat: no-repeat;
-    transform: rotate(-15deg);
+::-webkit-scrollbar-thumb {
+    background: #233323;
+    border-radius: 4px;
 }
 
-.section:nth-child(even)::after {
-    right: auto;
-    left: 25px;
-    transform: rotate(15deg) scaleX(-1);
+::-webkit-scrollbar-thumb:hover {
+    background: #ff8c00;
 }
 
-.section:nth-child(3n)::after {
-    opacity: 0.15;
-    transform: rotate(-25deg) scale(1.2);
+/* ============================================
+   CHOICE BUTTONS
+   ============================================ */
+.choice-btn {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Raptor claw scratch marks */
-.section:nth-child(5)::before,
-.section:nth-child(8)::before,
-.section:nth-child(12)::before {
-    content: '';
-    position: absolute;
-    top: 20px;
-    right: 40px;
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--accent-red) 20%, var(--accent-red) 80%, transparent);
-    opacity: 0.2;
-    transform: rotate(-35deg);
-    box-shadow:
-        0 8px 0 var(--accent-red),
-        0 16px 0 var(--accent-red);
+.choice-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px -5px rgba(255, 140, 0, 0.3);
 }
 
-/* Subtle background texture suggesting prehistoric environment */
-.quest-card::after {
-    content: '';
-    position: absolute;
-    bottom: 30px;
-    left: 40px;
-    width: 80px;
-    height: 100px;
-    opacity: 0.04;
-    background:
-        radial-gradient(ellipse 20px 35px at 50% 0%, var(--accent-green) 0%, transparent 100%),
-        radial-gradient(ellipse 15px 28px at 25% 40%, var(--accent-green) 0%, transparent 100%),
-        radial-gradient(ellipse 15px 28px at 75% 40%, var(--accent-green) 0%, transparent 100%);
-    background-repeat: no-repeat;
-    transform: rotate(-20deg);
-    pointer-events: none;
+/* ============================================
+   STORY ENGINE INTEGRATION FIXES
+   ============================================ */
+.choice-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.choice-wrapper .choice {
+    height: 100%;
+    width: 100%;
+}
+
+/* Consequence Tooltips */
+.choice-wrapper::after {
+    content: attr(data-info);
+    display: block;
+    font-size: 0.75rem;
+    color: #ff8c00;
+    margin-top: 0.5rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
 }
