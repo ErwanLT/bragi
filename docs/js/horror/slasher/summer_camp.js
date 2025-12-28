@@ -42,19 +42,26 @@ new StoryEngine({
             color = '#ff3333';
             isTerminal = true;
         } else if (forceEnding) {
+            let prefix = "";
+            if (forceEnding === 'kill') {
+                prefix = "Vous avez pris le risque de l'affronter. ";
+            } else if (forceEnding === 'police') {
+                prefix = "Les gyrophares illuminent la forêt. ";
+            }
+
             if (vars.survivants === 5) {
                 title = 'FINAL GIRL/BOY';
-                text = 'Vous avez sauvé tout le monde ! Une légende urbaine est née.';
+                text = prefix + 'Vous avez sauvé tout le monde ! Une légende urbaine est née.';
                 color = '#2ecc71';
                 isSuccess = true;
             } else if (vars.survivants > 0) {
                 title = 'SURVIVANT TRAUMATISÉ';
-                text = `Vous êtes vivant, mais ${5 - vars.survivants} amis manquent à l'appel.`;
+                text = prefix + `Vous êtes vivant, mais ${5 - vars.survivants} amis manquent à l'appel.`;
                 color = '#3498db';
                 isSuccess = true;
             } else {
                 title = 'DERNIER SOUFFLE';
-                text = 'Vous sortez seul de cette forêt, le seul survivant d\'un massacre.';
+                text = prefix + 'Vous sortez seul de cette forêt, le seul survivant d\'un massacre.';
                 color = '#e67e22';
                 isSuccess = true;
             }
