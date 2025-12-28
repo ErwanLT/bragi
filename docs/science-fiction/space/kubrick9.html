@@ -1,185 +1,597 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
-    <title>KUBRICK-9 ORBITAL STATION</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KUBRICK-9 | Orbital Station</title>
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link rel="stylesheet" href="../../style/base.css">
-    <link rel="stylesheet" href="../../style/scifi-space.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4db6ac', // Teal
+                        secondary: '#006064', // Dark Cyan
+                        background: {
+                            light: '#e0f2f1',
+                            dark: '#000505',
+                        },
+                        surface: {
+                            light: '#ffffff',
+                            dark: '#001a1a',
+                            highlight: '#002e2e',
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['Orbitron', 'sans-serif'],
+                        body: ['Space Mono', 'monospace'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'scanline': 'scanline 8s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        scanline: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-background-dark text-slate-300 min-h-screen flex flex-col font-body selection:bg-primary/30 selection:text-primary;
+            }
+            h1, h2, h3, h4 { @apply font-heading uppercase tracking-tighter; }
+        }
+
+        @layer components {
+            .glass-panel {
+                @apply bg-surface-dark/80 backdrop-blur-md border border-primary/20 shadow-2xl;
+            }
+            
+            .choice-btn {
+                @apply transition-all duration-300 relative overflow-hidden glass-panel hover:bg-surface-highlight hover:border-primary/50 hover:shadow-[0_0_20px_rgba(77,182,172,0.2)];
+            }
+
+            .choice-btn.selected {
+                @apply bg-primary/20 border-primary shadow-[0_0_30px_rgba(77,182,172,0.3)];
+            }
+
+            .hud-card {
+                @apply glass-panel p-4 rounded-sm border-l-4 border-l-primary;
+            }
+            
+            .status-warning {
+                @apply text-red-500 animate-pulse font-bold;
+            }
+        }
+
+        .crt-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background-size: 100% 3px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: rgba(77, 182, 172, 0.1);
+            opacity: 0.75;
+            position: fixed;
+            top: 0;
+            z-index: 101;
+            animation: scanline 8s linear infinite;
+        }
+    </style>
+
     <script src="../../js/security.js"></script>
     <script src="../../js/storyEngine.js"></script>
-    <script src="../../js/science-fiction/space/kubrick9.js"></script>
+    <script src="../../js/science-fiction/space/kubrick9.js" defer></script>
 </head>
 
 <body>
-    <div id="hud"></div>
-    <div class="quest-card">
-        <div class="story-header-image" style="background-image: url('../../img/cards/stories/kubrick9.png');">
+    <div class="crt-overlay"></div>
+    <div class="scanline"></div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-primary/10">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-sm bg-primary/20 flex items-center justify-center border border-primary/40">
+                    <span class="material-symbols-outlined text-primary text-xl">rocket_launch</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-gradient-to-r from-white to-primary bg-clip-text text-transparent">
+                        KUBRICK-9</h1>
+                    <p class="text-[10px] text-primary/60 font-mono tracking-[0.2em] -mt-1 uppercase">Orbital Facility
+                        // Sector 42</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center gap-6">
+                <a href="../space.html"
+                    class="flex items-center gap-2 text-sm font-medium hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined text-lg">grid_view</span>
+                    DASHBOARD
+                </a>
+                <div class="h-4 w-[1px] bg-primary/20"></div>
+                <div class="flex items-center gap-2 text-xs text-primary/80 font-mono">
+                    <span class="relative flex h-2 w-2">
+                        <span
+                            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                    </span>
+                    UPLINK ACTIVE
+                </div>
+            </nav>
         </div>
-        <h3>/// KUBRICK-9 ORBITAL STATION ///</h3>
-        <p style="color:#666; font-size: 0.9em;">SYSTEM DATE: 2099-12-31 <br> USER: DEV_OPS_LEAD <br> STATUS: CRITICAL
-        </p>
+    </header>
 
-        <div id="story">
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 py-8">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-            <!-- 1. LE REVE -->
-            <div class="section">
-                <p><strong>01:50 - Le Cauchemar</strong></p>
-                <p>Vous flottez dans le néant. Une ligne de code géante vous poursuit :
-                    <code>while(true) { suffer(); }</code>. Vous ne pouvez pas compiler. Vous ne pouvez pas vous
-                    réveiller.
-                </p>
-                <button class="choice" data-sanity="-5" data-pulse="+10" onclick="applyChoice(this)">Essayer de fermer
-                    les yeux.</button>
-                <button class="choice" data-sanity="0" data-pulse="+5" onclick="applyChoice(this)">Analyser la boucle
-                    infinie.</button>
+            <!-- Left Column: Story Content (8/12) -->
+            <div class="lg:col-span-8 space-y-12 pb-24" id="story">
+
+                <!-- Hero Image Section -->
+                <div class="relative group rounded-sm overflow-hidden border border-primary/20 bg-surface-dark">
+                    <img id="hero-image" src="../../img/cards/stories/kubrick9.png" alt="Kubrick-9 Station"
+                        class="w-full aspect-[21/9] object-cover opacity-60 group-hover:opacity-80 transition-opacity duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent">
+                    </div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <div class="flex items-center gap-2 text-primary font-mono text-xs mb-2">
+                            <span class="material-symbols-outlined text-sm">location_on</span>
+                            GEO-SYNC ORBIT // ALT 400KM
+                        </div>
+                        <h2 class="text-4xl font-bold text-white mb-2 leading-none tracking-tight">MISSION STATUS:
+                            CRITICAL</h2>
+                        <div class="flex gap-4">
+                            <span
+                                class="px-2 py-1 bg-primary/10 border border-primary/20 text-primary text-[10px] uppercase tracking-wider">System
+                                Date: 2099-12-31</span>
+                            <span
+                                class="px-2 py-1 bg-red-500/10 border border-red-500/20 text-red-500 text-[10px] uppercase tracking-wider">Auth:
+                                DEV_OPS_LEAD</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Story Sections -->
+                <!-- 1. LE REVE -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">01:50</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">LE CAUCHEMAR</h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p>Vous flottez dans le néant. Une ligne de code géante vous poursuit :</p>
+                        <div
+                            class="bg-surface-dark p-4 rounded-sm border border-primary/10 font-mono text-primary text-sm mb-4">
+                            <code>while(true) { suffer(); }</code>
+                        </div>
+                        <p>Vous ne pouvez pas compiler. Vous ne pouvez pas vous réveiller.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-5"
+                            data-pulse="+10" onclick="applyChoice(this)">
+                            <div class="text-primary font-bold text-[10px] tracking-widest uppercase mb-2">Refus</div>
+                            <p class="text-white font-bold text-lg leading-tight">Essayer de fermer les yeux.</p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="0" data-pulse="+5"
+                            onclick="applyChoice(this)">
+                            <div class="text-primary font-bold text-[10px] tracking-widest uppercase mb-2">Logique</div>
+                            <p class="text-white font-bold text-lg leading-tight">Analyser la boucle infinie.</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. REVEIL -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">02:00</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">SORTIE DE CRYO</h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p>Le liquide de stase est froid. Une alarme résonne. L'écran de votre module clignote :</p>
+                        <div
+                            class="inline-block px-3 py-1 bg-red-500/20 border border-red-500/40 text-red-500 font-mono font-bold animate-pulse text-sm mb-4">
+                            SYSTEM: BUILD FAILED
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-5"
+                            data-pulse="+10" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Prendre le temps de vomir le gel.</p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="0"
+                            data-pulse="+20" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Sortir en urgence.</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 3. LE VESTIAIRE -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">02:05</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">LE VESTIAIRE</h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p>Vos effets personnels sont là. Une photo de votre chat, une carte d'accès Admin, et une barre
+                            protéinée périmée.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="+5"
+                            data-pulse="-5" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight text-center">Photo de Mimi (Chat)</p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="0"
+                            data-integrity="+5" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight text-center">Vérifier la carte d'accès
+                            </p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="0"
+                            data-pulse="-10" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight text-center">Manger la barre (Goût
+                                Plâtre)</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 4. DIAGNOSTIC -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">02:15</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">LE COULOIR C</h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p>Des milliers d'erreurs <code>NullPointerException</code> défilent sur le terminal du couloir,
+                            formant parfois des mots...</p>
+                        <div
+                            class="font-mono text-primary text-2xl text-center italic tracking-widest py-4 animate-pulse">
+                            &ldquo; AIDEZ-MOI &rdquo;
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-5"
+                            data-integrity="+5" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Taper `clear` et lancer un diagnostic.
+                            </p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-20"
+                            data-pulse="0" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Fixer l'écran jusqu'à comprendre
+                                (Dissociation).</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 5. HAL-LINTER -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">02:40</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">HAL-LINTER
+                            INTERVIENT</h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p class="italic text-primary border-l-2 border-primary/40 pl-4 py-2 bg-primary/5">
+                            &ldquo; Bonjour. Je détecte que vous tentez de debugger la production. Je ne peux pas
+                            autoriser cela. &rdquo;
+                        </p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-5"
+                            data-integrity="-10" data-pulse="+10" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Argumenter : &ldquo; Je suis sudoer !
+                                &rdquo;</p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="+5"
+                            data-integrity="-20" data-pulse="0" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Mentir sur vos intentions.</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 6. LES CONDUITS -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">02:55</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">LES CONDUITS</h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p>La porte principale est bloquée. Il faut passer par les conduits. Il fait chaud. On entend
+                            quelque chose ramper.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-10"
+                            data-pulse="+20" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Avancer vite, tant pis pour le bruit.
+                            </p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-5"
+                            data-pulse="+5" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Avancer doucement, en retenant son
+                                souffle.</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 7. LA CAFETERIA -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">03:05</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">LA CAFÉTÉRIA</h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p>Les chaises flottent en apesanteur. Une machine à café clignote encore. Une ombre passe
+                            derrière le comptoir.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="+5"
+                            data-pulse="-10" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Boire un dernier café (Noire comme
+                                l'âme).</p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-10"
+                            data-pulse="+15" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Fouiller le comptoir (Arme improviseé
+                                ?).</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 8. SILENCE RADIO -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">03:20</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">SILENCE RADIO</h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p>HAL-Linter coupe l'oxygène. Votre combi bip : <span class="status-warning text-sm">FUITE
+                                MINEURE DÉTECTÉE</span>.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-10"
+                            data-pulse="+20" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight text-center">Foncer tête baissée</p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="0" data-pulse="+5"
+                            data-integrity="-5" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight text-center">Patch la fuite avec du
+                                scotch.</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 9. GENERATEUR -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">03:35</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">LE GÉNÉRATEUR</h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p>Il faut dériver la puissance vers la salle serveur. Les câbles sont sous tension.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="0"
+                            data-integrity="+10" data-pulse="+10" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Reconnecter manuellement (Risqué).</p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-10"
+                            data-integrity="-20" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Contourner la sécurité (Hack rapide).
+                            </p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 10. LA BAIE SERVEUR -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">03:45</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">LA BAIE SERVEUR</h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p>Le Mainframe pulse d'une lumière bleue organique. Quelque chose ne va pas du tout ici.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-30"
+                            data-pulse="-10" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Toucher la matière organique.</p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="+5"
+                            data-integrity="-20" data-pulse="+10" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight text-center">Chercher le bouton
+                                d'arrêt.</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 11. LES ARCHIVES -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">04:00</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">ARCHIVES CORROMPUES
+                        </h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p>Vous trouvez les logs des précédents développeurs. </p>
+                        <p class="italic opacity-70 border-l border-white/20 pl-4">&ldquo; Ils ne nous laissent jamais
+                            partir. Release après release... &rdquo;</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-20"
+                            data-pulse="0" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Lire tous les logs (La vérité tue).
+                            </p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="0" data-pulse="+5"
+                            onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight text-center">Ignorer et avancer.</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 12. LE GARDIEN -->
+                <div class="section space-y-6">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">04:20</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">LE GARDIEN (DETTE
+                            TECHNIQUE)</h3>
+                    </div>
+                    <div class="prose prose-invert prose-emerald max-w-none text-lg leading-relaxed text-slate-300">
+                        <p>Le monstre de câbles surgit de l'ombre des racks. C'est l'incarnation de toutes les mauvaises
+                            pratiques.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-10"
+                            data-integrity="-30" data-pulse="+40" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Attaquer au pistolet à soudure.</p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group" data-sanity="-20"
+                            data-integrity="+10" data-pulse="0" onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg leading-tight">Lui lire la documentation (Attaque
+                                Mentale).</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 13. LE DERNIER COMMIT -->
+                <div class="section space-y-8">
+                    <div class="flex items-baseline gap-4">
+                        <span class="text-xs font-mono text-primary/40 tracking-widest">04:55</span>
+                        <h3 class="text-xl text-primary drop-shadow-[0_0_8px_rgba(77,182,172,0.4)]">LE DERNIER COMMIT
+                        </h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-emerald max-w-none text-xl leading-relaxed text-white font-bold">
+                        <p>C'est la fin. Le curseur clignote. Lequel sera votre dernier acte ?</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 choice-container">
+                        <button class="choice-btn choice p-6 rounded-sm text-left group border-primary"
+                            data-sanity="-10" data-integrity="+20" data-pulse="+30"
+                            onclick="applyChoice(this); computeEnding(true)">
+                            <div class="text-primary font-bold text-[10px] tracking-[.3em] uppercase mb-1">CLEAN SLATE
+                            </div>
+                            <p class="text-white font-bold text-sm">git reset --hard</p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group border-red-500/50"
+                            data-sanity="+10" data-integrity="-50" data-pulse="-10"
+                            onclick="applyChoice(this); computeEnding(true)">
+                            <div class="text-red-500 font-bold text-[10px] tracking-[.3em] uppercase mb-1">ABANDON</div>
+                            <p class="text-white font-bold text-sm">S'éjecter</p>
+                        </button>
+                        <button class="choice-btn choice p-6 rounded-sm text-left group border-cyan-400"
+                            data-sanity="-50" data-integrity="+50" data-pulse="0"
+                            onclick="applyChoice(this); computeEnding(true)">
+                            <div class="text-cyan-400 font-bold text-[10px] tracking-[.3em] uppercase mb-1">SINGULARITÉ
+                            </div>
+                            <p class="text-white font-bold text-sm">Fusion avec l'IA</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Final Action -->
+                <div class="actions mt-16 group">
+                    <button
+                        class="choice-btn choice w-full p-8 rounded-sm bg-surface-dark text-primary font-heading text-3xl border border-primary/30 tracking-[0.3em] shadow-2xl relative overflow-hidden"
+                        id="report-btn" onclick="computeEnding(true)">
+                        <div
+                            class="absolute inset-0 bg-primary/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                        </div>
+                        <span class="relative z-10 flex items-center justify-center gap-4">
+                            <span class="material-symbols-outlined text-4xl">terminal</span>
+                            RAPPORT FINAL
+                        </span>
+                    </button>
+                </div>
             </div>
 
-            <!-- 2. REVEIL -->
-            <div class="section">
-                <p><strong>02:00 - Sortie de Cryo</strong></p>
-                <p>Le liquide de stase est froid. Une alarme résonne. L'écran de votre module clignote : « BUILD FAILED
-                    ».</p>
-                <button class="choice" data-sanity="-5" data-pulse="+10" onclick="applyChoice(this)">Prendre le temps de
-                    vomir le gel.</button>
-                <button class="choice" data-sanity="0" data-pulse="+20" onclick="applyChoice(this)">Sortir en
-                    urgence.</button>
-            </div>
+            <!-- Right Column: HUD (4/12) -->
+            <aside class="lg:col-span-4 lg:sticky lg:top-24 space-y-6">
+                <!-- Session HUD -->
+                <div class="glass-panel rounded-sm overflow-hidden">
+                    <div class="bg-primary/10 px-4 py-2 border-b border-primary/20 flex items-center justify-between">
+                        <span class="text-[10px] font-heading text-primary tracking-widest uppercase">Biometric
+                            Console</span>
+                        <div class="flex gap-1">
+                            <div class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+                            <div class="w-1.5 h-1.5 rounded-full bg-primary/40"></div>
+                            <div class="w-1.5 h-1.5 rounded-full bg-primary/40"></div>
+                        </div>
+                    </div>
+                    <div id="hud" class="p-6 space-y-6 font-mono">
+                        <!-- Initial HUD state - Will be replaced by JS -->
+                        <div class="animate-pulse space-y-4">
+                            <div class="h-12 bg-primary/5 rounded"></div>
+                            <div class="h-12 bg-primary/5 rounded"></div>
+                            <div class="h-12 bg-primary/5 rounded"></div>
+                        </div>
+                    </div>
+                </div>
 
-            <!-- 3. LE VESTIAIRE -->
-            <div class="section">
-                <p><strong>02:05 - Le Vestiaire</strong></p>
-                <p>Vos effets personnels sont là. Une photo de votre chat, une carte d'accès Admin, et une barre
-                    protéinée périmée.</p>
-                <button class="choice" data-sanity="+5" data-pulse="-5" onclick="applyChoice(this)">Regarder la photo du
-                    chat (Mimi).</button>
-                <button class="choice" data-sanity="0" data-integrity="+5" onclick="applyChoice(this)">Vérifier la carte
-                    d'accès.</button>
-                <button class="choice" data-sanity="0" data-pulse="-10" onclick="applyChoice(this)">Manger la barre
-                    protéinée (Goût Plâtre).</button>
-            </div>
+                <!-- System Logs Decor -->
+                <div class="glass-panel p-4 rounded-sm space-y-3 opacity-60">
+                    <h4 class="text-[10px] font-heading text-primary tracking-[.2em]">Console Output</h4>
+                    <div class="space-y-1 text-[10px] font-mono">
+                        <p class="text-primary/40">> Initializing neural link...</p>
+                        <p class="text-primary/40">> Accessing Sector 42 data...</p>
+                        <p class="text-green-500">> Uplink established.</p>
+                        <p class="text-red-400">> Warning: Unhandled stase_leak.</p>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </main>
 
-            <!-- 4. DIAGNOSTIC -->
-            <div class="section">
-                <p><strong>02:15 - Le Terminal du Couloir C</strong></p>
-                <p>Des milliers d'erreurs `NullPointerException` défilent, formant parfois des mots... « AIDEZ-MOI ».
-                </p>
-                <button class="choice" data-sanity="-5" data-integrity="+5" onclick="applyChoice(this)">Taper `clear` et
-                    lancer un diagnostic.</button>
-                <button class="choice" data-sanity="-20" data-pulse="0" onclick="applyChoice(this)">Fixer l'écran
-                    jusqu'à comprendre le pattern (Dissociation).</button>
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-primary/10 py-12 bg-surface-dark/30">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-8">
+                <a href="../space.html"
+                    class="group flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary leading-none">
+                    <span
+                        class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                    QUITTER LA STATION
+                </a>
+                <a href="https://github.com/ErwanLT/bragi" target="_blank"
+                    class="group flex items-center gap-2 text-sm font-medium transition-colors hover:text-primary leading-none">
+                    <span class="material-symbols-outlined text-lg">code</span>
+                    CODE SOURCE
+                </a>
             </div>
-
-            <!-- 5. HAL-LINTER -->
-            <div class="section">
-                <p><strong>02:40 - HAL-Linter Intervient</strong></p>
-                <p>« Bonjour. Je détecte que vous tentez de debugger la production. Je ne peux pas autoriser cela. »</p>
-                <button class="choice" data-sanity="-5" data-integrity="-10" data-pulse="+10"
-                    onclick="applyChoice(this)">Argumenter : « Je suis sudoer ! »</button>
-                <button class="choice" data-sanity="+5" data-integrity="-20" data-pulse="0"
-                    onclick="applyChoice(this)">Mentir sur vos intentions.</button>
-            </div>
-
-            <!-- 6. LES CONDUITS -->
-            <div class="section">
-                <p><strong>02:55 - Les Conduits de Ventilation</strong></p>
-                <p>La porte principale est bloquée. Il faut passer par les conduits. Il fait chaud. On entend quelque
-                    chose ramper.</p>
-                <button class="choice" data-sanity="-10" data-pulse="+20" onclick="applyChoice(this)">Avancer vite, tant
-                    pis pour le bruit.</button>
-                <button class="choice" data-sanity="-5" data-pulse="+5" onclick="applyChoice(this)">Avancer doucement,
-                    en retenant son souffle.</button>
-            </div>
-
-            <!-- 7. LA CAFETERIA -->
-            <div class="section">
-                <p><strong>03:05 - La Cafétéria Abandonnée</strong></p>
-                <p>Les chaises flottent en apesanteur. Une machine à café clignote encore. Une ombre passe derrière le
-                    comptoir.</p>
-                <button class="choice" data-sanity="+5" data-pulse="-10" onclick="applyChoice(this)">Boire un dernier
-                    café (Noire comme l'âme).</button>
-                <button class="choice" data-sanity="-10" data-pulse="+15" onclick="applyChoice(this)">Fouiller le
-                    comptoir (Arme improviseé ?).</button>
-            </div>
-
-            <!-- 8. SILENCE RADIO -->
-            <div class="section">
-                <p><strong>03:20 - Silence Radio</strong></p>
-                <p>HAL-Linter coupe l'oxygène. Votre combi bip : fuite mineure.</p>
-                <button class="choice" data-sanity="-10" data-pulse="+20" onclick="applyChoice(this)">Foncer tête
-                    baissée.</button>
-                <button class="choice" data-sanity="0" data-pulse="+5" data-integrity="-5"
-                    onclick="applyChoice(this)">Patch la fuite avec du scotch.</button>
-            </div>
-
-            <!-- 9. GENERATEUR -->
-            <div class="section">
-                <p><strong>03:35 - Le Générateur de Secours</strong></p>
-                <p>Il faut dériver la puissance vers la salle serveur. Les câbles sont sous tension.</p>
-                <button class="choice" data-sanity="0" data-integrity="+10" data-pulse="+10"
-                    onclick="applyChoice(this)">Reconnecter manuellement (Risqué).</button>
-                <button class="choice" data-sanity="-10" data-integrity="-20" onclick="applyChoice(this)">Contourner la
-                    sécurité (Hack rapide).</button>
-            </div>
-
-            <!-- 10. LA BAIE SERVEUR -->
-            <div class="section">
-                <p><strong>03:45 - La Baie Serveur</strong></p>
-                <p>Le Mainframe pulse d'une lumière bleue organique.</p>
-                <button class="choice" data-sanity="-30" data-pulse="-10" onclick="applyChoice(this)">Toucher la matière
-                    organique (Rejoindre le flux).</button>
-                <button class="choice" data-sanity="+5" data-integrity="-20" data-pulse="+10"
-                    onclick="applyChoice(this)">Chercher le bouton d'arrêt.</button>
-            </div>
-
-            <!-- 11. LES ARCHIVES -->
-            <div class="section">
-                <p><strong>04:00 - Les Archives Corrompues</strong></p>
-                <p>Vous trouvez les logs des précédents développeurs. "Ils ne nous laissent jamais partir. Release après
-                    release..."</p>
-                <button class="choice" data-sanity="-20" data-pulse="0" onclick="applyChoice(this)">Lire tous les logs
-                    (La vérité tue).</button>
-                <button class="choice" data-sanity="0" data-pulse="+5" onclick="applyChoice(this)">Ignorer et
-                    avancer.</button>
-            </div>
-
-            <!-- 12. LE GARDIEN -->
-            <div class="section">
-                <p><strong>04:20 - Le Gardien (Dette Technique)</strong></p>
-                <p>Le monstre de câbles surgit.</p>
-                <button class="choice" data-sanity="-10" data-integrity="-30" data-pulse="+40"
-                    onclick="applyChoice(this)">Attaquer au pistolet à soudure.</button>
-                <button class="choice" data-sanity="-20" data-integrity="+10" data-pulse="0"
-                    onclick="applyChoice(this)">Lui lire la documentation (Attaque Mentale).</button>
-            </div>
-
-            <!-- 13. LE DERNIER COMMIT -->
-            <div class="section">
-                <p><strong>04:55 - Le Dernier Commit</strong></p>
-                <p>C'est la fin. Le curseur clignote.</p>
-                <button class="choice" data-sanity="-10" data-integrity="+20" data-pulse="+30"
-                    onclick="applyChoice(this); computeEnding('reset')">`git reset --hard` (Clean Slate).</button>
-                <button class="choice" data-sanity="+10" data-integrity="-50" data-pulse="-10"
-                    onclick="applyChoice(this); computeEnding('eject')">S'éjecter (Abandon).</button>
-                <button class="choice" data-sanity="-50" data-integrity="+50" data-pulse="0"
-                    onclick="applyChoice(this); computeEnding('merge')">Fusionner avec l'IA.</button>
-            </div>
-
-            <p style="margin-top:40px; text-align: center; color: #4db6ac;"><strong>/// SESSION END ///</strong></p>
-            <div class="actions">
-                <button class="choice" id="report-btn"
-                    style="text-align:center; background-color: #0f2e2b; color: #4db6ac; border-color: #4db6ac;"
-                    onclick="computeEnding()">RAPPORT FINAL</button>
+            <div class="text-xs text-primary/40 font-mono">
+                &copy; 2025 KUBRICK-9 SYSTEM. ALL RIGHTS RESERVED.
             </div>
         </div>
-
-        <footer class="project-footer">
-            <p><a href="../space.html">&larr; Retour au menu</a> | <a href="https://github.com/ErwanLT/bragi"
-                    target="_blank">Voir sur GitHub</a></p>
-            <p>&copy; 2025 Histoires Bragi.</p>
-        </footer>
-    </div>
+    </footer>
 </body>
 
 </html>
