@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
@@ -7,115 +7,378 @@
     <title>Bragi - Histoires Interactives</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <meta name="description" content="Une collection d'histoires interactives d'horreur et de science-fiction.">
-    <link rel="stylesheet" href="style/index.css">
-    <!-- Preconnect to Google Fonts -->
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link
-        href="https://fonts.googleapis.com/css2?family=Creepster&family=Orbitron:wght@700&family=Rye&family=Pirata+One&family=Cinzel:wght@700&family=Special+Elite&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap"
         rel="stylesheet">
-    <style>
-        :root {
-            /* Override font with Google Font 'Inter' for that premium feel */
-            --font-main: 'Inter', sans-serif;
+    <link
+        href="https://fonts.googleapis.com/css2?family=Creepster&family=Orbitron:wght@700&family=Rye&family=Pirata+One&family=Special+Elite&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8b5cf6',
+                        secondary: '#4c1d95',
+                        background: '#050507',
+                        surface: '#0f172a'
+                    },
+                    fontFamily: {
+                        heading: ['Cinzel', 'serif'],
+                        body: ['Inter', 'sans-serif'],
+                        horror: ['Creepster', 'cursive'],
+                        scifi: ['Orbitron', 'sans-serif'],
+                        western: ['Rye', 'serif'],
+                        adventure: ['Pirata+One', 'cursive'],
+                        polar: ['Special+Elite', 'cursive']
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        body {
+            background-color: #050507;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Genre Title Fonts */
-        .card-horror h2 {
-            font-family: 'Creepster', cursive;
-            letter-spacing: 2px;
-        }
-
-        .card-scifi h2 {
-            font-family: 'Orbitron', sans-serif;
-            letter-spacing: 1px;
-        }
-
-        .card-western h2 {
-            font-family: 'Rye', serif;
-        }
-
-        .card-adventure h2 {
-            font-family: 'Pirata One', cursive;
-            font-size: 1.8em;
-        }
-
-        .card-fantasy h2 {
+        h1,
+        h2,
+        h3 {
             font-family: 'Cinzel', serif;
         }
 
-        .card-polar h2 {
+        .hero-mask {
+            mask-image: linear-gradient(to bottom, black 50%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent);
+        }
+
+        .genre-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: #0f172a;
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            aspect-ratio: 1 / 1.4;
+        }
+
+        .genre-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            border-color: rgba(139, 92, 246, 0.3);
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.8);
+        }
+
+        .genre-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+            opacity: 0.9;
+            z-index: 10;
+        }
+
+        .stretched-link::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+        }
+
+        .glass-header {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Unique Genre Type Styles */
+        .type-horror {
+            font-family: 'Creepster', cursive;
+            letter-spacing: 0.05em;
+        }
+
+        .type-scifi {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.1em;
+        }
+
+        .type-western {
+            font-family: 'Rye', serif;
+        }
+
+        .type-adventure {
+            font-family: 'Pirata One', cursive;
+        }
+
+        .type-fantasy {
+            font-family: 'Cinzel', serif;
+        }
+
+        .type-polar {
             font-family: 'Special Elite', cursive;
         }
 
-        .card-thriller h2 {
-            font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 2px;
+        .type-thriller {
+            font-family: 'Cinzel', serif;
+            font-weight: 900;
         }
     </style>
 </head>
 
-<body>
-    <header>
-        <h1>Histoires Bragi</h1>
-        <p class="subtitle">Plongez dans des récits interactifs où vos choix façonnent le dénouement.</p>
+<body class="min-h-screen flex flex-col pt-20">
+    <!-- Background Decor -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div
+            class="absolute top-0 right-0 w-[60vw] h-[60vw] bg-purple-600/5 blur-[150px] rounded-full translate-x-1/4 -translate-y-1/4">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-blue-600/5 blur-[150px] rounded-full -translate-x-1/4 translate-y-1/4">
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-header h-20">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-4 group no-underline text-white">
+                <img src="favicon.png" alt="Logo" class="w-8 h-8 group-hover:rotate-12 transition-transform">
+                <span class="font-heading text-xl tracking-tighter">BRAGI</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-10">
+                <a href="index.html"
+                    class="text-white transition-colors font-heading text-[10px] tracking-[0.3em] uppercase no-underline border-b border-primary/40 pb-1">Accueil</a>
+                <a href="stories.html"
+                    class="text-slate-400 hover:text-white transition-colors font-heading text-[10px] tracking-[0.3em] uppercase no-underline">Histoires</a>
+                <a href="about.html"
+                    class="text-slate-400 hover:text-white transition-colors font-heading text-[10px] tracking-[0.3em] uppercase no-underline">À
+                    Propos</a>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <a href="horror/index.html" class="card card-horror">
-            <div class="card-icon">💀</div>
-            <h2>Horreur</h2>
-            <p>Explorez notre collection d'histoires d'horreur. Oserez-vous entrer ?</p>
-        </a>
+    <main class="relative z-10">
+        <!-- Hero Section -->
+        <section class="h-[70vh] min-h-[600px] relative overflow-hidden flex items-center pt-20">
+            <div class="absolute inset-0 bg-cover bg-center bg-no-repeat hero-mask opacity-40 grayscale hover:grayscale-0 transition-all duration-[4000ms]"
+                style="background-image: url('img/hero_castle.png');"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050507]/40 to-[#050507]"></div>
 
-        <a href="science-fiction/index.html" class="card card-scifi">
-            <div class="card-icon">🛸</div>
-            <h2>Science-Fiction</h2>
-            <p>Voyagez vers le futur. IA, Espace et Mystères technologiques.</p>
-        </a>
+            <div class="max-w-7xl mx-auto px-6 w-full relative z-10">
+                <div class="max-w-3xl space-y-8">
+                    <div class="flex items-center gap-3 text-primary">
+                        <span class="w-16 h-px bg-primary/40"></span>
+                        <span class="font-heading text-xs tracking-[0.6em] uppercase">Le Tisseur de Destins</span>
+                    </div>
+                    <h1 class="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.8] m-0">L'UNIVERS
+                        DE BRAGI</h1>
+                    <p
+                        class="text-slate-300 text-xl md:text-2xl font-light italic border-l-4 border-primary/30 pl-8 leading-relaxed">
+                        Plongez dans l'obscurité des archives interdites. Chaque récit est un labyrinthe, chaque choix
+                        est une sentence.
+                    </p>
+                    <div class="flex gap-6 pt-6">
+                        <a href="stories.html"
+                            class="px-10 py-4 bg-primary text-white rounded-full font-heading text-xs tracking-widest uppercase hover:bg-secondary hover:scale-105 transition-all no-underline shadow-lg shadow-primary/20">Explorer
+                            la collection</a>
+                        <a href="about.html"
+                            class="px-10 py-4 border border-white/10 text-white rounded-full font-heading text-xs tracking-widest uppercase hover:bg-white/5 transition-all no-underline">Notre
+                            Essence</a>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-        <a href="western/index.html" class="card card-western">
-            <div class="card-icon">🤠</div>
-            <h2>Western</h2>
-            <p>Duels au soleil, chercheurs d'or et justice expéditive.</p>
-        </a>
+        <!-- Genre Selection -->
+        <section class="max-w-7xl mx-auto px-6 py-32 space-y-20">
+            <div class="text-center space-y-6">
+                <h2 class="text-4xl md:text-5xl font-bold tracking-tight">Choisissez votre Portail</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto opacity-50">
+                </div>
+            </div>
 
-        <a href="adventure/index.html" class="card card-adventure">
-            <div class="card-icon">⚓️</div>
-            <h2>Aventure</h2>
-            <p>Pirates, trésors et expéditions lointaines.</p>
-        </a>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
 
-        <a href="fantasy/index.html" class="card card-fantasy">
-            <div class="card-icon">🐉</div>
-            <h2>Fantasy</h2>
-            <p>Magie, Dragons et Quêtes épiques.</p>
-        </a>
+                <!-- Horror -->
+                <article class="genre-card group">
+                    <img src="img/cards/genres/horror.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110">
+                    <div class="genre-overlay"></div>
+                    <div class="absolute bottom-10 left-8 right-8 z-30 space-y-4">
+                        <h2
+                            class="type-horror text-4xl text-red-600 group-hover:text-red-500 transition-colors m-0 drop-shadow-lg">
+                            Horreur</h2>
+                        <p
+                            class="text-slate-400 text-xs tracking-wider font-light leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            Ombres et murmures. Oserez-vous franchir le seuil de l'indicible ?</p>
+                        <a href="horror/index.html" class="stretched-link"></a>
+                    </div>
+                </article>
 
-        <a href="polar/index.html" class="card card-polar">
-            <div class="card-icon">🕵️‍♂️</div>
-            <h2>Polar</h2>
-            <p>Histoires de détectives, ambiance film noir et années folles.</p>
-        </a>
+                <!-- Sci-Fi -->
+                <article class="genre-card group border-cyan-500/5">
+                    <img src="img/cards/genres/scifi.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110">
+                    <div class="genre-overlay"></div>
+                    <div class="absolute bottom-10 left-8 right-8 z-30 space-y-4">
+                        <h2 class="type-scifi text-3xl text-cyan-500 transition-colors m-0 drop-shadow-lg">Sci-Fi</h2>
+                        <p
+                            class="text-slate-400 text-xs tracking-wider font-light leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            IA, étoiles et futurs déchus. La technologie est votre salut ou votre ruine.</p>
+                        <a href="science-fiction/index.html" class="stretched-link"></a>
+                    </div>
+                </article>
 
-        <a href="thriller/index.html" class="card card-thriller">
-            <div class="card-icon">🦖</div>
-            <h2>Thriller</h2>
-            <p>Suspense et danger dans des environnements hostiles.</p>
-        </a>
+                <!-- Western -->
+                <article class="genre-card group">
+                    <img src="img/cards/genres/western.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110">
+                    <div class="genre-overlay"></div>
+                    <div class="absolute bottom-10 left-8 right-8 z-30 space-y-4">
+                        <h2
+                            class="type-western text-3xl text-amber-600 group-hover:text-amber-500 transition-colors m-0 drop-shadow-lg">
+                            Western</h2>
+                        <p
+                            class="text-slate-400 text-xs tracking-wider font-light leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            Poussière et plomb. Tracez votre route dans un monde sans loi.</p>
+                        <a href="western/index.html" class="stretched-link"></a>
+                    </div>
+                </article>
+
+                <!-- Adventure -->
+                <article class="genre-card group">
+                    <img src="img/cards/genres/adventure.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110">
+                    <div class="genre-overlay"></div>
+                    <div class="absolute bottom-10 left-8 right-8 z-30 space-y-4">
+                        <h2
+                            class="type-adventure text-4xl text-sky-500 group-hover:text-sky-400 transition-colors m-0 drop-shadow-lg">
+                            Aventure</h2>
+                        <p
+                            class="text-slate-400 text-xs tracking-wider font-light leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            Épées, trésors et terres lointaines. La gloire vous attend au-delà des mers.</p>
+                        <a href="adventure/index.html" class="stretched-link"></a>
+                    </div>
+                </article>
+
+                <!-- Fantasy -->
+                <article class="genre-card group">
+                    <img src="img/cards/genres/fantasy.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110">
+                    <div class="genre-overlay"></div>
+                    <div class="absolute bottom-10 left-8 right-8 z-30 space-y-4">
+                        <h2
+                            class="type-fantasy text-3xl text-purple-500 group-hover:text-purple-400 transition-colors m-0 drop-shadow-lg">
+                            Fantasy</h2>
+                        <p
+                            class="text-slate-400 text-xs tracking-wider font-light leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            Magie et prophéties. Forgez votre légende dans la trame du destin.</p>
+                        <a href="fantasy/index.html" class="stretched-link"></a>
+                    </div>
+                </article>
+
+                <!-- Polar -->
+                <article class="genre-card group">
+                    <img src="img/cards/genres/polar.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110">
+                    <div class="genre-overlay"></div>
+                    <div class="absolute bottom-10 left-8 right-8 z-30 space-y-4">
+                        <h2
+                            class="type-polar text-3xl text-slate-400 group-hover:text-white transition-colors m-0 drop-shadow-lg">
+                            Polar</h2>
+                        <p
+                            class="text-slate-400 text-xs tracking-wider font-light leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            Secrets et fumée. Résolvez l'énigme avant que la ville ne vous dévore.</p>
+                        <a href="polar/index.html" class="stretched-link"></a>
+                    </div>
+                </article>
+
+                <!-- Thriller -->
+                <article class="genre-card group">
+                    <img src="img/cards/genres/thriller.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-110">
+                    <div class="genre-overlay"></div>
+                    <div class="absolute bottom-10 left-8 right-8 z-30 space-y-4">
+                        <h2
+                            class="type-thriller text-3xl text-orange-500 group-hover:text-orange-400 transition-colors m-0 drop-shadow-lg uppercase">
+                            Thriller</h2>
+                        <p
+                            class="text-slate-400 text-xs tracking-wider font-light leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                            Suspense au sommet. Chaque seconde compte pour votre survie.</p>
+                        <a href="thriller/index.html" class="stretched-link"></a>
+                    </div>
+                </article>
+
+                <!-- Library CTA Card -->
+                <article
+                    class="genre-card group border-white/10 bg-white/5 flex items-center justify-center text-center">
+                    <div class="z-30 space-y-6 px-10">
+                        <span class="material-symbols-outlined text-5xl text-primary animate-pulse">auto_stories</span>
+                        <h2 class="text-2xl font-heading text-white m-0">Bibliothèque Complète</h2>
+                        <p class="text-slate-500 text-[10px] tracking-widest uppercase mb-4">Parcourir toutes les sagas
+                        </p>
+                        <a href="stories.html"
+                            class="inline-block px-8 py-3 bg-white/10 text-white rounded-full font-heading text-[10px] tracking-widest uppercase hover:bg-primary transition-all no-underline">Voir
+                            Tout</a>
+                    </div>
+                    <a href="stories.html" class="stretched-link"></a>
+                </article>
+
+            </div>
+        </section>
     </main>
 
-    <footer>
-        <p>&copy; 2025 Histoires Bragi. 
-            <a href="stories.html" style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;">Histoires</a>
-            <a href="about.html" style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;">À propos</a>
-            <a href="https://github.com/ErwanLT/bragi" style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;" target="_blank">Voir sur GitHub</a></p>
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-black/80 py-24 relative z-10 text-slate-500">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8 items-start">
+            <div class="space-y-8">
+                <div class="flex items-center gap-4">
+                    <img src="favicon.png" alt="Logo" class="w-10 h-10 opacity-40">
+                    <span class="font-heading text-2xl tracking-[0.2em] text-white">BRAGI</span>
+                </div>
+                <p class="text-xs text-slate-500 font-light leading-relaxed max-w-sm uppercase tracking-[0.2em]">
+                    Le tisseur d'histoires dont vous êtes le héros. Une expérience immersive conçue pour les esprits
+                    audacieux.
+                </p>
+            </div>
+
+            <div class="flex flex-col gap-8 md:items-center">
+                <span class="font-heading text-[11px] tracking-[0.5em] text-slate-400 uppercase">Exploration</span>
+                <nav class="flex flex-col gap-6 md:items-center font-heading text-[11px] tracking-[0.5em] uppercase">
+                    <a href="stories.html"
+                        class="hover:text-primary transition-all no-underline text-inherit">Chroniques</a>
+                    <a href="about.html"
+                        class="hover:text-primary transition-all no-underline text-inherit">L'Essence</a>
+                </nav>
+            </div>
+
+            <div class="flex flex-col gap-8 md:items-end text-right">
+                <span class="font-heading text-[11px] tracking-[0.5em] text-slate-400 uppercase">Communauté</span>
+                <a href="https://github.com/ErwanLT/bragi" target="_blank"
+                    class="flex items-center gap-4 px-8 py-3 border border-white/10 rounded-full hover:bg-white/5 transition-all group no-underline text-inherit">
+                    <span class="font-heading text-[11px] tracking-[0.4em] uppercase">Archives GitHub</span>
+                    <span class="material-symbols-outlined text-sm">open_in_new</span>
+                </a>
+                <div class="pt-10">
+                    <p class="text-[10px] text-slate-800 tracking-[0.6em] uppercase font-black">© 2025 Forge Digitale
+                    </p>
+                </div>
+            </div>
+        </div>
     </footer>
 
-    <!-- Simple JS for subtle interactions if needed, currently interactions are CSS based -->
     <script>
-        console.log("Bienvenue sur Histoires Bragi.");
+        console.log("Bienvenue dans l'univers de Bragi.");
     </script>
 </body>
 

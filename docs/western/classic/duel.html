@@ -1,143 +1,586 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <title>LE DERNIER DUEL</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LE DERNIER DUEL - BRAGI WESTERN</title>
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link rel="stylesheet" href="../../style/base.css">
-    <link rel="stylesheet" href="../../style/western-classic.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- Scripts -->
     <script src="../../js/security.js"></script>
     <script src="../../js/storyEngine.js"></script>
     <script src="../../js/western/classic/duel.js"></script>
+
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#E2A65E", /* Desert Sand */
+                        "secondary": "#D35400", /* Sunset Orange */
+                        "background-dark": "#1A120F", /* Dark Burnt Wood */
+                        "surface-dark": "#2B1D17", /* Leather Brown */
+                        "surface-highlight": "#3D2B22", /* Lighter Leather */
+                        "text-secondary": "#A08E85",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "heading": ["Bebas Neue", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "western": ["Special Elite", "cursive"],
+                    },
+                    borderRadius: { "DEFAULT": "0.1rem", "lg": "0.2rem", "xl": "0.4rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #1A120F;
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(200, 150, 100, 0.05) 0%, transparent 100%),
+                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.01) 0px, transparent 1px, transparent 100px);
+        }
+
+        .western-title {
+            font-family: "Bebas Neue", sans-serif;
+            letter-spacing: 0.1em;
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8), 4px 4px 0px rgba(226, 166, 94, 0.2);
+        }
+
+        .western-text {
+            font-family: "Special Elite", cursive;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1A120F;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #3D2B22;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #E2A65E;
+        }
+
+        /* Choice Button Transitions */
+        .choice-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-2px);
+            background-color: #3D2B22 !important;
+            border-color: #E2A65E !important;
+        }
+
+        /* StoryEngine Integration */
+        .choice-wrapper::after {
+            content: attr(data-info);
+            display: block;
+            font-size: 0.7rem;
+            color: #E2A65E;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            font-family: "Special Elite", cursive;
+            opacity: 0.6;
+        }
+    </style>
 </head>
 
-<body>
-    <div id="hud"></div>
-    <div class="quest-card">
-        <h3>★ LE DERNIER DUEL ★</h3>
-        <p style="text-align:center; font-style: italic; color: #8d6e63;">WANTED: "El Cascabel" - Dead or Alive</p>
-
-        <div id="story">
-            <!-- 1. SALOON -->
-            <div class="section">
-                <p><strong>12:00 - Coyote Creek Saloon</strong></p>
-                <p>La ville est déserte, sauf le saloon. La poussière tourbillonne. Vous entrez. Le barman nettoie un
-                    verre crasseux.</p>
-                <button class="choice" data-fortune="-5" onclick="applyChoice(this)">Payer un verre pour avoir des
-                    infos.</button>
-                <button class="choice" data-honneur="-10" onclick="applyChoice(this)">Intimider le barman avec votre
-                    Colt.</button>
+<body
+    class="bg-background-dark text-slate-200 min-h-screen flex flex-col font-body selection:bg-primary selection:text-background-dark">
+    <!-- Top Navigation Bar -->
+    <header
+        class="sticky top-0 z-50 w-full border-b border-solid border-white/5 bg-background-dark/95 backdrop-blur-sm px-6 py-3">
+        <div class="mx-auto max-w-7xl flex items-center justify-between">
+            <div class="flex items-center gap-4 text-white">
+                <div
+                    class="flex items-center justify-center size-10 rounded-full bg-primary/10 text-primary border border-primary/30">
+                    <span class="material-symbols-outlined">star</span>
+                </div>
+                <h2 class="text-white text-lg font-bold leading-tight tracking-[0.2em] font-heading uppercase">
+                    BRAGI WESTERN</h2>
             </div>
-
-            <!-- 2. POKER -->
-            <div class="section">
-                <p><strong>12:30 - Partie de Poker</strong></p>
-                <p>Trois types patibulaires vous invitent à leur table. L'un d'eux connaît El Cascabel.</p>
-                <button class="choice" data-fortune="+50" data-honneur="-10" onclick="applyChoice(this)">Tricher (As
-                    dans la manche).</button>
-                <button class="choice" data-fortune="-20" data-honneur="+10" onclick="applyChoice(this)">Jouer honnête
-                    (Perdre mais gagner leur respect).</button>
-            </div>
-
-            <!-- 3. BAGARRE -->
-            <div class="section">
-                <p><strong>13:00 - La Bagarre</strong></p>
-                <p>La triche (ou la chance) ne plaît pas à tout le monde. Une bouteille vole.</p>
-                <button class="choice" data-munitions="-1" onclick="applyChoice(this)">Tirer en l'air pour calmer tout
-                    le monde.</button>
-                <button class="choice" data-honneur="+5" onclick="applyChoice(this)">Se battre aux poings (Économiser
-                    les balles).</button>
-            </div>
-
-            <!-- 4. L'ÉCURIE -->
-            <div class="section">
-                <p><strong>13:45 - L'Écurie Abandonnée</strong></p>
-                <p>Vous cherchez des provisions. Un vieux cheval borgne vous regarde.</p>
-                <button class="choice" data-munitions="+6" onclick="applyChoice(this)">Fouiller la selle du shérif mort
-                    (Trouver des balles).</button>
-                <button class="choice" data-fortune="-10" data-honneur="+10" onclick="applyChoice(this)">Donner de l'eau
-                    au cheval et partir.</button>
-            </div>
-
-            <!-- 5. CANYON -->
-            <div class="section">
-                <p><strong>15:00 - L'Embuscade du Canyon</strong></p>
-                <p>Un coup de feu résonne ! Une balle siffle à votre oreille. Ils sont en hauteur.</p>
-                <button class="choice" data-munitions="-3" onclick="applyChoice(this)">Riposter intensivement (Tir de
-                    couverture).</button>
-                <button class="choice" data-honneur="-5" onclick="applyChoice(this)">Fuir au galop vers la
-                    mine.</button>
-            </div>
-
-            <!-- 6. FEU DE CAMP -->
-            <div class="section">
-                <p><strong>18:00 - Bivouac Rapide</strong></p>
-                <p>Vous êtes semé. Vous prenez un moment pour nettoyer votre arme et manger des haricots froids.</p>
-                <button class="choice" data-honneur="+10" onclick="applyChoice(this)">Se remémorer pourquoi on se bat
-                    (Justice).</button>
-                <button class="choice" data-munitions="+2" onclick="applyChoice(this)">Recalibrer le viseur et récupérer
-                    des balles perdues.</button>
-            </div>
-
-            <!-- 7. LA MINE -->
-            <div class="section">
-                <p><strong>19:30 - L'Entrée de la Mine</strong></p>
-                <p>El Cascabel se cache là-dedans. C'est un labyrinthe.</p>
-                <button class="choice" data-fortune="+100" onclick="applyChoice(this)">Explorer une veine d'or
-                    (Cupidité).</button>
-                <button class="choice" data-honneur="+5" onclick="applyChoice(this)">Suivre les traces de bottes (La
-                    mission d'abord).</button>
-            </div>
-
-            <!-- 8. RUE PRINCIPALE -->
-            <div class="section">
-                <p><strong>20:00 - Retour en Ville</strong></p>
-                <p>Il vous a contourné. Il vous attend dans la rue principale. Le vent souffle.</p>
-                <button class="choice" data-honneur="+10" onclick="applyChoice(this)">Sortir à découvert ("Viens te
-                    battre !").</button>
-                <button class="choice" data-honneur="-20" data-munitions="-1" onclick="applyChoice(this)">Tirer depuis
-                    l'ombre (Lâche).</button>
-            </div>
-
-            <!-- 9. L'église -->
-            <div class="section">
-                <p><strong>20:15 - Les Ruines de l'Église</strong></p>
-                <p>Il s'est replié dans l'église. Il a un otage.</p>
-                <button class="choice" data-munitions="-2" data-honneur="+20" onclick="applyChoice(this)">Tirer une
-                    balle impossible pour désarmer.</button>
-                <button class="choice" data-fortune="+50" data-honneur="-50" onclick="applyChoice(this)">Négocier :
-                    "Partageons le butin de la banque".</button>
-            </div>
-
-            <!-- 10. FACE A FACE -->
-            <div class="section">
-                <p><strong>20:30 - Face à Face</strong></p>
-                <p>L'otage s'enfuit. Il ne reste que vous deux. Le soleil rouge touche l'horizon.</p>
-                <button class="choice" data-munitions="-1" onclick="applyChoice(this)">Dégainer le premier !</button>
-                <button class="choice" data-honneur="+10" onclick="applyChoice(this)">Attendre qu'il bouge...</button>
-            </div>
-
-            <!-- 11. LE DERNIER COUP -->
-            <div class="section">
-                <p><strong>20:31 - Le Coup Fatal</strong></p>
-                <p>Il est à terre, blessé mais vivant. Il cherche son arme.</p>
-                <button class="choice" data-honneur="-10" onclick="applyChoice(this); computeEnding()">L'achever sans
-                    pitié.</button>
-                <button class="choice" data-honneur="+20" onclick="applyChoice(this); computeEnding()">Lui passer les
-                    menottes.</button>
-                <button class="choice" data-fortune="-100" onclick="applyChoice(this); computeEnding('rich')">Partir
-                    avec son or et le laisser (Si vous êtes riche).</button>
-            </div>
-
+            <nav class="hidden md:flex items-center gap-9">
+                <a class="text-text-secondary text-xs uppercase tracking-widest hover:text-primary transition-colors font-western"
+                    href="../classic.html">&larr; Retour au Saloon</a>
+            </nav>
         </div>
+    </header>
 
-        <footer class="project-footer">
-            <p><a href="../classic.html">&larr; Retour au menu</a> | <a href="https://github.com/ErwanLT/bragi"
-                    target="_blank">Voir sur GitHub</a></p>
-            <p>&copy; 2025 Histoires Bragi.</p>
-        </footer>
-    </div>
+    <!-- Main Layout -->
+    <main class="flex-grow w-full px-4 py-8 md:px-8 lg:px-12">
+        <div class="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+
+            <!-- Left Column: Narrative Content (8 cols) -->
+            <section class="lg:col-span-8 flex flex-col gap-8">
+
+                <!-- Page Heading & Metadata -->
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-4">
+                        <span
+                            class="px-2 py-1 bg-secondary/20 text-secondary text-[10px] font-bold uppercase tracking-[0.3em] border border-secondary/30">Wanted</span>
+                        <div class="h-px bg-white/10 flex-grow"></div>
+                        <span class="text-text-secondary text-[10px] font-western flex items-center gap-2">
+                            COYOTE CREEK - 1885
+                        </span>
+                    </div>
+                    <h1
+                        class="text-white text-5xl md:text-7xl lg:text-8xl font-black leading-none western-title uppercase">
+                        LE DERNIER DUEL
+                    </h1>
+                    <p class="text-primary italic font-western text-sm border-l-2 border-primary pl-4 py-1">
+                        Wanted : "El Cascabel" - Mort ou Vif
+                    </p>
+                </div>
+
+                <!-- Visual Aid (Hero Image) -->
+                <div
+                    class="w-full relative rounded-xl overflow-hidden shadow-2xl border border-white/5 group h-[300px] md:h-[500px]">
+                    <div class="absolute inset-0 bg-cover bg-center contrast-125 sepia-[0.3] brightness-75 transition-transform duration-700 group-hover:scale-105"
+                        style='background-image: url("../../img/cards/stories/duel.png");'>
+                    </div>
+                    <!-- Dust overlay -->
+                    <div
+                        class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-primary/10 opacity-60">
+                    </div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <p
+                            class="text-white/80 text-sm western-text bg-background-dark/60 p-4 border border-white/5 backdrop-blur-sm shadow-xl max-w-lg italic">
+                            « La cloche de l'église ne sonne pas seulement pour les mariages. Aujourd'hui, elle sonnera
+                            pour l'un de nous. »
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Story Logic Container -->
+                <div id="story">
+                    <!-- 1. SALOON -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body">
+                            <h4 class="text-secondary font-heading tracking-widest text-lg mb-4">12:00 - Coyote Creek
+                                Saloon</h4>
+                            <p class="mb-6">La ville est déserte, sauf le saloon. La poussière tourbillonne. Vous
+                                entrez. Le barman nettoie un verre crasseux.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/5">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                    data-fortune="-5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                        <span class="material-symbols-outlined text-[16px]">payments</span> COMMERCE
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-heading tracking-wide">Payer un verre
+                                    </p>
+                                    <p class="text-text-secondary text-sm">Acheter des informations précieuses.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                    data-honneur="-10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                        <span class="material-symbols-outlined text-[16px]">gavel</span> INTIMIDATION
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-heading tracking-wide">Sortir le Colt
+                                    </p>
+                                    <p class="text-text-secondary text-sm">Le respect s'impose parfois par la force.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. POKER -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body">
+                            <h4 class="text-secondary font-heading tracking-widest text-lg mb-4">12:30 - Partie de Poker
+                            </h4>
+                            <p class="mb-6">Trois types patibulaires vous invitent à leur table. L'un d'eux connaît El
+                                Cascabel.</p>
+                        </article>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-fortune="+50" data-honneur="-10" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">style</span> TRICHE
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">As dans la manche</p>
+                                <p class="text-text-secondary text-sm">Remplir les poches, aux dépens de l'honneur.</p>
+                            </button>
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-fortune="-20" data-honneur="+10" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">verified</span> INTÉGRITÉ
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Jouer honnête</p>
+                                <p class="text-text-secondary text-sm">Gagner le respect de la table.</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 3. BAGARRE -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body">
+                            <h4 class="text-secondary font-heading tracking-widest text-lg mb-4">13:00 - La Bagarre</h4>
+                            <p class="mb-6">La triche (ou la chance) ne plaît pas à tout le monde. Une bouteille vole.
+                            </p>
+                        </article>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-munitions="-1" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">flare</span> SOMMATION
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Tirer en l'air</p>
+                                <p class="text-text-secondary text-sm">Calmer les ardeurs avec du plomb.</p>
+                            </button>
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-honneur="+5" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">sports_mma</span> POLEMOS
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">La main à la pâte</p>
+                                <p class="text-text-secondary text-sm">Régler ça aux poings.</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 4. L'ÉCURIE -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body">
+                            <h4 class="text-secondary font-heading tracking-widest text-lg mb-4">13:45 - L'Écurie
+                                Abandonnée</h4>
+                            <p class="mb-6">Vous cherchez des provisions. Un vieux cheval borgne vous regarde.</p>
+                        </article>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-munitions="+6" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">inventory_2</span> BUTIN
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Fouiller la selle</p>
+                                <p class="text-text-secondary text-sm">Trouver les balles du défunt shérif.</p>
+                            </button>
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-fortune="-10" data-honneur="+10" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">water_drop</span> BONTÉ
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Aider le cheval</p>
+                                <p class="text-text-secondary text-sm">Un geste de compassion dans ce monde de brutes.
+                                </p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 5. CANYON -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body">
+                            <h4 class="text-secondary font-heading tracking-widest text-lg mb-4">15:00 - L'Embuscade du
+                                Canyon</h4>
+                            <p class="mb-6">Un coup de feu résonne ! Une balle siffle à votre oreille. Ils sont en
+                                hauteur.</p>
+                        </article>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-munitions="-3" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">crosshairs</span> COMBAT
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Riposter</p>
+                                <p class="text-text-secondary text-sm">Tir de couverture intensif.</p>
+                            </button>
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-honneur="-5" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">directions_run</span> RETRAITE
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Fuir vers la mine</p>
+                                <p class="text-text-secondary text-sm">Le galop de la survie.</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 6. FEU DE CAMP -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body">
+                            <h4 class="text-secondary font-heading tracking-widest text-lg mb-4">18:00 - Bivouac Rapide
+                            </h4>
+                            <p class="mb-6">Vous êtes semé. Vous prenez un moment pour nettoyer votre arme et manger des
+                                haricots froids.</p>
+                        </article>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-honneur="+10" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">balance</span> RÉFLEXION
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">La Justice</p>
+                                <p class="text-text-secondary text-sm">Se rappeler pourquoi on se bat.</p>
+                            </button>
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-munitions="+2" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">handyman</span> ENTRETIEN
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Préparer l'arme</p>
+                                <p class="text-text-secondary text-sm">Recalibrer et récupérer des munitions.</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 7. LA MINE -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body">
+                            <h4 class="text-secondary font-heading tracking-widest text-lg mb-4">19:30 - L'Entrée de la
+                                Mine</h4>
+                            <p class="mb-6">El Cascabel se cache là-dedans. C'est un labyrinthe.</p>
+                        </article>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-fortune="+100" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">monetization_on</span> CUPIDITÉ
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Veine d'or</p>
+                                <p class="text-text-secondary text-sm">S'enrichir, au risque de perdre sa trace.</p>
+                            </button>
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-honneur="+5" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">footprint</span> TRAQUE
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Suivre les traces</p>
+                                <p class="text-text-secondary text-sm">La mission avant tout.</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 8. RUE PRINCIPALE -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body">
+                            <h4 class="text-secondary font-heading tracking-widest text-lg mb-4">20:00 - Retour en Ville
+                            </h4>
+                            <p class="mb-6">Il vous a contourné. Il vous attend dans la rue principale. Le vent souffle.
+                            </p>
+                        </article>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-honneur="+10" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">campaign</span> DÉFI
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Sortir à découvert
+                                </p>
+                                <p class="text-text-secondary text-sm">« Viens te battre ! »</p>
+                            </button>
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-honneur="-20" data-munitions="-1" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">visibility_off</span> EMBUSCADE
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Tirer de l'ombre</p>
+                                <p class="text-text-secondary text-sm">Un coup bas, mais efficace.</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 9. L'église -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body">
+                            <h4 class="text-secondary font-heading tracking-widest text-lg mb-4">20:15 - Les Ruines de
+                                l'Église</h4>
+                            <p class="mb-6">Il s'est replié dans l'église. Il a un otage.</p>
+                        </article>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-munitions="-2" data-honneur="+20" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">crisis_alert</span> MIRACLE
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Le tir impossible</p>
+                                <p class="text-text-secondary text-sm">Désarmer sans blesser l'otage.</p>
+                            </button>
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-fortune="+50" data-honneur="-50" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">handshake</span> PACTE
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Négocier</p>
+                                <p class="text-text-secondary text-sm">« Partageons le butin. »</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 10. FACE A FACE -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body">
+                            <h4 class="text-secondary font-heading tracking-widest text-lg mb-4">20:30 - Face à Face
+                            </h4>
+                            <p class="mb-6">L'otage s'enfuit. Il ne reste que vous deux. Le soleil rouge touche
+                                l'horizon.</p>
+                        </article>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-munitions="-1" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">bolt</span> RÉFLEXE
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Dégainer !</p>
+                                <p class="text-text-secondary text-sm">Le premier qui tire survit.</p>
+                            </button>
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-honneur="+10" onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">hourglass_empty</span> CALME
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Attendre...</p>
+                                <p class="text-text-secondary text-sm">Attendre qu'il fasse le premier faux pas.</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 11. LE DERNIER COUP -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body">
+                            <h4 class="text-secondary font-heading tracking-widest text-lg mb-4">20:31 - Le Coup Fatal
+                            </h4>
+                            <p class="mb-6">Il est à terre, blessé mais vivant. Il cherche son arme.</p>
+                        </article>
+                        <div class="mt-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 choice-container">
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-honneur="-10" onclick="applyChoice(this); computeEnding(true)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">close</span> JUGEMENT
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">L'achever</p>
+                                <p class="text-text-secondary text-sm">Pas de pardon pour les coyotes.</p>
+                            </button>
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-honneur="+20" onclick="applyChoice(this); computeEnding(true)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">lock_person</span> LOI
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Les menottes</p>
+                                <p class="text-text-secondary text-sm">Le livrer à la justice.</p>
+                            </button>
+                            <button
+                                class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-lg bg-surface-dark border border-white/5 text-left"
+                                data-fortune="-100" onclick="applyChoice(this); computeEnding('rich')">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] items-center uppercase tracking-widest font-western">
+                                    <span class="material-symbols-outlined text-[16px]">directions_walk</span> DÉDAIN
+                                </div>
+                                <p class="text-white font-bold text-lg font-heading tracking-wide">Partir avec l'or</p>
+                                <p class="text-text-secondary text-sm">Le laisser mourir dans son coin.</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <p
+                        class="mt-12 text-center text-primary/30 text-[10px] tracking-[1em] uppercase font-western italic">
+                        The End of the West
+                    </p>
+
+                    <div class="actions mt-12">
+                        <button
+                            class="choice-btn choice w-full p-6 rounded-lg bg-surface-dark hover:bg-surface-highlight text-primary font-heading text-2xl border border-primary/20 tracking-[0.2em] shadow-2xl"
+                            id="report-btn" onclick="computeEnding(true)">
+                            <span class="choice-text flex items-center justify-center gap-3">
+                                <span class="material-symbols-outlined">gavel</span>
+                                SIGNER L'HISTOIRE
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Sidebar (4 cols) -->
+            <aside class="lg:col-span-4 space-y-6" id="hud">
+                <!-- Content injected by StoryEngine JS -->
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-white/5 bg-background-dark/80 py-12 px-6 backdrop-blur-md">
+        <div class="mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="text-text-secondary text-[10px] font-western uppercase tracking-[0.2em]">
+                &copy; 2025 BRAGI FRONTIER STORIES.
+            </div>
+            <div class="flex items-center gap-10">
+                <a href="../../stories.html"
+                    class="text-text-secondary hover:text-primary transition-colors text-[10px] font-western uppercase tracking-widest">Archives</a>
+                <a href="https://github.com/ErwanLT/bragi"
+                    class="text-text-secondary hover:text-primary transition-colors text-[10px] font-western uppercase tracking-widest"
+                    target="_blank">Codex</a>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

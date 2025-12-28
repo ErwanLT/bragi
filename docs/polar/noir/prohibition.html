@@ -1,179 +1,779 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 
 <head>
-    <meta charset="UTF-8">
-    <title>OMBRES DE CHICAGO</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OMBRES DE CHICAGO - 1932</title>
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link rel="stylesheet" href="../../style/base.css">
-    <link rel="stylesheet" href="../../style/polar-noir.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:wght@400;700&family=Plus+Jakarta+Sans:wght@700;800&family=Bebas+Neue&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- Scripts -->
     <script src="../../js/security.js"></script>
     <script src="../../js/storyEngine.js"></script>
     <script src="../../js/polar/noir/prohibition.js"></script>
+
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#D4AF37", /* Gold */
+                        "secondary": "#8B0000", /* Blood Red */
+                        "background-light": "#f1f5f9",
+                        "background-dark": "#0F1115", /* Deep Noir */
+                        "surface-dark": "#1C1F26", /* Dark Slate */
+                        "surface-highlight": "#2D323C", /* Highlight Slate */
+                        "text-secondary": "#94a3b8",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "heading": ["Bebas Neue", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "noir": ["Special Elite", "cursive"],
+                        "typewriter": ["Courier Prime", "monospace"],
+                    },
+                    borderRadius: { "DEFAULT": "0.1rem", "lg": "0.2rem", "xl": "0.4rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(20, 20, 20, 0) 0%, rgba(0, 0, 0, 0.4) 100%),
+                repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.01) 0px, transparent 1px, transparent 2px);
+        }
+
+        .noir-title {
+            font-family: "Special Elite", cursive;
+            filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.2));
+        }
+
+        .typewriter {
+            font-family: "Courier Prime", monospace;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0F1115;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #2D323C;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4AF37;
+        }
+
+        /* Choice Button Transitions */
+        .choice-btn {
+            transition: all 0.25s ease-out;
+        }
+
+        .choice-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.1);
+        }
+
+        /* StoryEngine Integration Fixes */
+        .choice-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .choice-wrapper .choice {
+            height: 100%;
+            width: 100%;
+        }
+
+        .choice-wrapper::after {
+            content: attr(data-info);
+            display: block;
+            font-size: 0.75rem;
+            color: #D4AF37;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            font-family: "Courier Prime", monospace;
+            opacity: 0.7;
+        }
+    </style>
 </head>
 
-<body>
-    <div id="hud"></div>
-    <div class="quest-card">
-        <h3>DOSSIER: OMBRES DE CHICAGO - 1932</h3>
-        <p style="text-align:right; font-family: 'Courier Prime'; font-size: 0.8em;">Détective: Jack Malone</p>
-
-        <div id="story">
-            <!-- 1. BUREAU -->
-            <div class="section">
-                <p><strong>22h00 - Bureau de Malone</strong></p>
-                <p>La pluie bat contre la vitre. Une femme fatale entre. Son mari a disparu.</p>
-                <button class="choice" data-indices="+10" onclick="applyChoice(this)">Accepter l'affaire et demander les
-                    détails.</button>
-                <button class="choice" data-respect="-10" data-sangfroid="+10" onclick="applyChoice(this)">Demander une
-                    avance en liquide d'abord (Cynique).</button>
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen flex flex-col font-body selection:bg-primary selection:text-background-dark">
+    <!-- Top Navigation Bar -->
+    <header
+        class="sticky top-0 z-50 w-full border-b border-solid border-white/10 bg-background-dark/90 backdrop-blur-md px-6 py-3">
+        <div class="mx-auto max-w-7xl flex items-center justify-between">
+            <div class="flex items-center gap-4 text-white">
+                <div
+                    class="flex items-center justify-center size-10 rounded-sm bg-surface-highlight text-primary border border-primary/20">
+                    <span class="material-symbols-outlined">search</span>
+                </div>
+                <h2 class="text-white text-lg font-bold leading-tight tracking-widest hidden sm:block font-noir">
+                    DOSSIER CRIMINEL</h2>
             </div>
-
-            <!-- 2. SCÈNE DE CRIME -->
-            <div class="section">
-                <p><strong>00h30 - Ruelle Sombre</strong></p>
-                <p>On a retrouvé la voiture du mari. Il y a du sang.</p>
-                <button class="choice" data-indices="+20" data-sangfroid="-10" onclick="applyChoice(this)">Examiner le
-                    siège arrière couvert de sang.</button>
-                <button class="choice" data-respect="+5" onclick="applyChoice(this)">Interroger le clochard témoin avec
-                    tact.</button>
-            </div>
-
-            <!-- 3. INDIC -->
-            <div class="section">
-                <p><strong>02h00 - Le Diner de Joe</strong></p>
-                <p>Votre indic a peur. Il demande de l'argent.</p>
-                <button class="choice" data-indices="+15" data-respect="-5" onclick="applyChoice(this)">Le menacer de le
-                    balancer aux flics.</button>
-                <button class="choice" data-respect="+10" onclick="applyChoice(this)">Lui payer un café et le
-                    rassurer.</button>
-            </div>
-
-            <!-- 4. SPEAKEASY -->
-            <div class="section">
-                <p><strong>08h00 - Le "Green Mill"</strong></p>
-                <p>C'est un bar clandestin tenu par la mafia. Il faut entrer.</p>
-                <button class="choice" data-sangfroid="-5" onclick="applyChoice(this)">Donner le mot de passe (Risqué si
-                    faux).</button>
-                <button class="choice" data-respect="-10" data-sangfroid="+5" onclick="applyChoice(this)">Montrer votre
-                    badge et entrer en force.</button>
-            </div>
-
-            <!-- 5. LE BARMAN -->
-            <div class="section">
-                <p><strong>Au comptoir</strong></p>
-                <p>Le barman nettoie un verre. Il sait quelque chose.</p>
-                <button class="choice" data-sangfroid="+10" onclick="applyChoice(this)">Commander un whisky et attendre
-                    qu'il parle.</button>
-                <button class="choice" data-indices="+10" data-respect="-10" onclick="applyChoice(this)">Lui mettre la
-                    tête sur le comptoir.</button>
-            </div>
-
-            <!-- 6. JAZZ SINGER -->
-            <div class="section">
-                <p><strong>La Chanteuse de Jazz</strong></p>
-                <p>Elle vous fait un signe discret. C'est la maîtresse du disparu.</p>
-                <button class="choice" data-indices="+20" onclick="applyChoice(this)">La rejoindre dans sa
-                    loge.</button>
-                <button class="choice" data-sangfroid="-10" onclick="applyChoice(this)">Refuser, c'est un piège
-                    évident.</button>
-            </div>
-
-            <!-- 7. EMBUSCADE -->
-            <div class="section">
-                <p><strong>Sortie de service</strong></p>
-                <p>Deux gros bras vous attendent. "Le patron veut te voir."</p>
-                <button class="choice" data-sangfroid="-20" data-respect="+10" onclick="applyChoice(this)">Se battre
-                    (Boxe à l'ancienne).</button>
-                <button class="choice" data-sangfroid="+5" onclick="applyChoice(this)">Les suivre calmement.</button>
-            </div>
-
-            <!-- 8. LE PARRAIN -->
-            <div class="section">
-                <p><strong>Bureau de Big Al</strong></p>
-                <p>Al Capone fume un cigare. Il vous offre un verre.</p>
-                <button class="choice" data-respect="+20" data-sangfroid="+10" onclick="applyChoice(this)">Accepter et
-                    discuter business.</button>
-                <button class="choice" data-respect="-20" onclick="applyChoice(this)">Refuser ("Je ne bois pas avec les
-                    tueurs").</button>
-            </div>
-
-            <!-- 9. PROPOSITION -->
-            <div class="section">
-                <p><strong>L'Offre</strong></p>
-                <p>Il vous propose d'oublier cette affaire contre une grosse enveloppe.</p>
-                <button class="choice" data-sangfroid="+20"
-                    onclick="applyChoice(this); computeEnding('corrupted')">Accepter l'argent (Fin Corrompu).</button>
-                <button class="choice" data-indices="+10" onclick="applyChoice(this)">Refuser poliment et
-                    partir.</button>
-            </div>
-
-            <!-- 10. FUSILLADE -->
-            <div class="section">
-                <p><strong>Drive-by Shooting</strong></p>
-                <p>Une voiture passe en trombe devant votre bureau. Les Thompson crépitent.</p>
-                <button class="choice" data-sangfroid="-20" onclick="applyChoice(this)">Plonger sous le bureau
-                    !</button>
-                <button class="choice" data-respect="+10" data-sangfroid="-10" onclick="applyChoice(this)">Riposter avec
-                    votre .38 Special !</button>
-            </div>
-
-            <!-- 11. MORGUE -->
-            <div class="section">
-                <p><strong>La Morgue</strong></p>
-                <p>Le légiste a trouvé quelque chose sur un corps repêché.</p>
-                <button class="choice" data-indices="+30" data-sangfroid="-10" onclick="applyChoice(this)">Examiner le
-                    corps (Estomac retourné).</button>
-                <button class="choice" onclick="applyChoice(this)">Lire juste le rapport.</button>
-            </div>
-
-            <!-- 12. ENTREPÔT -->
-            <div class="section">
-                <p><strong>Les Docks (Minuit)</strong></p>
-                <p>C'est là que la contrebande arrive. Et là qu'est le mari.</p>
-                <button class="choice" data-indices="+20" onclick="applyChoice(this)">S'infiltrer par le toit.</button>
-                <button class="choice" data-respect="-10" onclick="applyChoice(this)">Appeler la police en renfort
-                    (Lâcheté ? ou Prudence ?).</button>
-            </div>
-
-            <!-- 13. CONFRONTATION -->
-            <div class="section">
-                <p><strong>Le Grand Final</strong></p>
-                <p>Le bras droit de Capone tient le mari en otage.</p>
-                <button class="choice" data-sangfroid="-20" data-respect="+20" onclick="applyChoice(this)">Tirer pour
-                    désarmer (Risqué).</button>
-                <button class="choice" data-indices="+10" onclick="applyChoice(this)">Négocier en bluffant.</button>
-            </div>
-
-            <!-- 14. PREUVES -->
-            <div class="section">
-                <p><strong>Le Coffre-Fort</strong></p>
-                <p>Le livre de comptes est ouvert. La preuve ultime.</p>
-                <button class="choice" data-indices="+50" onclick="applyChoice(this)">Prendre le livre et
-                    courir.</button>
-                <button class="choice" data-sangfroid="+10" onclick="applyChoice(this)">Brûler l'entrepôt pour effacer
-                    les traces.</button>
-            </div>
-
-            <!-- 15. CONCLUSION -->
-            <div class="section">
-                <p><strong>Le Lendemain Matin</strong></p>
-                <p>Vous êtes au commissariat. Le Capitaine attend votre rapport.</p>
-                <button class="choice" onclick="applyChoice(this); computeEnding('attempt_solve')">Donner toutes les
-                    preuves
-                    (Si Indices > 80).</button>
-                <button class="choice" onclick="applyChoice(this); computeEnding()">Dire que c'était un accident (Si
-                    Respect Mafia élevé).</button>
-            </div>
-
+            <nav class="hidden md:flex items-center gap-9">
+                <a class="text-white text-sm font-medium hover:text-primary transition-colors font-typewriter"
+                    href="../noir.html">&larr; Retour au Menu</a>
+            </nav>
         </div>
+    </header>
 
-        <footer class="project-footer">
-            <p><a href="../noir.html">&larr; Retour au menu</a> | <a href="https://github.com/ErwanLT/bragi"
-                    target="_blank">Voir sur GitHub</a></p>
-            <p>&copy; 2025 Histoires Bragi.</p>
-        </footer>
-    </div>
+    <!-- Main Layout -->
+    <main class="flex-grow w-full px-4 py-8 md:px-8 lg:px-12">
+        <div class="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+
+            <!-- Left Column: Narrative Content (8 cols) -->
+            <section class="lg:col-span-8 flex flex-col gap-6">
+
+                <!-- Page Heading & Metadata -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span
+                            class="px-2 py-0.5 rounded-sm bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-[0.2em] border border-primary/30 font-typewriter">Top
+                            Secret</span>
+                        <span class="text-text-secondary text-xs font-typewriter flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[14px]">calendar_today</span> OCT. 1932
+                        </span>
+                        <span class="text-text-secondary text-xs font-typewriter flex items-center gap-1 ml-2">
+                            <span class="material-symbols-outlined text-[14px]">location_on</span> Chicago, IL
+                        </span>
+                    </div>
+                    <h1
+                        class="text-white text-4xl md:text-5xl lg:text-7xl font-black leading-tight tracking-tighter noir-title text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-500">
+                        OMBRES DE CHICAGO
+                    </h1>
+                    <p class="text-primary/60 font-typewriter text-sm italic">Détective: Jack Malone</p>
+                </div>
+
+                <!-- Visual Aid (Hero Image) -->
+                <div
+                    class="w-full relative rounded-sm overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.8)] border border-white/5 group h-[300px] md:h-[450px]">
+                    <div class="absolute inset-0 bg-cover bg-center grayscale contrast-125 transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-105"
+                        style='background-image: url("../../img/cards/stories/prohibition.png");'>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-black/40 opacity-90">
+                        </div>
+                    </div>
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <p
+                            class="text-white/70 text-xs typewriter border-l border-primary/50 pl-4 bg-black/60 p-3 backdrop-blur-sm inline-block max-w-md">
+                            « Dans cette ville, la seule chose plus froide que la pluie, c'est le canon d'un .38
+                            Special. »
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Story Logic Container -->
+                <div id="story">
+                    <!-- 1. BUREAU -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">22h00 - Bureau de
+                                Malone</p>
+                            <p class="mb-4">La pluie bat contre la vitre. Une femme fatale entre. Son mari a disparu.
+                            </p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <h3 class="text-white text-xl font-noir mb-6 flex items-center gap-3">
+                                <span class="material-symbols-outlined text-primary">contact_support</span> Votre
+                                analyse ?
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-indices="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">visibility</span>
+                                        INVESTIGATION
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Accepter l'affaire</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Se plonger dans les détails
+                                        immédiatement.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-respect="-10" data-sangfroid="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">payments</span> PRAGMATISME
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Demander une avance</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Rien n'est gratuit à Chicago.
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. SCÈNE DE CRIME -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">00h30 - Ruelle
+                                Sombre</p>
+                            <p class="mb-4">On a retrouvé la voiture du mari. Il y a du sang.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-indices="+20" data-sangfroid="-10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">search_check</span> INDICES
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Examiner le sang</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Une analyse brutale du
+                                        terrain.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-respect="+5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">record_voice_over</span>
+                                        TÉMOIGNAGE
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Interroger le témoin</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">La diplomatie des bas-fonds.
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. INDIC -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">02h00 - Le Diner
+                                de Joe</p>
+                            <p class="mb-4">Votre indic a peur. Il demande de l'argent.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-indices="+15" data-respect="-5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">gavel</span> PRESSION
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Le menacer</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Utiliser la peur contre la
+                                        peur.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-respect="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">coffee</span> EMPATHIE
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Lui payer un café</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Acheter sa loyauté avec
+                                        respect.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. SPEAKEASY -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">08h00 - Le "Green
+                                Mill"</p>
+                            <p class="mb-4">C'est un bar clandestin tenu par la mafia. Il faut entrer.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-sangfroid="-5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">lock_open</span> RUSE
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Le mot de passe</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">S'infiltrer discrètement.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-respect="-10" data-sangfroid="+5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">badge</span> AUTORITÉ
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Montrer le badge</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Entrer en force.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. LE BARMAN -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">Au comptoir</p>
+                            <p class="mb-4">Le barman nettoie un verre. Il sait quelque chose.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-sangfroid="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">local_bar</span> PATIENCE
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Commander un whisky</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Attendre que la langue se
+                                        délie.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-indices="+10" data-respect="-10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">sports_mma</span> BRUTALITÉ
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Méthode forte</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Lui mettre la tête sur le
+                                        comptoir.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. JAZZ SINGER -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">La Chanteuse de
+                                Jazz</p>
+                            <p class="mb-4">Elle vous fait un signe discret. C'est la maîtresse du disparu.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-indices="+20" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">meeting_room</span>
+                                        RENDEZ-VOUS
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Aller dans sa loge</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Chercher des informations
+                                        intimes.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-sangfroid="-10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">priority_high</span> SOUPÇON
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Refuser</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">C'est un piège trop évident.
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 7. EMBUSCADE -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">Sortie de service
+                            </p>
+                            <p class="mb-4">Deux gros bras vous attendent. "Le patron veut te voir."</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-sangfroid="-20" data-respect="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">sports_kickboxing</span>
+                                        BOXE
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Se battre</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Action à l'ancienne.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-sangfroid="+5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">follow_the_signs</span>
+                                        ACQUIESCEMENT
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Les suivre</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Calme et sang-froid.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 8. LE PARRAIN -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">Bureau de Big Al
+                            </p>
+                            <p class="mb-4">Al Capone fume un cigare. Il vous offre un verre.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-respect="+20" data-sangfroid="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">business_center</span>
+                                        AFFAIRES
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Accepter le verre</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Discuter avec le parrain.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-respect="-20" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">block</span> INTÉGRITÉ
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Refuser</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Ne pas pactiser avec le
+                                        crime.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 9. PROPOSITION -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">L'Offre</p>
+                            <p class="mb-4">Il vous propose d'oublier cette affaire contre une grosse enveloppe.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-sangfroid="+20" onclick="applyChoice(this); computeEnding('corrupted')">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">money_off</span> CORRUPTION
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Accepter l'argent</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Changer de vie, peu importe
+                                        le prix.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-indices="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">logout</span> DÉCLINER
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Partir poliment</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Continuer la traque envers et
+                                        contre tout.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 10. FUSILLADE -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">Drive-by Shooting
+                            </p>
+                            <p class="mb-4">Une voiture passe en trombe devant votre bureau. Les Thompson crépitent.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-sangfroid="-20" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">keyboard_arrow_down</span>
+                                        SURVIE
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Plonger</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Se mettre à l'abri sous le
+                                        bureau.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-respect="+10" data-sangfroid="-10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">target</span> RIPOSTE
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Tirer avec le .38</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Rendre la monnaie de leur
+                                        pièce.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 11. MORGUE -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">La Morgue</p>
+                            <p class="mb-4">Le légiste a trouvé quelque chose sur un corps repêché.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-indices="+30" data-sangfroid="-10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">medical_services</span>
+                                        AUTOPSIE
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Examiner le corps</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Un travail salissant mais
+                                        nécessaire.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">description</span> RAPPORT
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Lire le rapport</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Garder une certaine distance.
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 12. ENTREPÔT -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">Les Docks
+                                (Minuit)</p>
+                            <p class="mb-4">C'est là que la contrebande arrive. Et là qu'est le mari.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-indices="+20" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">climbing</span> INFILTRATION
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Par le toit</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Surprendre l'ennemi.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-respect="-10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">local_police</span> RENFORTS
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Appeler la police</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Prudence ou manque d'audace ?
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 13. CONFRONTATION -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">Le Grand Final
+                            </p>
+                            <p class="mb-4">Le bras droit de Capone tient le mari en otage.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-sangfroid="-20" data-respect="+20" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">crisis_alert</span>
+                                        PRÉCISION
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Tirer pour désarmer</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Un coup risqué mais héroïque.
+                                    </p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-indices="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">forum</span> BLUFF
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Négocier</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Utiliser les mots comme une
+                                        arme.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 14. PREUVES -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">Le Coffre-Fort
+                            </p>
+                            <p class="mb-4">Le livre de comptes est ouvert. La preuve ultime.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-indices="+50" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">menu_book</span>
+                                        COMPTABILITÉ
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Saisir les preuves</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Avoir enfin de quoi faire
+                                        tomber Capone.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left"
+                                    data-sangfroid="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">local_fire_department</span>
+                                        INCENDIE
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Brûler l'entrepôt</p>
+                                    <p class="text-text-secondary text-sm font-typewriter">Effacer les traces, repartir
+                                        de zéro.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 15. CONCLUSION -->
+                    <div class="section">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-400 font-typewriter">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-[0.15em] text-xs">Le Lendemain
+                                Matin</p>
+                            <p class="mb-4">Vous êtes au commissariat. Le Capitaine attend votre rapport.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-white/10">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left font-typewriter"
+                                    onclick="applyChoice(this); computeEnding('attempt_solve')">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">fact_check</span> VÉRITÉ
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Donner les preuves</p>
+                                    <p class="text-text-secondary text-sm">Faire éclater la vérité (Indices > 80).</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-6 rounded-sm bg-surface-dark border border-white/5 hover:border-primary/50 text-left font-typewriter"
+                                    onclick="applyChoice(this); computeEnding(true)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-typewriter">
+                                        <span class="material-symbols-outlined text-[16px]">history_edu</span> RAPPORT
+                                    </div>
+                                    <p class="text-white font-bold text-lg font-noir">Clore le dossier</p>
+                                    <p class="text-text-secondary text-sm">Rapport standard sans vagues.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="mt-12 text-center text-primary/40 text-xs tracking-[0.5em] font-noir uppercase">
+                        /// DOSSIER CLASSÉ ///
+                    </p>
+
+                    <div class="actions mt-10">
+                        <button
+                            class="choice-btn choice w-full p-5 rounded-sm bg-surface-dark hover:bg-surface-highlight text-primary font-noir text-xl border border-primary/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+                            id="report-btn" onclick="computeEnding(true)">
+                            <span class="choice-text flex items-center justify-center gap-3">
+                                <span class="material-symbols-outlined">print</span>
+                                TRANSMETTRE LE RAPPORT
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Sidebar (4 cols) -->
+            <aside class="lg:col-span-4 space-y-6" id="hud">
+                <!-- Content injected by StoryEngine JS -->
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-white/5 bg-background-dark/80 py-10 px-6 backdrop-blur-sm">
+        <div class="mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-8">
+            <div class="text-text-secondary text-xs font-typewriter uppercase tracking-widest">
+                &copy; 1932 BRAGI INVESTIGATIONS.
+            </div>
+            <div class="flex items-center gap-10">
+                <a href="../../stories.html"
+                    class="text-text-secondary hover:text-primary transition-colors text-[10px] font-typewriter uppercase tracking-widest">Archives</a>
+                <a href="../../about.html"
+                    class="text-text-secondary hover:text-primary transition-colors text-[10px] font-typewriter uppercase tracking-widest">Contact</a>
+                <a href="https://github.com/ErwanLT/bragi"
+                    class="text-text-secondary hover:text-primary transition-colors text-[10px] font-typewriter uppercase tracking-widest"
+                    target="_blank">Repository</a>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

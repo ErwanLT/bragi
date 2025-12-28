@@ -1,75 +1,383 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SIGNAL ZÉRO - COMM LINK</title>
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link rel="stylesheet" href="../../style/base.css">
-    <link rel="stylesheet" href="../../style/scifi-post-apocalyptic.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=VT323&family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@700;800&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- Scripts -->
     <script src="../../js/security.js"></script>
     <script src="../../js/storyEngine.js"></script>
     <script src="../../js/science-fiction/post-apocalyptic/signal_zero.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FF9800", /* Neon Amber */
+                        "secondary": "#E65100", /* Deep Amber */
+                        "background-dark": "#0B0D11", /* Void Black */
+                        "surface-dark": "#161A21", /* Terminal Black */
+                        "surface-highlight": "#232933", /* Console Slate */
+                        "text-secondary": "#6A7485",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "heading": ["Bebas Neue", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "terminal": ["VT323", "monospace"],
+                    },
+                    borderRadius: { "DEFAULT": "0.1rem", "lg": "0.2rem", "xl": "0.4rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: "Inter", sans-serif;
+            background-color: #0B0D11;
+            color: #FF9800;
+        }
+
+        .terminal-text {
+            font-family: "VT323", monospace;
+            text-shadow: 0 0 8px rgba(255, 152, 0, 0.4);
+        }
+
+        .map-pre {
+            border: 1px solid #FF9800;
+            padding: 15px;
+            margin: 15px 0;
+            white-space: pre;
+            background: #001100;
+            color: green;
+            font-family: 'Menlo', 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-weight: normal;
+            letter-spacing: 0;
+            line-height: 1.2;
+            box-shadow: inset 0 0 20px rgba(255, 152, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: textShadow 1.6s infinite;
+        }
+
+        .map-pre::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        @keyframes textShadow {
+            0% {
+                text-shadow: 0.4389924193300864px 0 1px rgba(0, 30, 255, 0.5), -0.4389924193300864px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            5% {
+                text-shadow: 2.7928974010788217px 0 1px rgba(0, 30, 255, 0.5), -2.7928974010788217px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            10% {
+                text-shadow: 0.02956275843481219px 0 1px rgba(0, 30, 255, 0.5), -0.02956275843481219px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            15% {
+                text-shadow: 0.4021853855287816px 0 1px rgba(0, 30, 255, 0.5), -0.4021853855287816px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            20% {
+                text-shadow: 3.4794037899852017px 0 1px rgba(0, 30, 255, 0.5), -3.4794037899852017px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            25% {
+                text-shadow: 1.6125630401149584px 0 1px rgba(0, 30, 255, 0.5), -1.6125630401149584px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            30% {
+                text-shadow: 0.7015590085143956px 0 1px rgba(0, 30, 255, 0.5), -0.7015590085143956px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            35% {
+                text-shadow: 3.896914047650351px 0 1px rgba(0, 30, 255, 0.5), -3.896914047650351px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            40% {
+                text-shadow: 3.870905614848819px 0 1px rgba(0, 30, 255, 0.5), -3.870905614848819px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            45% {
+                text-shadow: 2.231056963361899px 0 1px rgba(0, 30, 255, 0.5), -2.231056963361899px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            50% {
+                text-shadow: 0.08084290417898504px 0 1px rgba(0, 30, 255, 0.5), -0.08084290417898504px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            55% {
+                text-shadow: 2.3758461067427543px 0 1px rgba(0, 30, 255, 0.5), -2.3758461067427543px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            60% {
+                text-shadow: 2.202193051050636px 0 1px rgba(0, 30, 255, 0.5), -2.202193051050636px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            65% {
+                text-shadow: 2.8638780614874975px 0 1px rgba(0, 30, 255, 0.5), -2.8638780614874975px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            70% {
+                text-shadow: 0.48874025155497314px 0 1px rgba(0, 30, 255, 0.5), -0.48874025155497314px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            75% {
+                text-shadow: 1.8948491305757957px 0 1px rgba(0, 30, 255, 0.5), -1.8948491305757957px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            80% {
+                text-shadow: 0.0833037308038857px 0 1px rgba(0, 30, 255, 0.5), -0.0833037308038857px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            85% {
+                text-shadow: 0.09769827255241735px 0 1px rgba(0, 30, 255, 0.5), -0.09769827255241735px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            90% {
+                text-shadow: 3.443339761481782px 0 1px rgba(0, 30, 255, 0.5), -3.443339761481782px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            95% {
+                text-shadow: 2.1841838852799786px 0 1px rgba(0, 30, 255, 0.5), -2.1841838852799786px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+
+            100% {
+                text-shadow: 2.6208764473832513px 0 1px rgba(0, 30, 255, 0.5), -2.6208764473832513px 0 1px rgba(255, 0, 80, 0.3), 0 0 3px;
+            }
+        }
+
+        .radio-log {
+            border-left-width: 2px;
+            border-color: rgba(255, 152, 0, 0.4);
+            padding-left: 1rem;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            font-style: italic;
+            color: #cbd5e1;
+            background-color: rgba(255, 152, 0, 0.05);
+            border-top-right-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Choice Button Transitions */
+        .choice-btn {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 152, 0, 0.2);
+            background-color: #161A21;
+        }
+
+        .choice-btn:hover {
+            box-shadow: 0 0 20px rgba(255, 152, 0, 0.15);
+            transform: scale(1.01);
+            border-color: #FF9800;
+            background-color: #232933;
+        }
+
+        /* Scanline global effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%);
+            background-size: 100% 4px;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0.1;
+        }
+
+        /* StoryEngine Integration */
+        .choice-wrapper::after {
+            content: attr(data-info);
+            display: block;
+            font-size: 0.75rem;
+            color: #FF9800;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            font-family: "VT323", monospace;
+            letter-spacing: 0.1em;
+            opacity: 0.8;
+        }
+    </style>
 </head>
 
-<body>
-    <div id="hud"></div>
-    <div class="quest-card">
-        <h3>/// SIGNAL ZÉRO - TRANSMISSION ///</h3>
-        <p>FREQ: 104.5 MHz | ENCRYPTION: NONE | DATE: UNKNOWN</p>
+<body
+    class="bg-background-dark text-slate-300 min-h-screen flex flex-col font-body selection:bg-primary/30 selection:text-white">
+    <div class="scanlines"></div>
 
-        <div id="story">
-            <!-- INTRO -->
-            <div class="section" style="border-bottom: 2px solid #ff9800; padding-bottom: 30px; margin-bottom: 40px;">
-                <p style="font-style: italic; color: #ccc;">
-                    Année 2042. Cela fait un an que <strong>"L'Impulsion"</strong> a grillé toute l'électronique de la
-                    planète et fait chuter les satellites.
-                    Les guerres pour les ressources on fait le reste. La civilisation s'est éteinte en quelques
-                    semaines.
-                    <br><br>
-                    Vous êtes <strong>l'Opérateur 7</strong>, terré dans le dernier bunker gouvernemental blindé contre
-                    les IEM.
-                    Dehors, c'est la <strong>Zone Morte</strong> : une ruine silencieuse hantée par des pillards
-                    désespérés et des meutes de chiens sauvages.
-                    <br><br>
-                    Votre mission : Guider l'Escouade Sigma via une des rares liaisons radio courte-portée encore
-                    actives. Ils doivent traverser votre ancienne ville pour rejoindre le dernier point d'extraction
-                    avec les données du "Projet Renaissance", le seul espoir de redémarrer le réseau électrique mondial.
-                    <br><br>
-                    Ils sont vos yeux dans le chaos. Vous êtes leur voix dans la nuit. <strong>Terminé.</strong>
-                </p>
+    <!-- Top Navigation Bar -->
+    <header
+        class="sticky top-0 z-50 w-full border-b border-solid border-white/5 bg-background-dark/95 backdrop-blur-md px-6 py-3">
+        <div class="mx-auto max-w-7xl flex items-center justify-between">
+            <div class="flex items-center gap-4 text-primary">
+                <div
+                    class="flex items-center justify-center size-10 bg-primary/10 border border-primary/30 animate-pulse">
+                    <span class="material-symbols-outlined text-[20px]">settings_input_antenna</span>
+                </div>
+                <h2 class="text-primary text-xl font-bold leading-tight tracking-[0.1em] font-terminal uppercase">
+                    BUNKER Q.G. - COMM LINK // OP7</h2>
             </div>
+            <nav class="hidden md:flex items-center gap-9">
+                <a class="text-text-secondary text-xs uppercase tracking-widest hover:text-primary transition-colors font-terminal"
+                    href="../post-apocalyptic.html">&larr; ABORT MISSION</a>
+            </nav>
+        </div>
+    </header>
 
-            <!-- PHASE 1: L'APPROCHE -->
+    <!-- Main Layout -->
+    <main class="flex-grow w-full px-4 py-8 md:px-8 lg:px-12">
+        <div class="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
 
-            <!-- 1. CONTACT -->
-            <div class="section">
-                <p><strong>08:00 - Établissement de la liaison</strong></p>
-                <div class="radio-log">"Ici Alpha-1. Check radio. On est à l'entrée de la Zone. Le ciel est noir."</div>
-                <p>Votre terminal s'illumine. Vous êtes leur seul lien avec la survie.</p>
+            <!-- Left Column: Narrative Content (8 cols) -->
+            <section class="lg:col-span-8 flex flex-col gap-10">
 
-                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"5 sur 5, Alpha-1. Restez
-                    groupés."</button>
-                <button class="choice" data-signal="-5" onclick="applyChoice(this)">"Reçu. Activez les capteurs
-                    biométriques."</button>
-            </div>
+                <!-- Page Heading & Metadata -->
+                <div class="flex flex-col gap-4 border-l-4 border-primary pl-6 py-2">
+                    <div class="flex items-center gap-4">
+                        <span
+                            class="px-2 py-0.5 bg-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest border border-primary/40 animate-pulse">Live
+                            Transmission</span>
+                        <div class="h-px bg-white/10 flex-grow"></div>
+                        <span class="text-text-secondary text-xs font-terminal uppercase tracking-widest">
+                            FREQ: 104.5 MHz | ENCRYPTION: NONE
+                        </span>
+                    </div>
+                    <h1
+                        class="text-primary text-5xl md:text-7xl lg:text-8xl font-black leading-none terminal-text uppercase italic">
+                        SIGNAL ZÉRO
+                    </h1>
+                </div>
 
-            <!-- 2. LE PÉRIMÈTRE -->
-            <div class="section">
-                <p><strong>08:15 - Le Périmètre</strong></p>
-                <div class="radio-log">"Les grillages sont fondus. Le compteur Geiger s'affole légèrement."</div>
+                <!-- Visual Aid (Hero Image) -->
+                <div
+                    class="w-full relative rounded-lg overflow-hidden shadow-2xl border border-white/5 group h-[300px] md:h-[450px]">
+                    <div class="absolute inset-0 bg-cover bg-center contrast-150 brightness-75 transition-transform duration-1000 group-hover:scale-105"
+                        style='background-image: url("../../img/cards/stories/signal_zero.png");'>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-primary/5">
+                    </div>
+                    <!-- CRT Flicker Effect Overlay -->
+                    <div class="absolute inset-0 bg-primary/5 mix-blend-overlay pointer-events-none"></div>
+                </div>
 
-                <button class="choice" data-signal="-2" data-squad="0" onclick="applyChoice(this)">"Avancez rapidement.
-                    Ne traînez pas ici."</button>
-                <button class="choice" data-signal="-5" data-squad="0" onclick="applyChoice(this)">"Prenez des mesures
-                    de radiation précises." (Coût: Signal)</button>
-            </div>
+                <!-- Story Logic Container -->
+                <div id="story">
+                    <!-- INTRO -->
+                    <div class="section mb-12">
+                        <article
+                            class="prose prose-invert max-w-none text-lg leading-relaxed text-slate-400 font-terminal">
+                            <p class="mb-4">
+                                <span class="text-primary font-bold">Année 2042.</span> Cela fait un an que <span
+                                    class="text-white border-b border-primary/40">"L'Impulsion"</span> a grillé toute
+                                l'électronique de la planète et fait chuter les satellites.
+                            </p>
+                            <p class="mb-4">
+                                Dehors, c'est la <span class="text-primary">Zone Morte</span> : une ruine silencieuse
+                                hantée par des pillards désespérés et des meutes de chiens sauvages.
+                            </p>
+                            <p class="mb-4">
+                                Votre mission : Guider l'Escouade Sigma via une des rares liaisons radio encore actives.
+                                Ils doivent traverser la ville pour rejoindre le dernier point d'extraction avec les
+                                données du <span class="text-white">"Projet Renaissance"</span>.
+                            </p>
+                        </article>
+                    </div>
 
-            <!-- 3. CARTE 1 (Entrée) -->
-            <div class="section">
-                <p><strong>08:30 - Position Actuelle</strong></p>
-                <pre class="map">
+                    <!-- 1. CONTACT -->
+                    <div class="section">
+                        <div class="radio-log">"Ici Alpha-1. Check radio. On est à l'entrée de la Zone. Le ciel est
+                            noir."</div>
+                        <article
+                            class="prose prose-invert max-w-none text-xl leading-relaxed text-slate-300 font-body mb-8">
+                            <p>Votre terminal s'illumine. Vous êtes leur seul lien avec la survie.</p>
+                        </article>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-2"
+                                onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-terminal mb-2">
+                                    <span class="material-symbols-outlined text-[16px]">radio</span> Transmission
+                                </div>
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">"5 sur 5, Alpha-1.
+                                    Restez groupés."</p>
+                                <p class="text-text-secondary text-sm font-terminal">Maintenir une communication stable.
+                                </p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-5"
+                                onclick="applyChoice(this)">
+                                <div
+                                    class="flex items-center gap-2 text-primary font-bold text-[10px] uppercase tracking-widest font-terminal mb-2">
+                                    <span class="material-symbols-outlined text-[16px]">sensors</span> Analyse
+                                </div>
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">"Reçu. Activez les
+                                    capteurs biométriques."</p>
+                                <p class="text-text-secondary text-sm font-terminal">Prioriser les données de santé.</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 2. LE PÉRIMÈTRE -->
+                    <div class="section">
+                        <div class="radio-log">"Les grillages sont fondus. Le compteur Geiger s'affole légèrement."
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container mt-4">
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-2" data-squad="0"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">"Avancez rapidement.
+                                    Ne traînez pas."</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-5" data-squad="0"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">"Prenez des mesures
+                                    de radiation."</p>
+                                <p class="text-text-secondary text-xs text-secondary mt-1 uppercase font-terminal">
+                                    Attention : Coût Signal élevé</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 3. CARTE 1 (Entrée) -->
+                    <div class="section">
+                        <div class="mb-6">
+                            <p class="text-primary font-terminal uppercase text-xs mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">map</span> Données Télémétriques
+                            </p>
+                            <pre class="map-pre terminal-text text-sm">
       [ ZONE MORTE ]
             ^
             |
@@ -78,42 +386,61 @@
       +-----+-----+
             |
       [ BUNKER Q.G. ]
-</pre>
-                <div class="radio-log">"On a franchi la première ligne. On aperçoit un pont détruit devant nous."</div>
-                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"Continuez vers le pont."</button>
-            </div>
+                            </pre>
+                        </div>
+                        <div class="radio-log">"On a franchi la première ligne. On aperçoit un pont détruit devant
+                            nous."</div>
+                        <button class="choice-btn choice p-6 rounded-lg text-left w-full md:w-1/2" data-signal="-2"
+                            onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg font-terminal tracking-wide">"Continuez vers le
+                                pont."</p>
+                        </button>
+                    </div>
 
-            <!-- 4. LE PONT DÉTRUIT -->
-            <div class="section">
-                <p><strong>08:45 - Le Pont Détruit</strong></p>
-                <div class="radio-log">"Le pont est effondré. On peut descendre dans le lit de la rivière asseché
-                    (rapide mais à découvert) ou faire un détour par la forêt (lent mais couvert)."</div>
+                    <!-- 4. LE PONT DÉTRUIT -->
+                    <div class="section">
+                        <div class="radio-log">"Le pont est effondré. On peut descendre dans le lit de la rivière
+                            (rapide) ou contourner par la forêt (plus sûr)."</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container mt-4">
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-2" data-squad="-1"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Descendre dans la
+                                    rivière</p>
+                                <p class="text-text-secondary text-sm font-terminal">Risque de blessure élevé.</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-10" data-squad="0"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Contourner par la
+                                    forêt</p>
+                                <p class="text-text-secondary text-sm font-terminal">Perte de signal importante.</p>
+                            </button>
+                        </div>
+                    </div>
 
-                <button class="choice" data-signal="-2" data-squad="-1" onclick="applyChoice(this)">Descendre dans la
-                    rivière. (Risque de chute/tir)</button>
-                <button class="choice" data-signal="-10" data-squad="0" onclick="applyChoice(this)">Contourner par la
-                    forêt. (Coût: Temps/Signal)</button>
-            </div>
+                    <!-- 5. LA STATION SERVICE -->
+                    <div class="section">
+                        <div class="radio-log">"On passe près d'une station. On pourrait fouiller pour des piles ou des
+                            vivres."</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container mt-4">
+                            <button class="choice-btn choice p-6 rounded-lg text-left border-emerald-500/20"
+                                data-signal="+15" data-ammo="+5" data-squad="-1" onclick="applyChoice(this)">
+                                <div class="text-emerald-500 text-[10px] font-bold font-terminal uppercase mb-2">
+                                    Opportunité</div>
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Fouiller le bâtiment
+                                </p>
+                                <p class="text-emerald-500/60 text-xs font-terminal">+SIGNAL / +AMMO (Risqué)</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-2"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">"Ignorer. Priorité
+                                    Mission."</p>
+                            </button>
+                        </div>
+                    </div>
 
-            <!-- 5. LA STATION SERVICE -->
-            <div class="section">
-                <p><strong>09:10 - La Station Service</strong></p>
-                <div class="radio-log">"On passe près d'une vieille station. On pourrait fouiller pour des piles ou des
-                    vivres."</div>
-
-                <button class="choice" data-signal="+15" data-ammo="+5" data-squad="-1"
-                    onclick="applyChoice(this)">Fouiller le bâtiment principal. (Gain: Signal/Ammo, Risque:
-                    Piège)</button>
-                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"Ignorer. On a une
-                    mission."</button>
-            </div>
-
-            <!-- PHASE 2: LES FAUBOURGS -->
-
-            <!-- 6. CARTE 2 (Faubourgs) -->
-            <div class="section">
-                <p><strong>09:30 - Les Faubourgs</strong></p>
-                <pre class="map">
+                    <!-- 6. CARTE 2 (Faubourgs) -->
+                    <div class="section">
+                        <pre class="map-pre terminal-text text-sm mb-6">
       [ VILLE - CENTRE ]
             ^
             |
@@ -124,36 +451,59 @@
       +-----+-----+
       | FAUBOURGS | <--- VOUS ETES ICI
       +-----------+
-</pre>
-                <div class="radio-log">"On entre dans la zone urbaine dense. L'entrée du métro est devant nous."</div>
-                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"Entrez dans le métro. C'est plus
-                    sûr que la rue."</button>
-            </div>
+                        </pre>
+                        <div class="radio-log">"On entre dans la zone urbaine dense. L'entrée du métro est devant nous."
+                        </div>
+                        <button class="choice-btn choice p-6 rounded-lg text-left w-full md:w-1/2" data-signal="-2"
+                            onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg font-terminal tracking-wide">"Entrez dans le métro."
+                            </p>
+                        </button>
+                    </div>
 
-            <!-- 7. LE TUNNEL -->
-            <div class="section">
-                <p><strong>09:45 - Le Tunnel</strong></p>
-                <div class="radio-log">"Il fait noir total. Nos lampes vacillent."</div>
-                <button class="choice" data-signal="-5" data-squad="0" onclick="applyChoice(this)">Allumer les torches
-                    chimiques.</button>
-                <button class="choice" data-signal="-2" data-squad="-1" onclick="applyChoice(this)">Avancer dans le noir
-                    (Risque de blessure).</button>
-            </div>
+                    <!-- 7. LE TUNNEL -->
+                    <div class="section">
+                        <div class="radio-log">"Il fait noir total. Nos lampes vacillent."</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container mt-4">
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-5" data-squad="0"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Torches chimiques
+                                </p>
+                                <p class="text-text-secondary text-sm font-terminal">Sécurité visuelle maximale.</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-2" data-squad="-1"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Avancer dans le noir
+                                </p>
+                                <p class="text-text-secondary text-sm font-terminal">Économiser les ressources.</p>
+                            </button>
+                        </div>
+                    </div>
 
-            <!-- 8. LES RATS -->
-            <div class="section">
-                <p><strong>10:00 - Nuée</strong></p>
-                <div class="radio-log">"DES YEUX ! PARTOUT ! UNE NUÉE DE RATS MUTANTS !"</div>
-                <button class="choice" data-ammo="-3" data-squad="0" onclick="applyChoice(this)">"Utilisez les
-                    lance-flammes !" (Coût: Ammo)</button>
-                <button class="choice" data-squad="-2" onclick="applyChoice(this)">"Courez ! Fuyez !" (Risque:
-                    Escouade)</button>
-            </div>
+                    <!-- 8. LES RATS -->
+                    <div class="section">
+                        <div class="radio-log uppercase border-red-500/50 text-red-400">"DES YEUX ! PARTOUT ! UNE NUÉE
+                            DE RATS MUTANTS !"</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container mt-4">
+                            <button class="choice-btn choice p-6 rounded-lg text-left border-red-500/20" data-ammo="-3"
+                                data-squad="0" onclick="applyChoice(this)">
+                                <div class="text-red-500 text-[10px] font-bold font-terminal uppercase mb-2">Combat
+                                </div>
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">"Utilisez les
+                                    lance-flammes !"</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-squad="-2"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">"Courez ! Fuyez !"
+                                </p>
+                                <p class="text-red-500/60 text-xs font-terminal">Risque : Escouade CC</p>
+                            </button>
+                        </div>
+                    </div>
 
-            <!-- 9. CARTE 3 (Métro) -->
-            <div class="section">
-                <p><strong>10:20 - Quai de Métro</strong></p>
-                <pre class="map">
+                    <!-- 9. CARTE 3 (Métro) -->
+                    <div class="section">
+                        <pre class="map-pre terminal-text text-sm mb-6">
       [ SORTIE ]
           ^
           |
@@ -162,27 +512,35 @@
     +-----+------+
           |
       [ TUNNEL ]
-</pre>
-                <div class="radio-log">"On est sur le quai. C'est calme. Trop calme."</div>
-                <button class="choice" data-signal="+10" onclick="applyChoice(this)">Faire une pause pour recalibrer la
-                    radio. (+Signal)</button>
-                <button class="choice" data-signal="-2" onclick="applyChoice(this)">Continuer vers la surface.</button>
-            </div>
+                        </pre>
+                        <div class="radio-log">"On est sur le quai. C'est calme. Trop calme."</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container mt-4">
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="+10"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Recalibrer la radio
+                                </p>
+                                <p class="text-emerald-500 text-xs font-terminal">+Signal</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-2"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Continuer</p>
+                            </button>
+                        </div>
+                    </div>
 
-            <!-- 10. LE SORTIE -->
-            <div class="section">
-                <p><strong>10:40 - Lumière du Jour</strong></p>
-                <div class="radio-log">"On est sortis. La ville est en ruines. C'est... terrifiant."</div>
-                <button class="choice" data-signal="-5" onclick="applyChoice(this)">"Concentrez-vous. Rapport de
-                    situation."</button>
-            </div>
+                    <!-- 10. LE SORTIE -->
+                    <div class="section">
+                        <div class="radio-log">"On est sortis. La ville est en ruines. C'est... terrifiant."</div>
+                        <button class="choice-btn choice p-6 rounded-lg text-left w-full md:w-1/2" data-signal="-5"
+                            onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg font-terminal tracking-wide">"Rapport de situation."
+                            </p>
+                        </button>
+                    </div>
 
-            <!-- PHASE 3: ZONE HOSTILE -->
-
-            <!-- 11. LE CARREFOUR (CHOIX STRATEGIQUE) -->
-            <div class="section">
-                <p><strong>11:00 - Le Carrefour</strong></p>
-                <pre class="map">
+                    <!-- 11. LE CARREFOUR -->
+                    <div class="section">
+                        <pre class="map-pre terminal-text text-sm mb-6">
       [ EXTRACTION ]
             ^
             |
@@ -194,123 +552,227 @@
       +-----+-----------------+
       |        CARREFOUR      | <--- VOUS ETES ICI
       +-----------------------+
-</pre>
-                <div class="radio-log">"On doit traverser. À gauche, les ruines industrielles (couvert mais piégé). À
-                    droite, la grande place (rapide mais exposée)."</div>
+                        </pre>
+                        <div class="radio-log">"On doit traverser. Ruines (couvert/piégé) ou Place (rapide/exposée) ?"
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-10" data-ammo="-2"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">[GAUCHE] Les Ruines
+                                </p>
+                                <p class="text-text-secondary text-sm font-terminal">Infiltration lente.</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-2" data-squad="-1"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">[DROITE] La Place
+                                </p>
+                                <p class="text-text-secondary text-sm font-terminal">Course à découvert.</p>
+                            </button>
+                        </div>
+                    </div>
 
-                <button class="choice" data-signal="-10" data-ammo="-2" onclick="applyChoice(this)">[GAUCHE] Les Ruines
-                    (Lent + Besoin Kit Démineur/Ammo)</button>
-                <button class="choice" data-signal="-2" data-squad="-1" onclick="applyChoice(this)">[DROITE] La Place
-                    (Rapide + Risque Snipers)</button>
-            </div>
+                    <!-- 12. CONTACT -->
+                    <div class="section">
+                        <div
+                            class="radio-log text-red-500 font-bold border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)]">
+                            "CONTACT ! CONTACT ! ON EST PRIS A PARTIE !"</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container mt-6">
+                            <button class="choice-btn choice p-6 rounded-lg text-left border-red-500/30" data-ammo="-5"
+                                data-squad="0" onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">"Feu nourri !
+                                    Suppress them !"</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-squad="-2"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">"Fumigènes et repli
+                                    !"</p>
+                            </button>
+                        </div>
+                    </div>
 
-            <!-- 12. L'EMBUSCADE (Place) / LE PIEGE (Ruines) -->
-            <div class="section">
-                <p><strong>11:30 - Contact</strong></p>
-                <div class="radio-log">"CONTACT ! CONTACT ! ON EST PRIS A PARTIE !"</div>
-                <p>Que vous soyez dans les ruines ou sur la place, ils vous ont trouvés.</p>
+                    <!-- 13. L'HOPITAL -->
+                    <div class="section">
+                        <div class="radio-log">"On peut se réfugier dans cet hôpital en ruines pour soigner les
+                            blessés."</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button class="choice-btn choice p-6 rounded-lg text-left border-emerald-500/20"
+                                data-squad="+1" data-signal="-10" onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Soigner les blessés
+                                </p>
+                                <p class="text-emerald-500 text-xs font-terminal">+Escouade / -Signal</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-2"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">"Négatif. On
+                                    continue."</p>
+                            </button>
+                        </div>
+                    </div>
 
-                <button class="choice" data-ammo="-5" data-squad="0" onclick="applyChoice(this)">"Feu nourri ! Suppress
-                    them !" (Coût: Max Ammo)</button>
-                <button class="choice" data-squad="-2" onclick="applyChoice(this)">"Fumigènes et repli !" (Risque
-                    élevé)</button>
-            </div>
+                    <!-- 14. LA TOUR RADIO -->
+                    <div class="section">
+                        <div class="radio-log">"Une antenne relais sur le toit. On pourrait booster le signal."</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                            <button
+                                class="choice-btn choice p-6 rounded-lg text-left border-primary/40 shadow-[0_0_10px_rgba(255,152,0,0.1)]"
+                                data-signal="+40" data-squad="-1" onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Réparer l'antenne
+                                </p>
+                                <p class="text-primary text-xs font-terminal">++SIGNAL (Risque chute)</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-5"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Ignorer.</p>
+                            </button>
+                        </div>
+                    </div>
 
-            <!-- 13. L'HOPITAL -->
-            <div class="section">
-                <p><strong>12:00 - L'Hôpital de Campagne</strong></p>
-                <div class="radio-log">"On peut se réfugier dans cet hôpital en ruines pour soigner les blessés."</div>
-
-                <button class="choice" data-squad="+1" data-signal="-10" onclick="applyChoice(this)">Prendre le temps de
-                    soigner. (+Escouade, -Signal)</button>
-                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"Négatif. On continue."</button>
-            </div>
-
-            <!-- 14. LA TOUR RADIO -->
-            <div class="section">
-                <p><strong>12:30 - Relais Radio</strong></p>
-                <div class="radio-log">"Il y a une antenne relais sur ce toit. On pourrait booster votre signal, mais
-                    c'est haut et exposé."</div>
-
-                <button class="choice" data-signal="+40" data-squad="-1" onclick="applyChoice(this)">Monter réparer
-                    l'antenne. (Gros gain Signal, Risque chute)</button>
-                <button class="choice" data-signal="-5" onclick="applyChoice(this)">Ignorer.</button>
-            </div>
-
-            <!-- 15. CARTE 4 (Zone Indu) -->
-            <div class="section">
-                <p><strong>13:00 - Zone Industrielle</strong></p>
-                <pre class="map">
+                    <!-- 15. CARTE 4 -->
+                    <div class="section">
+                        <pre class="map-pre terminal-text text-sm mb-6">
       [ HELIPAD ]
-           ^
-           |
-    +------+------+
-    |    USINE    | <--- VOUS ETES ICI
-    +------+------+
-           |
-       [ VILLE ]
-</pre>
-                <div class="radio-log">"Dernière ligne droite. L'usine chimique."</div>
-                <button class="choice" data-signal="-2" onclick="applyChoice(this)">"Mettez vos masques."</button>
-            </div>
+            ^
+            |
+     +------+------+
+     |    USINE    | <--- VOUS ETES ICI
+     +------+------+
+            |
+        [ VILLE ]
+                        </pre>
+                        <div class="radio-log">"Dernière ligne droite. L'usine chimique."</div>
+                        <button class="choice-btn choice p-6 rounded-lg text-left w-full md:w-1/2" data-signal="-2"
+                            onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg font-terminal tracking-wide">"Mettez vos masques."
+                            </p>
+                        </button>
+                    </div>
 
-            <!-- PHASE 4: EXTRACTION -->
+                    <!-- 16. GAZ TOXIQUE -->
+                    <div class="section">
+                        <div class="radio-log text-yellow-500">"Les filtres ne tiennent pas ! Le gaz est corrosif !"
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container mt-4">
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-squad="-1"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Traverser en courant
+                                </p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-10" data-ammo="-2"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Couper la vanne</p>
+                            </button>
+                        </div>
+                    </div>
 
-            <!-- 16. GAZ TOXIQUE -->
-            <div class="section">
-                <p><strong>13:15 - Fuite de Gaz</strong></p>
-                <div class="radio-log">"Les filtres ne tiennent pas ! Le gaz est corrosif !"</div>
-                <button class="choice" data-squad="-1" onclick="applyChoice(this)">Courir à travers le nuage.</button>
-                <button class="choice" data-signal="-10" data-ammo="-2" onclick="applyChoice(this)">Chercher une vanne
-                    pour couper le gaz.</button>
-            </div>
+                    <!-- 17. LE SILO -->
+                    <div class="section">
+                        <div class="radio-log">"L'ascenseur est mort. On doit monter à pied."</div>
+                        <button class="choice-btn choice p-6 rounded-lg text-left w-full md:w-1/2" data-signal="-5"
+                            onclick="applyChoice(this)">
+                            <p class="text-white font-bold text-lg font-terminal tracking-wide">Monter les escaliers</p>
+                        </button>
+                    </div>
 
-            <!-- 17. LE SILO -->
-            <div class="section">
-                <p><strong>13:30 - Le Silo</strong></p>
-                <div class="radio-log">"La zone d'extraction est au sommet du silo. L'ascenseur est mort."</div>
-                <button class="choice" data-signal="-5" onclick="applyChoice(this)">Monter les escaliers
-                    (Épuisant).</button>
-            </div>
-
-            <!-- 18. DERNIER CARRE - CARTE FINALE -->
-            <div class="section">
-                <p><strong>13:45 - Le Sommet</strong></p>
-                <pre class="map">
-       \_/
-     -- H --  <--- HELICO EN APPROCHE
-       / \
+                    <!-- 18. DERNIER CARRE -->
+                    <div class="section">
+                        <pre class="map-pre terminal-text text-sm mb-6 text-white border-white/20">
+        \_/
+      -- H --  <--- HELICO EN APPROCHE
+        / \
     
     [ TOIT SILO ] <--- VOUS ETES ICI
-</pre>
-                <div class="radio-log">"On est sur le toit ! L'hélico arrive ! Mais la porte d'accès est en train de
-                    céder sous les coups !"</div>
-                <button class="choice" data-ammo="-10" data-squad="0" onclick="applyChoice(this)">"Videz vos chargeurs
-                    sur la porte !" (Toutes les munitions)</button>
-                <button class="choice" data-squad="-1" onclick="applyChoice(this)">"Barricadez avec ce que vous trouvez
-                    !" (Risque humain)</button>
-            </div>
+                        </pre>
+                        <div class="radio-log">"On est sur le toit ! L'hélico arrive ! La porte cède !"</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container mt-4">
+                            <button
+                                class="choice-btn choice p-6 rounded-lg text-left border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.1)]"
+                                data-ammo="-10" data-squad="0" onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">"Videz vos chargeurs
+                                    !"</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-squad="-1"
+                                onclick="applyChoice(this)">
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Barricader la porte
+                                </p>
+                            </button>
+                        </div>
+                    </div>
 
-            <!-- 19. LE CHOIX FINAL -->
-            <div class="section">
-                <p><strong>13:55 - Sacrifice</strong></p>
-                <div class="radio-log">"Il n'y a pas assez de place pour tout le monde et le matériel ! Il faut choisir
-                    !"</div>
+                    <!-- 19. LE CHOIX FINAL -->
+                    <div class="section">
+                        <div class="radio-log font-bold">"Il n'y a pas assez de place pour tout le monde ! Il faut
+                            choisir !"</div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 choice-container mt-6">
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-squad="-1"
+                                onclick="applyChoice(this); computeEnding(true)">
+                                <div class="text-primary font-bold text-[10px] font-terminal uppercase mb-2">Renaissance
+                                </div>
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Sauver les données
+                                </p>
+                                <p class="text-red-500/60 text-xs font-terminal">Sacrifice : 1 Homme</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left" data-signal="-50"
+                                onclick="applyChoice(this); computeEnding(true)">
+                                <div class="text-primary font-bold text-[10px] font-terminal uppercase mb-2">Humanité
+                                </div>
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Sauver les hommes
+                                </p>
+                                <p class="text-text-secondary text-xs font-terminal">Données perdues</p>
+                            </button>
+                            <button class="choice-btn choice p-6 rounded-lg text-left border-red-600/50" data-squad="-4"
+                                onclick="applyChoice(this); computeEnding('abandon')">
+                                <div class="text-red-500 font-bold text-[10px] font-terminal uppercase mb-2">Zéro</div>
+                                <p class="text-white font-bold text-lg font-terminal tracking-wide">Couvrir le décollage
+                                </p>
+                                <p class="text-red-500 text-xs font-terminal">Fin Terminale</p>
+                            </button>
+                        </div>
+                    </div>
 
-                <button class="choice" data-squad="-1" onclick="applyChoice(this); computeEnding()">Sauver les données
-                    (Sacrifier un homme).</button>
-                <button class="choice" data-signal="-50" onclick="applyChoice(this); computeEnding()">Sauver les hommes
-                    (Abandonner les données).</button>
-                <button class="choice" data-squad="-4" onclick="applyChoice(this); computeEnding('abandon')">Rester pour
-                    couvrir le décollage. (Tout le monde meurt).</button>
-            </div>
+                    <p class="mt-16 text-center text-primary/20 text-[12px] tracking-[1.5em] font-terminal uppercase">
+                        Transmission Terminated // Offline
+                    </p>
 
-            <footer class="project-footer">
-                <p><a href="../post-apocalyptic.html">&larr; Retour au menu</a> | <a
-                        href="https://github.com/ErwanLT/bragi" target="_blank">Voir sur GitHub</a></p>
-                <p>&copy; 2025 Histoires Bragi.</p>
-            </footer>
+                    <div class="actions mt-16 group">
+                        <button
+                            class="choice-btn choice w-full p-8 rounded-lg bg-surface-dark text-primary font-terminal text-3xl border border-primary/30 tracking-[0.3em] shadow-2xl relative overflow-hidden"
+                            id="report-btn" onclick="computeEnding(true)">
+                            <div
+                                class="absolute inset-0 bg-primary/5 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                            </div>
+                            <span class="choice-text flex items-center justify-center gap-4 relative z-10">
+                                <span class="material-symbols-outlined text-4xl animate-pulse">terminal</span>
+                                EXECUTE_FINAL_REPORT
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Sidebar (4 cols) -->
+            <aside class="lg:col-span-4 space-y-8" id="hud">
+                <!-- Content injected by StoryEngine JS -->
+            </aside>
         </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-white/5 bg-background-dark/95 py-12 px-6 backdrop-blur-md">
+        <div class="mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-12">
+            <div
+                class="text-text-secondary text-[10px] font-terminal uppercase tracking-[0.4em] flex items-center gap-3">
+                <span class="material-symbols-outlined text-sm">shield</span> &copy; 2042 LAST HOPE NETWORKS.
+            </div>
+            <div class="flex items-center gap-12">
+                <a href="../../stories.html"
+                    class="text-text-secondary hover:text-primary transition-colors text-[10px] font-terminal uppercase tracking-[0.3em]">Bunker
+                    Archives</a>
+                <a href="https://github.com/ErwanLT/bragi"
+                    class="text-text-secondary hover:text-primary transition-colors text-[10px] font-terminal uppercase tracking-[0.3em]"
+                    target="_blank">Codex 7</a>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

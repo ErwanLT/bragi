@@ -1,177 +1,731 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="dark">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LE TRÉSOR DE L'ÎLE MAUDITE</title>
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link rel="stylesheet" href="../../style/base.css">
-    <link rel="stylesheet" href="../../style/adventure-piracy.css">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&family=Bebas+Neue&family=Inter:wght@400;600&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+
+    <!-- Scripts -->
     <script src="../../js/security.js"></script>
     <script src="../../js/storyEngine.js"></script>
     <script src="../../js/adventure/piracy/treasure.js"></script>
+
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FFD700", /* Gold */
+                        "secondary": "#8A0303", /* Blood Red */
+                        "accent-blue": "#1E3A8A", /* Deep Sea Blue */
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0F172A", /* Dark Slate */
+                        "surface-dark": "#1E293B", /* Slate 800 */
+                        "surface-highlight": "#334155", /* Slate 700 */
+                        "text-secondary": "#94a3b8",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"],
+                        "heading": ["Bebas Neue", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: "Inter", "Plus Jakarta Sans", sans-serif;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: "Plus Jakarta Sans", sans-serif;
+        }
+
+        .story-title {
+            font-family: "Bebas Neue", sans-serif;
+            letter-spacing: 2px;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0F172A;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FFD700;
+        }
+
+        /* Choice Button Transitions */
+        .choice-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(255, 215, 0, 0.3);
+        }
+
+        /* StoryEngine Integration Fixes */
+        .choice-wrapper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .choice-wrapper .choice {
+            height: 100%;
+            width: 100%;
+        }
+
+        .choice-wrapper::after {
+            content: attr(data-info);
+            display: block;
+            font-size: 0.75rem;
+            color: #FFD700;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            opacity: 0.8;
+        }
+    </style>
 </head>
 
-<body>
-    <div id="hud"></div>
-    <div class="quest-card">
-        <h3>⚓ LE TRÉSOR DE L'ÎLE MAUDITE ⚓</h3>
-        <p style="text-align:center; font-style: italic; color: #8b0000;">Journal de bord du Capitaine Blackwood</p>
-
-        <div id="story">
-            <!-- 1. TAVERNE -->
-            <div class="section">
-                <p><strong>Jour 1 - La Taverne du "Chien Noyé"</strong></p>
-                <p>Un vieux marin borgne vous vend une carte. Elle mène à l'Île Maudite.</p>
-                <button class="choice" data-or="-50" onclick="applyChoice(this)">Acheter la carte honnêtement.</button>
-                <button class="choice" data-loyalte="-10" data-or="+20" onclick="applyChoice(this)">Voler la carte et le
-                    tabasser.</button>
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white min-h-screen flex flex-col font-body selection:bg-primary selection:text-background-dark">
+    <!-- Top Navigation Bar -->
+    <header
+        class="sticky top-0 z-50 w-full border-b border-solid border-white/10 bg-background-dark/95 backdrop-blur-sm px-6 py-3">
+        <div class="mx-auto max-w-7xl flex items-center justify-between">
+            <div class="flex items-center gap-4 text-white">
+                <div class="flex items-center justify-center size-10 rounded-full bg-surface-highlight text-primary">
+                    <span class="material-symbols-outlined">sailing</span>
+                </div>
+                <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em] hidden sm:block font-display">
+                    Légendes Pirate</h2>
             </div>
-
-            <!-- 2. RECRUTEMENT -->
-            <div class="section">
-                <p><strong>Jour 2 - Recrutement sur les quais</strong></p>
-                <p>Il faut compléter l'équipage du <em>Black Heron</em>.</p>
-                <button class="choice" data-loyalte="-10" data-or="+100" onclick="applyChoice(this)">Engager des repris
-                    de justice (Moins cher, dangereux).</button>
-                <button class="choice" data-loyalte="+10" data-or="-50" onclick="applyChoice(this)">Engager des marins
-                    expérimentés (Fiables mais chers).</button>
-            </div>
-
-            <!-- 3. DEPART -->
-            <div class="section">
-                <p><strong>Jour 3 - En Haute Mer</strong></p>
-                <p>L'aventure commence. Le vent est bon. Comment motiver les hommes ?</p>
-                <button class="choice" data-vivres="-10" data-loyalte="+10" onclick="applyChoice(this)">Double ration de
-                    Rhum pour tous !</button>
-                <button class="choice" data-vivres="+5" data-loyalte="-5" onclick="applyChoice(this)">Rationnement
-                    strict dès le début.</button>
-            </div>
-
-            <!-- 4. TEMPETE -->
-            <div class="section">
-                <p><strong>Jour 7 - La Tempête</strong></p>
-                <p>Des vagues scélérates frappent la coque. Le mât craque.</p>
-                <button class="choice" data-vivres="-20" onclick="applyChoice(this)">Jeter une partie de la cargaison
-                    pour alléger.</button>
-                <button class="choice" data-loyalte="-15" onclick="applyChoice(this)">Forcer les hommes à la manoeuvre
-                    périlleuse.</button>
-            </div>
-
-            <!-- 5. CALME PLAT -->
-            <div class="section">
-                <p><strong>Jour 12 - Calme Plat</strong></p>
-                <p>Plus un souffle de vent. La chaleur est accablante.</p>
-                <button class="choice" data-vivres="-10" onclick="applyChoice(this)">Pêcher pour économiser les
-                    vivres.</button>
-                <button class="choice" data-loyalte="-10" onclick="applyChoice(this)">Punir ceux qui se
-                    plaignent.</button>
-            </div>
-
-            <!-- 6. NAVIRE ENNEMI -->
-            <div class="section">
-                <p><strong>Jour 15 - Voiles à l'horizon</strong></p>
-                <p>Un navire marchand espagnol, lourdement chargé.</p>
-                <button class="choice" data-or="+200" data-vivres="+20" data-loyalte="+10" onclick="applyChoice(this)">À
-                    l'abordage ! (Risque de blessures).</button>
-                <button class="choice" data-loyalte="-5" onclick="applyChoice(this)">Les éviter et rester concentré sur
-                    l'île.</button>
-            </div>
-
-            <!-- 7. L'ILE -->
-            <div class="section">
-                <p><strong>Jour 20 - Terre en vue !</strong></p>
-                <p>L'Île Maudite se dresse, sombre et menaçante.</p>
-                <button class="choice" data-vivres="-5" onclick="applyChoice(this)">Chercher un mouillage sûr (Prend du
-                    temps).</button>
-                <button class="choice" data-loyalte="-5" onclick="applyChoice(this)">Débarquer de nuit par les
-                    récifs.</button>
-            </div>
-
-            <!-- 8. JUNGLE -->
-            <div class="section">
-                <p><strong>Jour 21 - La Jungle Épaisse</strong></p>
-                <p>Machettes en main, vous vous frayez un chemin. C'est l'enfer vert.</p>
-                <button class="choice" data-vivres="+10" onclick="applyChoice(this)">Chercher des fruits et de l'eau
-                    douce.</button>
-                <button class="choice" data-loyalte="-5" onclick="applyChoice(this)">Avancer à marche forcée.</button>
-            </div>
-
-            <!-- 9. PIEGES -->
-            <div class="section">
-                <p><strong>Jour 22 - Les Pièges Anciens</strong></p>
-                <p>Le sol s'ouvre sous les pieds de votre second.</p>
-                <button class="choice" data-loyalte="+10" onclick="applyChoice(this)">Le sauver au péril de votre
-                    vie.</button>
-                <button class="choice" data-loyalte="-20" onclick="applyChoice(this)">Le laisser ("Il était
-                    incompétent").</button>
-            </div>
-
-            <!-- 10. CAMPEMENT -->
-            <div class="section">
-                <p><strong>Jour 22 - Nuit dans la jungle</strong></p>
-                <p>Des bruits étranges encerclent le camp.</p>
-                <button class="choice" data-vivres="-10" data-loyalte="+5" onclick="applyChoice(this)">Grand feu et
-                    festin pour garder le moral.</button>
-                <button class="choice" data-loyalte="-5" onclick="applyChoice(this)">Sifence total, pas de feu.</button>
-            </div>
-
-            <!-- 11. LA GROTTE -->
-            <div class="section">
-                <p><strong>Jour 23 - La Grotte du Crâne</strong></p>
-                <p>L'entrée est là, comme sur la carte.</p>
-                <button class="choice" data-or="+50" onclick="applyChoice(this)">Ramasser les pièces d'or semées à
-                    l'entrée.</button>
-                <button class="choice" onclick="applyChoice(this)">Ignorer les miettes, viser le gros lot.</button>
-            </div>
-
-            <!-- 12. ENIGME -->
-            <div class="section">
-                <p><strong>L'Énigme du Gardien</strong></p>
-                <p>Une porte de pierre bloque le chemin. "Je suis d'eau, mais je ne mouille pas. Qui suis-je ?"</p>
-                <button class="choice" data-loyalte="+5" onclick="applyChoice(this)">"Une carte" (Réflexion).</button>
-                <button class="choice" data-vivres="-20" data-or="-50" onclick="applyChoice(this)">Utiliser de la poudre
-                    noire pour tout faire sauter !</button>
-            </div>
-
-            <!-- 13. TRAHISON -->
-            <div class="section">
-                <p><strong>La salle du Trésor</strong></p>
-                <p>Des montagnes d'or ! Mais votre second sort son pistolet.</p>
-                <button class="choice" data-or="+500" data-loyalte="-100" onclick="applyChoice(this)">Lui proposer 50/50
-                    (Il accepte... peut-être).</button>
-                <button class="choice" data-loyalte="+20" onclick="applyChoice(this)">Duel au sabre ! (Pour
-                    l'honneur).</button>
-            </div>
-
-            <!-- 14. LE CHOIX FINAL -->
-            <div class="section">
-                <p><strong>Le Coffre Maudit</strong></p>
-                <p>Au centre, un coffre pulse d'une lueur violette.</p>
-                <button class="choice" data-or="+1000" onclick="applyChoice(this); computeEnding('cursed')">Ouvrir le
-                    coffre maudit (Cupidité absolue).</button>
-                <button class="choice" data-or="+300" onclick="applyChoice(this)">Ne prendre que l'or "sûr"
-                    autour.</button>
-            </div>
-
-            <!-- 15. RETOUR -->
-            <div class="section">
-                <p><strong>Jour 24 - Le Retour</strong></p>
-                <p>Vous regagnez le navire les bras chargés.</p>
-                <button class="choice" onclick="applyChoice(this); computeEnding('rich')">Partager équitablement et
-                    rentrer riche.</button>
-                <button class="choice" data-loyalte="-50" onclick="applyChoice(this); computeEnding()">Tenter de doubler
-                    l'équipage.</button>
-            </div>
-
+            <nav class="hidden md:flex items-center gap-9">
+                <a class="text-white text-sm font-medium hover:text-primary transition-colors"
+                    href="../piracy.html">&larr; Retour au Menu</a>
+            </nav>
         </div>
+    </header>
 
-        <footer class="project-footer">
-            <p><a href="../piracy.html">&larr; Retour au menu</a> | <a href="https://github.com/ErwanLT/bragi"
-                    target="_blank">Voir sur GitHub</a></p>
-            <p>&copy; 2025 Histoires Bragi.</p>
-        </footer>
-    </div>
+    <!-- Main Layout -->
+    <main class="flex-grow w-full px-4 py-8 md:px-8 lg:px-12">
+        <div class="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+
+            <!-- Left Column: Narrative Content (8 cols) -->
+            <section class="lg:col-span-8 flex flex-col gap-6">
+
+                <!-- Page Heading & Metadata -->
+                <div class="flex flex-col gap-2">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span
+                            class="px-2 py-1 rounded bg-secondary/20 text-secondary text-xs font-bold uppercase tracking-wider border border-secondary/30">Chapitre
+                            Unique</span>
+                        <span class="text-text-secondary text-sm flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">calendar_today</span> 1715
+                        </span>
+                        <span class="text-text-secondary text-sm flex items-center gap-1 ml-2">
+                            <span class="material-symbols-outlined text-[16px]">location_on</span> Caraïbes
+                        </span>
+                    </div>
+                    <h1
+                        class="text-white text-4xl md:text-5xl lg:text-6xl font-black leading-tight tracking-[-0.033em] story-title text-transparent bg-clip-text bg-gradient-to-r from-primary to-yellow-600">
+                        LE TRÉSOR DE L'ÎLE MAUDITE
+                    </h1>
+                </div>
+
+                <!-- Visual Aid (Hero Image) -->
+                <div
+                    class="w-full relative rounded-xl overflow-hidden shadow-2xl border border-surface-highlight group h-[300px] md:h-[400px]">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
+                        style='background-image: url("../../img/cards/stories/treasure.png");'>
+                        <div
+                            class="absolute inset-0 bg-gradient-to-t from-background-dark via-transparent to-transparent opacity-90">
+                        </div>
+                    </div>
+                    <div class="absolute bottom-4 left-4 right-4">
+                        <p
+                            class="text-white/80 text-sm italic border-l-2 border-primary pl-3 bg-black/30 p-2 rounded backdrop-blur-sm inline-block">
+                            « Journal de bord du Capitaine Blackwood »
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Story Logic Container -->
+                <div id="story">
+                    <!-- 1. TAVERNE -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 1 - La Taverne
+                                du "Chien Noyé"</p>
+                            <p class="mb-4">Un vieux marin borgne vous vend une carte. Elle mène à l'Île Maudite.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <h3 class="text-white text-xl font-bold mb-6 flex items-center gap-2 font-display">
+                                <span class="material-symbols-outlined text-primary">alt_route</span> Que faites-vous ?
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-or="-50" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">verified</span> COMMERCE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Acheter honnêtement</p>
+                                    <p class="text-text-secondary text-sm">Payer le prix demandé sans histoires.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="-10" data-or="+20" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">swords</span> VIOLENCE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Voler la carte</p>
+                                    <p class="text-text-secondary text-sm">Prendre la carte et quelques pièces.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. RECRUTEMENT -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 2 - Recrutement
+                            </p>
+                            <p class="mb-4">Il faut compléter l'équipage du <em>Black Heron</em>.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="-10" data-or="+100" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">groups</span> FORÇATS
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Repris de justice</p>
+                                    <p class="text-text-secondary text-sm">Moins cher, mais dangereux.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="+10" data-or="-50" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">star</span> VÉTÉRANS
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Marins expérimentés</p>
+                                    <p class="text-text-secondary text-sm">Fiables, mais ils coûtent cher.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. DEPART -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 3 - En Haute Mer
+                            </p>
+                            <p class="mb-4">L'aventure commence. Le vent est bon. Comment motiver les hommes ?</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-vivres="-10" data-loyalte="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">liquor</span> RHUM
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Double ration</p>
+                                    <p class="text-text-secondary text-sm">Une tournée pour le moral !</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-vivres="+5" data-loyalte="-5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">block</span> DISCIPLINE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Rationnement</p>
+                                    <p class="text-text-secondary text-sm">On garde les vivres pour plus tard.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 4. TEMPETE -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 7 - La Tempête
+                            </p>
+                            <p class="mb-4">Des vagues scélérates frappent la coque. Le mât craque.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-vivres="-20" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">delete</span> LESTAGE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Jeter la cargaison</p>
+                                    <p class="text-text-secondary text-sm">Alléger le navire pour sauver la coque.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="-15" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">engineering</span> MANOEUVRE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Forcer la manoeuvre</p>
+                                    <p class="text-text-secondary text-sm">Prendre des risques pour passer la vague.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 5. CALME PLAT -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 12 - Calme Plat
+                            </p>
+                            <p class="mb-4">Plus un souffle de vent. La chaleur est accablante.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-vivres="-10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">phishing</span> PÊCHE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Pêcher</p>
+                                    <p class="text-text-secondary text-sm">Chercher de la nourriture fraîche.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="-10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">gavel</span> PUNITION
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Faire taire les plaintes</p>
+                                    <p class="text-text-secondary text-sm">Fouetter ceux qui démoralisent l'équipage.
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 6. NAVIRE ENNEMI -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 15 - Voiles à
+                                l'horizon</p>
+                            <p class="mb-4">Un navire marchand espagnol, lourdement chargé.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-or="+200" data-vivres="+20" data-loyalte="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">anchor</span> ABORDAGE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">À l'attaque !</p>
+                                    <p class="text-text-secondary text-sm">Saisir la cargaison et l'or.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="-5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">visibility_off</span>
+                                        FANTÔME
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Les éviter</p>
+                                    <p class="text-text-secondary text-sm">Rester concentré sur l'objectif principal.
+                                    </p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 7. L'ILE -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 20 - Terre en
+                                vue !</p>
+                            <p class="mb-4">L'Île Maudite se dresse, sombre et menaçante.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-vivres="-5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">anchor</span> MOUILLAGE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Chercher un abri</p>
+                                    <p class="text-text-secondary text-sm">Trouver une crique sûre.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="-5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">rowing</span> DÉBARQUEMENT
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Par les récifs</p>
+                                    <p class="text-text-secondary text-sm">Arriver plus vite, mais c'est risqué.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 8. JUNGLE -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 21 - La Jungle
+                            </p>
+                            <p class="mb-4">Machettes en main, vous vous frayez un chemin. C'est l'enfer vert.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-vivres="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">nutrition</span> CUEILLETTE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Ressources</p>
+                                    <p class="text-text-secondary text-sm">Chercher des fruits et de l'eau.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="-5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">hiking</span> AVANCE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Marche forcée</p>
+                                    <p class="text-text-secondary text-sm">Pas de temps à perdre.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 9. PIEGES -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 22 - Les Pièges
+                                Anciens</p>
+                            <p class="mb-4">Le sol s'ouvre sous les pieds de votre second.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="+10" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">handshake</span> AIDE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Le sauver</p>
+                                    <p class="text-text-secondary text-sm">Au risque de votre propre vie.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="-20" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">block</span> ABANDON
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Le laisser</p>
+                                    <p class="text-text-secondary text-sm">Tant pis pour les incompétents.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 10. CAMPEMENT -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 22 - Nuit dans
+                                la jungle</p>
+                            <p class="mb-4">Des bruits étranges encerclent le camp.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-vivres="-10" data-loyalte="+5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">local_fire_department</span>
+                                        FEU DE JOIE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Grand festin</p>
+                                    <p class="text-text-secondary text-sm">Garder le moral des troupes.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="-5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">visibility_off</span> FURTIF
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Silence total</p>
+                                    <p class="text-text-secondary text-sm">Pas de feu, pas de bruit.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 11. LA GROTTE -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 23 - La Grotte
+                            </p>
+                            <p class="mb-4">L'entrée est là, comme sur la carte.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-or="+50" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">savings</span> PIECES
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Ramasser l'or</p>
+                                    <p class="text-text-secondary text-sm">Prendre ce qui traîne à l'entrée.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">forward</span> AVANCE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Tout ignorer</p>
+                                    <p class="text-text-secondary text-sm">Viser le gros lot, pas les miettes.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 12. ENIGME -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">L'Énigme du Gardien
+                            </p>
+                            <p class="mb-4">Une porte de pierre bloque le chemin. "Je suis d'eau, mais je ne mouille
+                                pas. Qui suis-je ?"</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="+5" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">psychology</span> RÉFLEXION
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Une carte</p>
+                                    <p class="text-text-secondary text-sm">Résoudre l'énigme intelligemment.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-vivres="-20" data-or="-50" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">whatshot</span> EXPLOSIF
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Tout faire sauter</p>
+                                    <p class="text-text-secondary text-sm">Utiliser la poudre noire !</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 13. TRAHISON -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">La Salle du Trésor
+                            </p>
+                            <p class="mb-4">Des montagnes d'or ! Mais votre second sort son pistolet.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-or="+500" data-loyalte="-100" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">handshake</span> NÉGOCIATION
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Partager 50/50</p>
+                                    <p class="text-text-secondary text-sm">Tenter de l'acheter.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="+20" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">swords</span> DUEL
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Duel au sabre</p>
+                                    <p class="text-text-secondary text-sm">Pour l'honneur !</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 14. LE CHOIX FINAL -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Le Coffre Maudit</p>
+                            <p class="mb-4">Au centre, un coffre pulse d'une lueur violette.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-or="+1000" onclick="applyChoice(this); computeEnding('cursed')">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">skull</span> MAUDIT
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Ouvrir le coffre</p>
+                                    <p class="text-text-secondary text-sm">Cupidité absolue.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-or="+300" onclick="applyChoice(this)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">savings</span> PRUDENCE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">L'or sûr</p>
+                                    <p class="text-text-secondary text-sm">Ne prendre que ce qui traîne autour.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 15. RETOUR -->
+                    <div class="section">
+                        <article class="prose prose-invert max-w-none text-lg leading-relaxed text-gray-300 font-body">
+                            <p class="mb-4 text-primary font-bold uppercase tracking-wide text-sm">Jour 24 - Le Retour
+                            </p>
+                            <p class="mb-4">Vous regagnez le navire les bras chargés.</p>
+                        </article>
+                        <div class="mt-8 pt-8 border-t border-surface-highlight">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    onclick="applyChoice(this); computeEnding('rich')">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">groups</span> PARTAGE
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Rentrer riche</p>
+                                    <p class="text-text-secondary text-sm">Partager avec l'équipage.</p>
+                                </button>
+                                <button
+                                    class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
+                                    data-loyalte="-50" onclick="applyChoice(this); computeEnding(true)">
+                                    <div
+                                        class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
+                                        <span class="material-symbols-outlined text-[18px]">person_off</span> TRAHISON
+                                    </div>
+                                    <p class="text-white font-bold text-lg">Doubler l'équipage</p>
+                                    <p class="text-text-secondary text-sm">Tout garder pour vous.</p>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p
+                        style="margin-top:40px; text-align: center; color: var(--primary); opacity: 0.8; letter-spacing: 2px;">
+                        <strong>/// FIN DE L'AVENTURE ///</strong>
+                    </p>
+
+                    <div class="actions mt-8">
+                        <button
+                            class="choice-btn choice w-full p-4 rounded-xl bg-secondary hover:bg-secondary/80 text-white font-bold border border-secondary"
+                            id="report-btn" onclick="computeEnding(true)">
+                            <span class="choice-text flex items-center justify-center gap-2"><span
+                                    class="material-symbols-outlined">history_edu</span> ÉCRIRE LA LÉGENDE</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Sidebar (4 cols) -->
+            <aside class="lg:col-span-4 space-y-6" id="hud">
+                <!-- Content injected by StoryEngine JS -->
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-white/10 bg-background-dark py-8 px-6">
+        <div class="mx-auto max-w-7xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="text-text-secondary text-sm">
+                &copy; 2025 Histoires Bragi.
+            </div>
+            <div class="flex items-center gap-6">
+                <a href="../../stories.html"
+                    class="text-text-secondary hover:text-white transition-colors text-sm">Histoires</a>
+                <a href="../../about.html" class="text-text-secondary hover:text-white transition-colors text-sm">À
+                    propos</a>
+                <a href="https://github.com/ErwanLT/bragi"
+                    class="text-text-secondary hover:text-white transition-colors text-sm" target="_blank">Voir sur
+                    GitHub</a>
+            </div>
+        </div>
+    </footer>
 </body>
 
 </html>

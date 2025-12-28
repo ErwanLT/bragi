@@ -1,181 +1,465 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bragi - La Bibliothèque</title>
+    <title>La Bibliothèque | Bragi</title>
     <link rel="icon" type="image/png" href="favicon.png">
-    <meta name="description" content="Explorez la bibliothèque d'histoires interactives de Bragi.">
-    <link rel="stylesheet" href="style/index.css">
-    <link rel="stylesheet" href="style/genres.css">
-    <link rel="stylesheet" href="style/stories.css">
-    <!-- Storage Utility -->
-    <script src="js/security.js"></script>
-    <!-- Preconnect to Google Fonts -->
+    <meta name="description"
+        content="Explorez la bibliothèque d'histoires interactives de Bragi. Choisissez votre prochaine aventure.">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8b5cf6',
+                        secondary: '#4c1d95',
+                        accent: '#f59e0b',
+                        background: '#050507',
+                        surface: '#0f172a',
+                        success: '#10b981'
+                    },
+                    fontFamily: {
+                        heading: ['Cinzel', 'serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        /* Fallback / Robust Styles to prevent "Broken" look if Tailwind CDN is slow */
+        body {
+            background-color: #050507;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding-top: 5rem;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Cinzel', serif;
+        }
+
+        .hero-mask {
+            mask-image: linear-gradient(to bottom, black 40%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent);
+        }
+
+        .story-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: #0f172a;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            aspect-ratio: 16 / 10;
+        }
+
+        .story-card:hover {
+            transform: scale(1.02);
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .story-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.4) 60%, transparent 100%);
+            opacity: 0.9;
+            z-index: 10;
+        }
+
+        .stretched-link::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+        }
+
+        .completed-badge {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: #10b981;
+            color: white;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            z-index: 30;
+            display: none;
+            /* Shown via JS */
+        }
+
+        .story-card.completed .completed-badge {
+            display: block;
+        }
+
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 9999px;
+            padding: 0.5rem 1.5rem;
+            color: #94a3b8;
+            font-family: 'Cinzel', serif;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .filter-btn.active {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: rgba(139, 92, 246, 0.4);
+            color: #a78bfa;
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .glass-header {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+
+    <script src="js/security.js"></script>
 </head>
 
-<body>
-    <header>
-        <h1>La Bibliothèque</h1>
-        <p class="subtitle">Choisissez votre prochaine aventure parmi nos récits interactifs.</p>
-    </header>
-
-    <nav class="filter-bar">
-        <button class="filter-btn active" data-filter="all">Tous</button>
-        <button class="filter-btn" data-filter="horror">Horreur</button>
-        <button class="filter-btn" data-filter="scifi">Science-Fiction</button>
-        <button class="filter-btn" data-filter="western">Western</button>
-        <button class="filter-btn" data-filter="adventure">Aventure</button>
-        <button class="filter-btn" data-filter="fantasy">Fantasy</button>
-        <button class="filter-btn" data-filter="polar">Polar</button>
-        <button class="filter-btn" data-filter="thriller">Thriller</button>
-    </nav>
-
-    <div class="data-mgmt">
-        <button id="export-progress" class="data-btn">
-            <span class="icon">💾</span> Sauvegarder ma progression
-        </button>
-        <button id="import-progress-trigger" class="data-btn">
-            <span class="icon">📤</span> Charger une sauvegarde
-        </button>
-        <input type="file" id="import-progress-file" style="display: none;" accept=".brg">
+<body class="min-h-screen flex flex-col pt-20 bg-[#050507]">
+    <!-- Background Decor -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div
+            class="absolute top-0 right-0 w-[50vw] h-[50vw] bg-purple-600/5 blur-[120px] rounded-full translate-x-1/3 -translate-y-1/3">
+        </div>
+        <div
+            class="absolute bottom-0 left-0 w-[40vw] h-[40vw] bg-blue-600/5 blur-[120px] rounded-full -translate-x-1/3 translate-y-1/3">
+        </div>
     </div>
 
-    <main class="stories-grid">
-        <!-- Horreur -->
-        <article class="story-card card-horror" data-genre="horror" id="labyrinth">
-            <div class="story-header">
-                <span class="story-icon">💀</span>
-                <div>
-                    <span class="story-genre">Horreur</span>
-                    <div class="sub-genre">Cosmic</div>
-                </div>
-            </div>
-            <a href="horror/cosmic/labyrinth.html" class="story-title">Le labyrinthe oublié</a>
-        </article>
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-header h-20">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-4 group no-underline text-white">
+                <img src="favicon.png" alt="Logo" class="w-8 h-8 group-hover:rotate-12 transition-transform">
+                <span class="font-heading text-xl tracking-tighter">BRAGI</span>
+            </a>
+            <nav class="hidden md:flex items-center gap-10">
+                <a href="index.html"
+                    class="text-slate-400 hover:text-white transition-colors font-heading text-[10px] tracking-[0.3em] uppercase no-underline">Accueil</a>
+                <a href="stories.html"
+                    class="text-white transition-colors font-heading text-[10px] tracking-[0.3em] uppercase no-underline">Histoires</a>
+                <a href="about.html"
+                    class="text-slate-400 hover:text-white transition-colors font-heading text-[10px] tracking-[0.3em] uppercase no-underline">À
+                    Propos</a>
+            </nav>
+        </div>
+    </header>
 
-        <article class="story-card card-horror" data-genre="horror" id="manor">
-            <div class="story-header">
-                <span class="story-icon">💀</span>
-                <div>
-                    <span class="story-genre">Horreur</span>
-                    <div class="sub-genre">Psychologique</div>
-                </div>
-            </div>
-            <a href="horror/psychological/manor.html" class="story-title">Le manoir du silence</a>
-        </article>
+    <main class="relative z-10">
+        <!-- Hero Section -->
+        <section class="h-[40vh] min-h-[400px] relative overflow-hidden flex items-center pt-20">
+            <div class="absolute inset-0 bg-cover bg-center bg-no-repeat hero-mask opacity-30"
+                style="background-image: url('img/hero_castle.png');"></div>
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#050507]/60 to-[#050507]"></div>
 
-        <article class="story-card card-horror" data-genre="horror" id="summer_camp">
-            <div class="story-header">
-                <span class="story-icon">💀</span>
-                <div>
-                    <span class="story-genre">Horreur</span>
-                    <div class="sub-genre">Slasher</div>
+            <div
+                class="max-w-7xl mx-auto px-6 w-full relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-12">
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3 text-purple-400">
+                        <span class="w-12 h-px bg-purple-400/40"></span>
+                        <span class="font-heading text-xs tracking-[0.5em] uppercase">Archive des Récits</span>
+                    </div>
+                    <h1 class="text-6xl lg:text-8xl font-bold tracking-tighter m-0">ARCHIVES</h1>
+                    <p
+                        class="text-slate-400 text-lg max-w-xl font-light italic border-l-2 border-purple-500/20 pl-6 my-0">
+                        Explorez les sagas dont vous êtes le héros. Chaque archive est une porte vers l'inconnu.</p>
                 </div>
-            </div>
-            <a href="horror/slasher/summer_camp.html" class="story-title">Le Camp du Lac Sanglant</a>
-        </article>
 
-        <!-- Sci-Fi -->
-        <article class="story-card card-scifi" data-genre="scifi" id="signal_zero">
-            <div class="story-header">
-                <span class="story-icon">🛸</span>
-                <div>
-                    <span class="story-genre">Science-Fiction</span>
-                    <div class="sub-genre">Post-apo</div>
+                <!-- Data Management -->
+                <div class="flex items-center gap-4">
+                    <button id="export-progress" title="Sauvegarder"
+                        class="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-purple-500/40 transition-all group">
+                        <span
+                            class="material-symbols-outlined text-xl text-purple-400 group-hover:scale-110">save</span>
+                    </button>
+                    <button id="import-progress-trigger" title="Charger"
+                        class="w-12 h-12 flex items-center justify-center bg-white/5 border border-white/10 rounded-full hover:bg-white/10 hover:border-purple-500/40 transition-all group">
+                        <span
+                            class="material-symbols-outlined text-xl text-purple-400 group-hover:scale-110">upload_file</span>
+                    </button>
+                    <input type="file" id="import-progress-file" style="display: none;" accept=".brg">
                 </div>
             </div>
-            <a href="science-fiction/post-apocalyptic/signal_zero.html" class="story-title">Signal zéro -
-                Transmission</a>
-        </article>
+        </section>
 
-        <article class="story-card card-scifi" data-genre="scifi" id="kubrick9">
-            <div class="story-header">
-                <span class="story-icon">🛸</span>
-                <div>
-                    <span class="story-genre">Science-Fiction</span>
-                    <div class="sub-genre">Espace</div>
-                </div>
-            </div>
-            <a href="science-fiction/space/kubrick9.html" class="story-title">Kubrick 9 - Station orbitale</a>
-        </article>
+        <!-- Library Content -->
+        <section class="max-w-7xl mx-auto px-6 py-20 space-y-16">
 
-        <!-- Western -->
-        <article class="story-card card-western" data-genre="western" id="duel">
-            <div class="story-header">
-                <span class="story-icon">🤠</span>
-                <div>
-                    <span class="story-genre">Western</span>
-                    <div class="sub-genre">Classique</div>
-                </div>
-            </div>
-            <a href="western/classic/duel.html" class="story-title">Le dernier duel</a>
-        </article>
+            <!-- Filters -->
+            <nav class="flex flex-wrap justify-center gap-4 py-6 sticky top-24 z-40">
+                <button class="filter-btn active" data-filter="all">Tous</button>
+                <button class="filter-btn" data-filter="horror">Horreur</button>
+                <button class="filter-btn" data-filter="scifi">Science-Fiction</button>
+                <button class="filter-btn" data-filter="western">Western</button>
+                <button class="filter-btn" data-filter="adventure">Aventure</button>
+                <button class="filter-btn" data-filter="fantasy">Fantasy</button>
+                <button class="filter-btn" data-filter="polar">Polar</button>
+                <button class="filter-btn" data-filter="thriller">Thriller</button>
+            </nav>
 
-        <!-- Aventure -->
-        <article class="story-card card-adventure" data-genre="adventure" id="treasure">
-            <div class="story-header">
-                <span class="story-icon">⚓️</span>
-                <div>
-                    <span class="story-genre">Aventure</span>
-                    <div class="sub-genre">Piraterie</div>
-                </div>
-            </div>
-            <a href="adventure/piracy/treasure.html" class="story-title">Le trésor de l'ile maudite</a>
-        </article>
+            <!-- Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12" id="stories-grid">
 
-        <!-- Fantasy -->
-        <article class="story-card card-fantasy" data-genre="fantasy" id="quest">
-            <div class="story-header">
-                <span class="story-icon">🐉</span>
-                <div>
-                    <span class="story-genre">Fantasy</span>
-                    <div class="sub-genre">Médiéval</div>
-                </div>
-            </div>
-            <a href="fantasy/medieval/quest.html" class="story-title">La quête du code ancestral</a>
-        </article>
+                <!-- Horror -->
+                <article class="story-card" data-genre="horror" id="labyrinth">
+                    <img src="img/cards/stories/labyrinth.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-1000">
+                    <div class="story-overlay"></div>
+                    <div class="completed-badge">✓ COMPLÉTÉ</div>
+                    <div class="absolute bottom-8 left-8 right-8 z-30">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span
+                                class="px-2 py-0.5 bg-red-600/20 border border-red-600/40 text-[8px] text-red-500 font-bold tracking-widest uppercase rounded">Horreur</span>
+                            <span
+                                class="text-[8px] text-slate-500 font-bold tracking-widest uppercase italic">Cosmic</span>
+                        </div>
+                        <a href="horror/cosmic/labyrinth.html"
+                            class="stretched-link text-3xl font-bold tracking-tight text-white no-underline hover:text-purple-400 transition-colors">Le
+                            labyrinthe oublié</a>
+                    </div>
+                </article>
 
-        <!-- Polar -->
-        <article class="story-card card-polar" data-genre="polar" id="prohibition">
-            <div class="story-header">
-                <span class="story-icon">🕵️‍♂️</span>
-                <div>
-                    <span class="story-genre">Polar</span>
-                    <div class="sub-genre">Noir</div>
-                </div>
-            </div>
-            <a href="polar/noir/prohibition.html" class="story-title">Dossier: ombres de Chicago - 1932</a>
-        </article>
+                <article class="story-card" data-genre="horror" id="manor">
+                    <img src="img/cards/stories/silence_manor.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-1000">
+                    <div class="story-overlay"></div>
+                    <div class="completed-badge">✓ COMPLÉTÉ</div>
+                    <div class="absolute bottom-8 left-8 right-8 z-30">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span
+                                class="px-2 py-0.5 bg-red-600/20 border border-red-600/40 text-[8px] text-red-500 font-bold tracking-widest uppercase rounded">Horreur</span>
+                            <span
+                                class="text-[8px] text-slate-500 font-bold tracking-widest uppercase italic">Psychologique</span>
+                        </div>
+                        <a href="horror/psychological/manor.html"
+                            class="stretched-link text-3xl font-bold tracking-tight text-white no-underline hover:text-purple-400 transition-colors">Le
+                            manoir du silence</a>
+                    </div>
+                </article>
 
-        <!-- Thriller -->
-        <article class="story-card card-thriller" data-genre="thriller" id="jurassic">
-            <div class="story-header">
-                <span class="story-icon">🦖</span>
-                <div>
-                    <span class="story-genre">Thriller</span>
-                    <div class="sub-genre">Préhistorique</div>
-                </div>
+                <article class="story-card" data-genre="horror" id="summer_camp">
+                    <img src="img/cards/stories/summer_camp.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-1000">
+                    <div class="story-overlay"></div>
+                    <div class="completed-badge">✓ COMPLÉTÉ</div>
+                    <div class="absolute bottom-8 left-8 right-8 z-30">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span
+                                class="px-2 py-0.5 bg-red-600/20 border border-red-600/40 text-[8px] text-red-500 font-bold tracking-widest uppercase rounded">Horreur</span>
+                            <span
+                                class="text-[8px] text-slate-500 font-bold tracking-widest uppercase italic">Slasher</span>
+                        </div>
+                        <a href="horror/slasher/summer_camp.html"
+                            class="stretched-link text-3xl font-bold tracking-tight text-white no-underline hover:text-purple-400 transition-colors">Lac
+                            Sanglant</a>
+                    </div>
+                </article>
+
+                <!-- Sci-Fi -->
+                <article class="story-card" data-genre="scifi" id="signal_zero">
+                    <img src="img/cards/stories/signal_zero.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-1000">
+                    <div class="story-overlay"></div>
+                    <div class="completed-badge">✓ COMPLÉTÉ</div>
+                    <div class="absolute bottom-8 left-8 right-8 z-30">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span
+                                class="px-2 py-0.5 bg-cyan-600/20 border border-cyan-600/40 text-[8px] text-cyan-500 font-bold tracking-widest uppercase rounded">Sci-Fi</span>
+                            <span
+                                class="text-[8px] text-slate-500 font-bold tracking-widest uppercase italic">Post-apo</span>
+                        </div>
+                        <a href="science-fiction/post-apocalyptic/signal_zero.html"
+                            class="stretched-link text-3xl font-bold tracking-tight text-white no-underline hover:text-purple-400 transition-colors">Signal
+                            Zéro</a>
+                    </div>
+                </article>
+
+                <article class="story-card" data-genre="scifi" id="kubrick9">
+                    <img src="img/cards/stories/kubrick9.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-1000">
+                    <div class="story-overlay"></div>
+                    <div class="completed-badge">✓ COMPLÉTÉ</div>
+                    <div class="absolute bottom-8 left-8 right-8 z-30">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span
+                                class="px-2 py-0.5 bg-cyan-600/20 border border-cyan-600/40 text-[8px] text-cyan-500 font-bold tracking-widest uppercase rounded">Sci-Fi</span>
+                            <span
+                                class="text-[8px] text-slate-500 font-bold tracking-widest uppercase italic">Espace</span>
+                        </div>
+                        <a href="science-fiction/space/kubrick9.html"
+                            class="stretched-link text-3xl font-bold tracking-tight text-white no-underline hover:text-purple-400 transition-colors">Kubrick
+                            9</a>
+                    </div>
+                </article>
+
+                <!-- Western -->
+                <article class="story-card" data-genre="western" id="duel">
+                    <img src="img/cards/stories/duel.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-1000">
+                    <div class="story-overlay"></div>
+                    <div class="completed-badge">✓ COMPLÉTÉ</div>
+                    <div class="absolute bottom-8 left-8 right-8 z-30">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span
+                                class="px-2 py-0.5 bg-amber-600/20 border border-amber-600/40 text-[8px] text-amber-500 font-bold tracking-widest uppercase rounded">Western</span>
+                            <span
+                                class="text-[8px] text-slate-500 font-bold tracking-widest uppercase italic">Classique</span>
+                        </div>
+                        <a href="western/classic/duel.html"
+                            class="stretched-link text-3xl font-bold tracking-tight text-white no-underline hover:text-purple-400 transition-colors">Dernier
+                            Duel</a>
+                    </div>
+                </article>
+
+                <!-- Adventure -->
+                <article class="story-card" data-genre="adventure" id="treasure">
+                    <img src="img/cards/stories/treasure.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-1000">
+                    <div class="story-overlay"></div>
+                    <div class="completed-badge">✓ COMPLÉTÉ</div>
+                    <div class="absolute bottom-8 left-8 right-8 z-30">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span
+                                class="px-2 py-0.5 bg-sky-600/20 border border-sky-600/40 text-[8px] text-sky-500 font-bold tracking-widest uppercase rounded">Aventure</span>
+                            <span
+                                class="text-[8px] text-slate-500 font-bold tracking-widest uppercase italic">Piraterie</span>
+                        </div>
+                        <a href="adventure/piracy/treasure.html"
+                            class="stretched-link text-3xl font-bold tracking-tight text-white no-underline hover:text-purple-400 transition-colors">L'Île
+                            Maudite</a>
+                    </div>
+                </article>
+
+                <article class="story-card" data-genre="adventure" id="jurassic">
+                    <img src="img/cards/stories/jurassic.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-1000">
+                    <div class="story-overlay"></div>
+                    <div class="completed-badge">✓ COMPLÉTÉ</div>
+                    <div class="absolute bottom-8 left-8 right-8 z-30">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span
+                                class="px-2 py-0.5 bg-sky-600/20 border border-sky-600/40 text-[8px] text-sky-500 font-bold tracking-widest uppercase rounded">Aventure</span>
+                            <span
+                                class="text-[8px] text-slate-500 font-bold tracking-widest uppercase italic">Préhistorique</span>
+                        </div>
+                        <a href="adventure/prehistoric/jurassic.html"
+                            class="stretched-link text-3xl font-bold tracking-tight text-white no-underline hover:text-purple-400 transition-colors">Isla
+                            Nublar</a>
+                    </div>
+                </article>
+
+                <!-- Fantasy -->
+                <article class="story-card" data-genre="fantasy" id="quest">
+                    <img src="img/cards/stories/quest.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-1000">
+                    <div class="story-overlay"></div>
+                    <div class="completed-badge">✓ COMPLÉTÉ</div>
+                    <div class="absolute bottom-8 left-8 right-8 z-30">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span
+                                class="px-2 py-0.5 bg-purple-600/20 border border-purple-600/40 text-[8px] text-purple-500 font-bold tracking-widest uppercase rounded">Fantasy</span>
+                            <span
+                                class="text-[8px] text-slate-500 font-bold tracking-widest uppercase italic">Médiéval</span>
+                        </div>
+                        <a href="fantasy/medieval/quest.html"
+                            class="stretched-link text-3xl font-bold tracking-tight text-white no-underline hover:text-purple-400 transition-colors">Code
+                            Ancestral</a>
+                    </div>
+                </article>
+
+                <!-- Polar -->
+                <article class="story-card" data-genre="polar" id="prohibition">
+                    <img src="img/cards/stories/prohibition.png" alt=""
+                        class="absolute inset-0 w-full h-full object-cover transition-all duration-1000">
+                    <div class="story-overlay"></div>
+                    <div class="completed-badge">✓ COMPLÉTÉ</div>
+                    <div class="absolute bottom-8 left-8 right-8 z-30">
+                        <div class="flex items-center gap-2 mb-3">
+                            <span
+                                class="px-2 py-0.5 bg-slate-600/20 border border-slate-600/40 text-[8px] text-slate-500 font-bold tracking-widest uppercase rounded">Polar</span>
+                            <span
+                                class="text-[8px] text-slate-500 font-bold tracking-widest uppercase italic">Noir</span>
+                        </div>
+                        <a href="polar/noir/prohibition.html"
+                            class="stretched-link text-3xl font-bold tracking-tight text-white no-underline hover:text-purple-400 transition-colors">Chicago
+                            1932</a>
+                    </div>
+                </article>
+
             </div>
-            <a href="thriller/prehistoric/jurassic.html" class="story-title">JURASSIC PARK - ISLA NUBLAR</a>
-        </article>
+        </section>
     </main>
 
-    <footer>
-        <p>&copy; 2025 <a href="index.html"
-                style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;">Histoires Bragi</a>.
-            <a href="stories.html"
-                style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;">Histoires</a>
-            <a href="about.html" style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;">À
-                propos</a>
-            <a href="https://github.com/ErwanLT/bragi"
-                style="color: var(--text-secondary); text-decoration: none; margin-left: 10px;" target="_blank">Voir sur
-                GitHub</a>
-        </p>
+    <!-- Footer -->
+    <footer class="border-t border-white/5 bg-black py-20 relative z-10 text-slate-500">
+        <div
+            class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-16 items-start uppercase tracking-[0.2em] text-[10px]">
+            <div class="space-y-4">
+                <div class="flex items-center gap-4 text-white">
+                    <img src="favicon.png" alt="" class="w-6 h-6 opacity-40">
+                    <span class="font-heading tracking-widest">BRAGI</span>
+                </div>
+                <p>Le tisseur d'histoires interactives.</p>
+                <p class="text-slate-800">© 2025 Forge Digitale</p>
+            </div>
+
+            <div class="flex flex-col gap-4 md:items-center">
+                <span class="text-slate-400 font-heading tracking-[0.4em]">Archives</span>
+                <a href="index.html"
+                    class="hover:text-purple-400 transition-colors no-underline text-inherit">Accueil</a>
+                <a href="about.html"
+                    class="hover:text-purple-400 transition-colors no-underline text-inherit">Essence</a>
+            </div>
+
+            <div class="flex flex-col gap-4 md:items-end">
+                <span class="text-slate-400 font-heading tracking-[0.4em]">Communauté</span>
+                <a href="https://github.com/ErwanLT/bragi" target="_blank"
+                    class="hover:text-purple-400 transition-colors no-underline text-inherit border border-white/10 px-6 py-2 rounded-full">GitHub</a>
+            </div>
+        </div>
     </footer>
 
     <script>
@@ -203,42 +487,30 @@
 
             if (importBtn && fileInput) {
                 importBtn.addEventListener('click', () => fileInput.click());
-
                 fileInput.addEventListener('change', (e) => {
                     const file = e.target.files[0];
                     if (!file) return;
-
                     const reader = new FileReader();
                     reader.onload = (event) => {
-                        const content = event.target.result;
-                        if (BragiStorage.importProgress(content)) {
-                            alert("Progression importée avec succès !");
-                            window.location.reload();
-                        } else {
-                            alert("Erreur lors de l'importation. Le fichier est peut-être corrompu.");
-                        }
+                        if (BragiStorage.importProgress(event.target.result)) {
+                            alert("Succès !"); window.location.reload();
+                        } else { alert("Erreur !"); }
                     };
                     reader.readAsText(file);
                 });
             }
 
+            // Filtering
             filters.forEach(filter => {
                 filter.addEventListener('click', () => {
-                    // Update active button
                     filters.forEach(btn => btn.classList.remove('active'));
                     filter.classList.add('active');
 
                     const category = filter.getAttribute('data-filter');
-
                     cards.forEach(card => {
                         const cardGenre = card.getAttribute('data-genre');
-
                         if (category === 'all' || category === cardGenre) {
                             card.classList.remove('hidden');
-                            // Small delay for staggered animation feel
-                            card.style.animation = 'none';
-                            card.offsetHeight; // trigger reflow
-                            card.style.animation = null;
                         } else {
                             card.classList.add('hidden');
                         }
