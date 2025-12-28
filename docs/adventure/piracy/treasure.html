@@ -674,7 +674,7 @@
                                 </button>
                                 <button
                                     class="choice-btn choice group relative flex flex-col gap-2 p-5 rounded-xl bg-surface-highlight/50 hover:bg-surface-highlight border-2 border-transparent hover:border-primary text-left"
-                                    data-loyalte="-50" onclick="applyChoice(this); computeEnding()">
+                                    data-loyalte="-50" onclick="applyChoice(this); computeEnding(true)">
                                     <div
                                         class="flex items-center gap-2 text-primary font-bold text-sm uppercase tracking-wider">
                                         <span class="material-symbols-outlined text-[18px]">person_off</span> TRAHISON
@@ -694,7 +694,7 @@
                     <div class="actions mt-8">
                         <button
                             class="choice-btn choice w-full p-4 rounded-xl bg-secondary hover:bg-secondary/80 text-white font-bold border border-secondary"
-                            id="report-btn" onclick="computeEnding()">
+                            id="report-btn" onclick="computeEnding(true)">
                             <span class="choice-text flex items-center justify-center gap-2"><span
                                     class="material-symbols-outlined">history_edu</span> ÉCRIRE LA LÉGENDE</span>
                         </button>
