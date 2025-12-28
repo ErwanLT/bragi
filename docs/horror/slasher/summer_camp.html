@@ -1,223 +1,630 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Camp du Lac Sanglant</title>
+    <title>Le Camp du Lac Sanglant | Bragi</title>
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link rel="stylesheet" href="../../style/base.css">
-    <link rel="stylesheet" href="../../style/horror-slasher.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=Special+Elite&display=swap" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ef4444', // Blood Red
+                        secondary: '#10b981', // Forest Green
+                        accent: '#f59e0b', // Amber/Yellow
+                        background: '#0d0d0d',
+                        surface: '#1a1a1a'
+                    },
+                    fontFamily: {
+                        heading: ['Creepster', 'cursive'],
+                        body: ['Special Elite', 'cursive'],
+                    },
+                    animation: {
+                        'scanline': 'scanline 10s linear infinite',
+                        'vhs-glitch': 'vhs 0.2s infinite',
+                    },
+                    keyframes: {
+                        vhs: {
+                            '0%': { transform: 'translateX(0)' },
+                            '25%': { transform: 'translateX(-1px) skewX(1deg)' },
+                            '50%': { transform: 'translateX(1px)' },
+                            '75%': { transform: 'translateX(-1px)' },
+                            '100%': { transform: 'translateX(0)' },
+                        },
+                        scanline: {
+                            '0%': { top: '0%' },
+                            '100%': { top: '100%' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                background-color: #0d0d0d;
+                color: #a1a1aa;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                font-family: 'Special Elite', cursive;
+                overflow-x: hidden;
+            }
+            body::selection {
+                background-color: #ef4444;
+                color: white;
+            }
+            h1, h2, h3, h4 {
+                font-family: 'Creepster', cursive;
+                letter-spacing: 0.1em;
+                line-height: 1;
+            }
+        }
+
+        @layer components {
+            .vhs-line {
+                position: absolute;
+                width: 100%;
+                height: 2px;
+                background-color: rgba(255, 255, 255, 0.1);
+                pointer-events: none;
+                z-index: 100;
+                animation: scanline 10s linear infinite;
+            }
+
+            .slasher-card {
+                background-color: rgba(26, 26, 26, 0.6);
+                backdrop-filter: blur(12px);
+                border-left-width: 4px;
+                border-right-width: 4px;
+                border-color: rgba(239, 68, 68, 0.3);
+                box-shadow: 0 0 40px rgba(239, 68, 68, 0.1);
+                position: relative;
+                transition-property: all;
+                transition-duration: 300ms;
+            }
+
+            .choice-btn {
+                transition-property: all;
+                transition-duration: 300ms;
+                position: relative;
+                overflow: hidden;
+                background-color: rgba(0, 0, 0, 0.4);
+                border-width: 2px;
+                border-color: rgba(239, 68, 68, 0.2);
+                padding: 1.5rem;
+                text-align: left;
+                transform: skewX(-2deg);
+            }
+
+            .choice-btn:hover {
+                border-color: #ef4444;
+                background-color: rgba(239, 68, 68, 0.05);
+            }
+
+            .choice-btn.selected {
+                background-color: rgba(239, 68, 68, 0.2);
+                border-color: #ef4444;
+                box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+                transform: scale(1.02) skewX(0deg);
+            }
+        }
+    </style>
+
     <script src="../../js/security.js"></script>
     <script src="../../js/storyEngine.js"></script>
-    <script src="../../js/horror/slasher/summer_camp.js"></script>
+    <script src="../../js/horror/slasher/summer_camp.js" defer></script>
 </head>
 
 <body>
-    <div id="hud"></div>
-    <div class="quest-card">
-        <div class="story-header-image" style="background-image: url('../../img/cards/stories/summer_camp.png');"></div>
-        <h3>🔪 Le Camp du Lac Sanglant 🔪</h3>
-        <p style="text-align: center; color: #888; font-style: italic; margin-bottom: 2rem;">"Ils pensaient passer un
-            été inoubliable... Ils avaient raison."</p>
-
-        <div id="story">
-
-            <!-- 1. ARRIVEE -->
-            <div class="section">
-                <p><strong>1. L'Arrivée</strong></p>
-                <p>Le van s'arrête devant le panneau "Camp Crystal Lake" (rayé avec de la peinture rouge). Vous êtes 5
-                    moniteurs : Vous, Jake (le sportif), Sally (la pom-pom girl), Nerd (le geek), et Stoner (le fumeur).
-                </p>
-                <button class="choice" onclick="applyChoice(this)">Faire une blague sur les films d'horreur.</button>
-                <button class="choice" data-panique="+5" onclick="applyChoice(this)">Noter que le panneau est
-                    flippant.</button>
-            </div>
-
-            <!-- 2. FEU DE CAMP -->
-            <div class="section">
-                <p><strong>2. Le Feu de Camp</strong></p>
-                <p>La nuit tombe. Stoner propose de raconter une histoire de fantôme sur le "Tueur au Masque de Hockey".
-                </p>
-                <button class="choice" data-panique="+10" onclick="applyChoice(this)">Écouter attentivement (Grosse
-                    erreur).</button>
-                <button class="choice" data-vie="+5" onclick="applyChoice(this)">Aller chercher des bières dans la
-                    cabane (Seul).</button>
-            </div>
-
-            <!-- 3. LE BRUIT -->
-            <div class="section">
-                <p><strong>3. Un Bruit dans les Buissons</strong></p>
-                <p>CRAC. Une branche casse. Stoner dit : "C'est sûrement un écureuil". Il se lève pour aller voir.</p>
-                <button class="choice" data-panique="+5" onclick="applyChoice(this)">Lui dire de se rasseoir.</button>
-                <button class="choice" data-survivants="-1" data-panique="+20" onclick="applyChoice(this)">Le laisser y
-                    aller (Adieu Stoner).</button>
-            </div>
-
-            <!-- 4. LA DECOUVERTE -->
-            <div class="section">
-                <p><strong>4. La Découverte</strong></p>
-                <p>Stoner ne revient pas. Vous allez voir. Vous trouvez son bonnet... couvert de sang.</p>
-                <button class="choice" data-panique="+30" onclick="applyChoice(this)">HURLER.</button>
-                <button class="choice" data-panique="+10" onclick="applyChoice(this)">Courir prévenir les autres en
-                    silence.</button>
-            </div>
-
-            <!-- 5. LE TUEUR APPARAIT -->
-            <div class="section">
-                <p><strong>5. Il est là</strong></p>
-                <p>Une silhouette massive surgit, armée d'une machette rouillée. Il porte un masque.</p>
-                <button class="choice" data-vie="-10" data-panique="+10" onclick="applyChoice(this)">Rester figé de
-                    peur.</button>
-                <button class="choice" data-vie="-5" onclick="applyChoice(this)">S'enfuir vers les cabanes.</button>
-            </div>
-
-            <!-- 6. SEPARATION -->
-            <div class="section">
-                <p><strong>6. "On se sépare !"</strong></p>
-                <p>Jake crie : "On couvre plus de terrain si on se sépare !". Classique.</p>
-                <button class="choice" data-survivants="-1" onclick="applyChoice(this)">Accepter (Mauvaise
-                    idée).</button>
-                <button class="choice" data-vie="+5" onclick="applyChoice(this)">Rester groupés (La sécurité par le
-                    nombre).</button>
-            </div>
-
-            <!-- 7. LA CABANE A OUTILS -->
-            <div class="section">
-                <p><strong>7. La Cabane à Outils</strong></p>
-                <p>Vous vous cachez dans la remise. Il y a des armes potentielles.</p>
-                <button class="choice" data-vie="+10" onclick="applyChoice(this)">Prendre une tronçonneuse (Pas
-                    d'essence).</button>
-                <button class="choice" data-vie="+5" onclick="applyChoice(this)">Prendre un tournevis.</button>
-            </div>
-
-            <!-- 8. NERD EN DANGER -->
-            <div class="section">
-                <p><strong>8. Nerd coincé</strong></p>
-                <p>Nerd a perdu ses lunettes en courant. Le tueur approche.</p>
-                <button class="choice" data-vie="-10" data-survivants="0" onclick="applyChoice(this)">L'aider
-                    (Risqué).</button>
-                <button class="choice" data-survivants="-1" data-panique="+10" onclick="applyChoice(this)">Le laisser
-                    (Sacrifice).</button>
-            </div>
-
-            <!-- 9. LE GENERATEUR -->
-            <div class="section">
-                <p><strong>9. Plus de lumière</strong></p>
-                <p>Le courant saute. Il faut rallumer le générateur au sous-sol de la maison principale.</p>
-                <button class="choice" data-panique="+20" onclick="applyChoice(this)">Descendre dans le noir.</button>
-                <button class="choice" data-vie="-5" onclick="applyChoice(this)">Utiliser la lampe torche de votre
-                    téléphone (Batterie faible).</button>
-            </div>
-
-            <!-- 10. LE CHAT -->
-            <div class="section">
-                <p><strong>10. Fausse Alerte</strong></p>
-                <p>Quelque chose vous saute dessus ! C'est juste un chat.</p>
-                <button class="choice" data-vie="+5" data-panique="-10" onclick="applyChoice(this)">Ouf...
-                    (Soulagement).</button>
-                <button class="choice" data-panique="+5" onclick="applyChoice(this)">Tuer le chat par réflexe
-                    (Cruel).</button>
-            </div>
-
-            <!-- 11. LA BLESSURE -->
-            <div class="section">
-                <p><strong>11. La Chute</strong></p>
-                <p>Vous trébuchez sur une racine (ou un cadavre, dur à dire).</p>
-                <button class="choice" data-vie="-10" onclick="applyChoice(this)">Se tordre la cheville.</button>
-                <button class="choice" data-vie="-5" onclick="applyChoice(this)">Se relever en boitant.</button>
-            </div>
-
-            <!-- 12. SALLY CRIE -->
-            <div class="section">
-                <p><strong>12. Le Cri de Sally</strong></p>
-                <p>Sally hurle près du lac. Elle est en maillot de bain (évidemment).</p>
-                <button class="choice" data-survivants="-1" data-panique="+10" onclick="applyChoice(this)">Arriver trop
-                    tard (Décapitée).</button>
-                <button class="choice" data-vie="-20" data-survivants="0" onclick="applyChoice(this)">Intervenir et
-                    prendre un coup.</button>
-            </div>
-
-            <!-- 13. LA VOITURE -->
-            <div class="section">
-                <p><strong>13. La Voiture</strong></p>
-                <p>Vous atteignez la voiture. Les clés sont introuvables.</p>
-                <button class="choice" data-panique="+10" onclick="applyChoice(this)">Chercher sous le siège.</button>
-                <button class="choice" data-vie="-5" onclick="applyChoice(this)">Essayer de démarrer aux fils.</button>
-            </div>
-
-            <!-- 14. LE MOTEUR -->
-            <div class="section">
-                <p><strong>14. Le Moteur Cale</strong></p>
-                <p>Le tueur est sur le capot ! Il tape sur le pare-brise.</p>
-                <button class="choice" data-vie="-10" data-panique="+10" onclick="applyChoice(this)">Accélérer en marche
-                    arrière.</button>
-                <button class="choice" data-vie="-15" onclick="applyChoice(this)">Freiner sec pour l'éjecter.</button>
-            </div>
-
-            <!-- 15. L'ACCIDENT -->
-            <div class="section">
-                <p><strong>15. L'Accident</strong></p>
-                <p>Vous rentrez dans un arbre. La voiture est HS.</p>
-                <button class="choice" data-vie="-10" onclick="applyChoice(this)">Sortir en rampant.</button>
-                <button class="choice" data-vie="-5" onclick="applyChoice(this)">Faire le mort (Mais il
-                    vérifie).</button>
-            </div>
-
-            <!-- 16. LA TROUSSE DE SOINS -->
-            <div class="section">
-                <p><strong>16. Une Pause</strong></p>
-                <p>Vous trouvez une trousse de secours dans les toilettes du camping.</p>
-                <button class="choice" data-vie="+30" data-panique="-10" onclick="applyChoice(this)">Se soigner
-                    (Bandages et antiseptique).</button>
-                <button class="choice" data-vie="+10" onclick="applyChoice(this)">Prendre juste des
-                    antidouleurs.</button>
-            </div>
-
-            <!-- 17. LE PIEGE -->
-            <div class="section">
-                <p><strong>17. Le Piège</strong></p>
-                <p>Vous décidez d'arrêter de fuir. Il faut le piéger.</p>
-                <button class="choice" data-panique="-5" onclick="applyChoice(this)">Préparer un piège à ours.</button>
-                <button class="choice" data-vie="-10" onclick="applyChoice(this)">S'utiliser comme appât.</button>
-            </div>
-
-            <!-- 18. LA CONFRONTATION -->
-            <div class="section">
-                <p><strong>18. Face à Face</strong></p>
-                <p>Il est là. Il ne court jamais, mais il vous rattrape toujours.</p>
-                <button class="choice" data-vie="-20" onclick="applyChoice(this)">Lui planter le tournevis dans
-                    l'épaule.</button>
-                <button class="choice" data-vie="-30" onclick="applyChoice(this)">Essayer de lui retirer son
-                    masque.</button>
-            </div>
-
-            <!-- 19. LE COUP DE GRACE ? -->
-            <div class="section">
-                <p><strong>19. Il est à terre</strong></p>
-                <p>Il tombe. Il semble mort.</p>
-                <button class="choice" data-panique="+10" onclick="applyChoice(this)">Lâcher l'arme et soupirer (Erreur
-                    classique).</button>
-                <button class="choice" data-vie="-5" onclick="applyChoice(this)">Lui mettre une deuxième balle (ou coup)
-                    pour être sûr.</button>
-            </div>
-
-            <!-- 20. LA POLICE -->
-            <div class="section">
-                <p><strong>20. La Sirène</strong></p>
-                <p>On entend les sirènes au loin. Il bouge encore un doigt.</p>
-                <button class="choice" onclick="applyChoice(this); computeEnding('police')">Courir vers la
-                    police.</button>
-                <button class="choice" onclick="applyChoice(this); computeEnding('kill')">L'achever une bonne fois pour
-                    toutes.</button>
-            </div>
-
-        </div>
-
-        <footer class="project-footer">
-            <p><a href="../slasher.html">&larr; Retour au menu</a> | <a href="https://github.com/ErwanLT/bragi"
-                    target="_blank">Voir sur GitHub</a></p>
-            <p>&copy; 2025 Histoires Bragi.</p>
-        </footer>
+    <div class="vhs-line"></div>
+    <div
+        class="fixed inset-0 pointer-events-none z-[110] bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.6)_100%)]">
     </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 border-b-4 border-primary/40 bg-black/80 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-8 h-24 flex items-center justify-between">
+            <div class="flex items-center gap-6">
+                <div class="text-primary text-5xl select-none">🔪</div>
+                <div>
+                    <h1 class="text-4xl font-bold text-primary tracking-tighter">CAMP LAC SANGLANT</h1>
+                    <p
+                        class="text-[12px] text-zinc-500 font-body uppercase tracking-[0.4em] -mt-1 ml-1 italic font-bold">
+                        Volume III : Le Massacre</p>
+                </div>
+            </div>
+            <nav
+                class="hidden md:flex items-center gap-10 text-[10px] font-body tracking-tighter uppercase font-bold text-zinc-500">
+                <a href="../slasher.html" class="flex items-center gap-2 hover:text-primary transition-colors">
+                    <span class="material-symbols-outlined text-lg">skip_previous</span>
+                    RALLYE POINT
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl mx-auto w-full px-8 py-16 relative z-10">
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+
+            <!-- Left Column: Story Content (8/12) -->
+            <div class="lg:col-span-8 space-y-20 pb-48" id="story">
+
+                <!-- Hero Section -->
+                <div class="relative group aspect-video overflow-hidden border-b-8 border-primary/20">
+                    <img id="hero-image" src="../../img/cards/stories/summer_camp.png" alt="Crystal Lake"
+                        class="w-full h-full object-cover grayscale brightness-50 contrast-125 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-[2000ms]">
+                    <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+
+                    <div class="absolute top-10 right-10 flex flex-col gap-2 items-end">
+                        <div class="bg-primary px-3 py-1 text-black font-heading text-xs tracking-widest uppercase">
+                            Recording</div>
+                        <div class="text-primary font-bold text-[10px] animate-pulse">00:42:15</div>
+                    </div>
+
+                    <div class="absolute bottom-12 left-12 right-12">
+                        <h2 class="text-5xl text-white mb-4 tracking-tighter italic">ILS AVAIENT RAISON...</h2>
+                        <p
+                            class="text-primary/60 italic text-xl border-l-4 border-primary/40 pl-8 leading-tight max-w-2xl">
+                            &ldquo;Ils pensaient passer un été inoubliable... Ils avaient raison.&rdquo;
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Story Sections -->
+
+                <!-- 1. ARRIVEE -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">01</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-primary font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Le van s'arrête devant le panneau "Camp Crystal Lake" (rayé avec de la peinture rouge). Vous
+                            êtes 5 moniteurs : Vous, Jake (le sportif), Sally (la pom-pom girl), Nerd (le geek), et
+                            Stoner (le fumeur).</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" onclick="applyChoice(this)">Faire une blague sur les films
+                            d'horreur.</button>
+                        <button class="choice-btn choice" data-panique="+5" onclick="applyChoice(this)">Noter que le
+                            panneau est flippant.</button>
+                    </div>
+                </div>
+
+                <!-- 2. FEU DE CAMP -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">02</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-zinc-700 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>La nuit tombe. Stoner propose de raconter une histoire de fantôme sur le "Tueur au Masque de
+                            Hockey".</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-panique="+10" onclick="applyChoice(this)">Écouter
+                            attentivement (Grosse erreur).</button>
+                        <button class="choice-btn choice" data-vie="+5" onclick="applyChoice(this)">Aller chercher des
+                            bières dans la cabane (Seul).</button>
+                    </div>
+                </div>
+
+                <!-- 3. LE BRUIT -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">03</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-zinc-700 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>CRAC. Une branche casse. Stoner dit : "C'est sûrement un écureuil". Il se lève pour aller
+                            voir.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-panique="+5" onclick="applyChoice(this)">Lui dire de se
+                            rasseoir.</button>
+                        <button class="choice-btn choice" data-survivants="-1" data-panique="+20"
+                            onclick="applyChoice(this)">Le laisser y aller (Adieu Stoner).</button>
+                    </div>
+                </div>
+
+                <!-- 4. LA DECOUVERTE -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">04</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-primary/40 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Stoner ne revient pas. Vous allez voir. Vous trouvez son bonnet... couvert de sang.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice text-primary" data-panique="+30"
+                            onclick="applyChoice(this)">HURLER.</button>
+                        <button class="choice-btn choice" data-panique="+10" onclick="applyChoice(this)">Courir prévenir
+                            les autres en silence.</button>
+                    </div>
+                </div>
+
+                <!-- 5. LE TUEUR APPARAIT -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">05</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-primary font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Une silhouette massive surgit, armée d'une machette rouillée. Il porte un masque.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-vie="-10" data-panique="+10"
+                            onclick="applyChoice(this)">Rester figé de peur.</button>
+                        <button class="choice-btn choice" data-vie="-5" onclick="applyChoice(this)">S'enfuir vers les
+                            cabanes.</button>
+                    </div>
+                </div>
+
+                <!-- 6. SEPARATION -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">06</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-zinc-700 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Jake crie : "On couvre plus de terrain si on se sépare !". Classique.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-survivants="-1" onclick="applyChoice(this)">Accepter
+                            (Mauvaise idée).</button>
+                        <button class="choice-btn choice" data-vie="+5" onclick="applyChoice(this)">Rester groupés (La
+                            sécurité par le nombre).</button>
+                    </div>
+                </div>
+
+                <!-- 7. LA CABANE A OUTILS -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">07</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-zinc-700 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Vous vous cachez dans la remise. Il y a des armes potentielles.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-vie="+10" onclick="applyChoice(this)">Prendre une
+                            tronçonneuse (Pas d'essence).</button>
+                        <button class="choice-btn choice" data-vie="+5" onclick="applyChoice(this)">Prendre un
+                            tournevis.</button>
+                    </div>
+                </div>
+
+                <!-- 8. NERD EN DANGER -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">08</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-primary/60 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Nerd a perdu ses lunettes en courant. Le tueur approche.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-vie="-10" data-survivants="0"
+                            onclick="applyChoice(this)">L'aider (Risqué).</button>
+                        <button class="choice-btn choice text-primary" data-survivants="-1" data-panique="+10"
+                            onclick="applyChoice(this)">Le laisser (Sacrifice).</button>
+                    </div>
+                </div>
+
+                <!-- 9. LE GENERATEUR -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">09</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-zinc-700 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Le courant saute. Il faut rallumer le générateur au sous-sol de la maison principale.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-panique="+20" onclick="applyChoice(this)">Descendre dans
+                            le noir.</button>
+                        <button class="choice-btn choice" data-vie="-5" onclick="applyChoice(this)">Utiliser la lampe
+                            torche de votre téléphone.</button>
+                    </div>
+                </div>
+
+                <!-- 10. LE CHAT -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">10</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-green-900/40 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Quelque chose vous saute dessus ! C'est juste un chat.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-vie="+5" data-panique="-10"
+                            onclick="applyChoice(this)">Ouf... (Soulagement).</button>
+                        <button class="choice-btn choice text-primary" data-panique="+5"
+                            onclick="applyChoice(this)">Tuer le chat par réflexe.</button>
+                    </div>
+                </div>
+
+                <!-- 11. LA BLESSURE -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">11</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-primary/20 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Vous trébuchez sur une racine (ou un cadavre, dur à dire).</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-vie="-10" onclick="applyChoice(this)">Se tordre la
+                            cheville.</button>
+                        <button class="choice-btn choice" data-vie="-5" onclick="applyChoice(this)">Se relever en
+                            boitant.</button>
+                    </div>
+                </div>
+
+                <!-- 12. SALLY CRIE -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">12</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-primary/60 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Sally hurle près du lac. Elle est en maillot de bain (évidemment).</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice text-primary" data-survivants="-1" data-panique="+10"
+                            onclick="applyChoice(this)">Arriver trop tard (Décapitée).</button>
+                        <button class="choice-btn choice" data-vie="-20" data-survivants="0"
+                            onclick="applyChoice(this)">Intervenir et prendre un coup.</button>
+                    </div>
+                </div>
+
+                <!-- 13. LA VOITURE -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">13</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-zinc-700 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Vous atteignez la voiture. Les clés sont introuvables.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-panique="+10" onclick="applyChoice(this)">Chercher sous
+                            le siège.</button>
+                        <button class="choice-btn choice" data-vie="-5" onclick="applyChoice(this)">Essayer de démarrer
+                            aux fils.</button>
+                    </div>
+                </div>
+
+                <!-- 14. LE MOTEUR -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">14</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-primary/40 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Le tueur est sur le capot ! Il tape sur le pare-brise.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-vie="-10" data-panique="+10"
+                            onclick="applyChoice(this)">Accélérer en marche arrière.</button>
+                        <button class="choice-btn choice" data-vie="-15" onclick="applyChoice(this)">Freiner sec pour
+                            l'éjecter.</button>
+                    </div>
+                </div>
+
+                <!-- 15. L'ACCIDENT -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">15</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-primary/60 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Vous rentrez dans un arbre. La voiture est HS.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-vie="-10" onclick="applyChoice(this)">Sortir en
+                            rampant.</button>
+                        <button class="choice-btn choice" data-vie="-5" onclick="applyChoice(this)">Faire le
+                            mort.</button>
+                    </div>
+                </div>
+
+                <!-- 16. LA TROUSSE DE SOINS -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">16</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-secondary font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Vous trouvez une trousse de secours dans les toilettes du camping.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice text-secondary font-bold" data-vie="+30" data-panique="-10"
+                            onclick="applyChoice(this)">Se soigner (Bandages).</button>
+                        <button class="choice-btn choice" data-vie="+10" onclick="applyChoice(this)">Prendre juste des
+                            antidouleurs.</button>
+                    </div>
+                </div>
+
+                <!-- 17. LE PIEGE -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">17</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-accent font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Vous décidez d'arrêter de fuir. Il faut le piéger.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice text-accent" data-panique="-5"
+                            onclick="applyChoice(this)">Préparer un piège à ours.</button>
+                        <button class="choice-btn choice" data-vie="-10" onclick="applyChoice(this)">S'utiliser comme
+                            appât.</button>
+                    </div>
+                </div>
+
+                <!-- 18. LA CONFRONTATION -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">18</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-primary font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Il est là. Il ne court jamais, mais il vous rattrape toujours.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice text-primary" data-vie="-20" onclick="applyChoice(this)">Lui
+                            planter le tournevis.</button>
+                        <button class="choice-btn choice" data-vie="-30" onclick="applyChoice(this)">Essayer de lui
+                            retirer son masque.</button>
+                    </div>
+                </div>
+
+                <!-- 19. LE COUP DE GRACE ? -->
+                <div class="section space-y-8 group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-primary/40 font-heading text-4xl">19</span>
+                    </div>
+                    <div
+                        class="bg-zinc-900/40 p-8 border-l-8 border-zinc-500 font-body text-xl leading-relaxed text-zinc-400 italic">
+                        <p>Il tombe. Il semble mort.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <button class="choice-btn choice" data-panique="+10" onclick="applyChoice(this)">Lâcher l'arme
+                            et soupirer (Erreur).</button>
+                        <button class="choice-btn choice text-primary" data-vie="-5" onclick="applyChoice(this)">Lui
+                            mettre un coup de grâce.</button>
+                    </div>
+                </div>
+
+                <!-- 20. LA POLICE -->
+                <div class="section space-y-16 py-20 bg-primary/5 border-y-4 border-primary/20">
+                    <div class="text-center space-y-8">
+                        <h3 class="text-6xl text-primary tracking-tighter">LA FIN DU CAUCHEMAR ?</h3>
+                        <p class="text-2xl italic font-body opacity-60 px-12">On entend les sirènes au loin. Il bouge
+                            encore un doigt dans la boue ensanglantée.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 px-10 max-w-4xl mx-auto">
+                        <button
+                            class="choice-btn choice !bg-blue-900/20 !border-blue-500/40 text-center flex-col gap-4 py-12"
+                            onclick="applyChoice(this); computeEnding('police')">
+                            <span class="material-symbols-outlined text-5xl text-blue-500">local_police</span>
+                            <p class="text-2xl font-bold uppercase tracking-widest text-blue-200">Courir vers la police
+                            </p>
+                        </button>
+                        <button
+                            class="choice-btn choice !bg-red-900/20 !border-red-500/40 text-center flex-col gap-4 py-12"
+                            onclick="applyChoice(this); computeEnding('kill')">
+                            <span class="material-symbols-outlined text-5xl text-red-500">skull</span>
+                            <p class="text-2xl font-bold uppercase tracking-widest text-red-200">L'ACHEVER POUR DE BON
+                            </p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Final Action -->
+                <div class="mt-20 text-center">
+                    <button
+                        class="choice-btn choice !bg-transparent !border-zinc-800 text-zinc-700 hover:text-primary mx-auto"
+                        onclick="computeEnding(true)">
+                        Consulter les archives du massacre
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Right Column: HUD (4/12) -->
+            <aside class="lg:col-span-4 lg:sticky lg:top-24 space-y-12">
+
+                <!-- Survivor HUD -->
+                <div class="slasher-card">
+                    <div class="bg-primary/20 px-8 py-6 border-b-4 border-primary/40 flex items-center justify-between">
+                        <h4 class="text-xl tracking-widest text-white uppercase italic">SURVIE STATS</h4>
+                        <div class="flex gap-2">
+                            <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                            <div class="w-2 h-2 rounded-full bg-red-500 opacity-20"></div>
+                        </div>
+                    </div>
+
+                    <div id="hud" class="p-10 space-y-12">
+                        <!-- Loading State -->
+                        <div class="space-y-6 animate-pulse opacity-10 font-heading">
+                            <div class="h-6 bg-primary w-full"></div>
+                            <div class="h-6 bg-primary w-2/3"></div>
+                            <div class="h-20 bg-zinc-800 w-full mt-10"></div>
+                        </div>
+                    </div>
+
+                    <!-- Side Note -->
+                    <div class="px-10 pb-10 pt-4">
+                        <div
+                            class="p-4 border-2 border-primary/10 bg-black/40 text-[10px] text-zinc-500 font-body leading-tight uppercase font-bold italic">
+                            REMARQUE : Le tueur réagit à la panique. Soyez discret.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- VHS Tape Style decoration -->
+                <div class="p-1 border-y-4 border-zinc-800 bg-zinc-900 flex flex-col gap-1 items-center opacity-40">
+                    <div class="w-full h-10 bg-black flex justify-between px-4 items-center">
+                        <div class="w-12 h-2 bg-zinc-800 rounded-full"></div>
+                        <div class="w-12 h-2 bg-zinc-800 rounded-full"></div>
+                    </div>
+                    <p class="text-[8px] tracking-[1em] text-zinc-600 font-body uppercase">TAPE-003 : SUMMER-CAMP</p>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t-8 border-primary/20 py-24 bg-black">
+        <div class="max-w-7xl mx-auto px-8 flex flex-col md:flex-row items-center justify-between gap-12">
+            <div
+                class="flex items-center gap-16 font-body text-[11px] tracking-tight text-zinc-500 uppercase font-bold">
+                <a href="../slasher.html" class="hover:text-primary transition-all flex items-center gap-3 group">
+                    <span
+                        class="material-symbols-outlined text-lg group-hover:-translate-x-2 transition-transform">rewind</span>
+                    RETOUR MENU
+                </a>
+                <a href="https://github.com/ErwanLT/bragi" target="_blank"
+                    class="hover:text-primary transition-all flex items-center gap-3 group">
+                    <span
+                        class="material-symbols-outlined text-lg group-hover:rotate-12 transition-transform">code</span>
+                    SOURCE CODE
+                </a>
+            </div>
+            <div class="flex flex-col items-end gap-2">
+                <p class="text-[10px] text-zinc-700 font-body tracking-[0.4em] uppercase font-bold">
+                    &copy; 1984 BRAGI ENTERTAINMENT
+                </p>
+                <div class="flex gap-1">
+                    <div class="w-4 h-[2px] bg-red-600"></div>
+                    <div class="w-4 h-[2px] bg-yellow-600"></div>
+                    <div class="w-4 h-[2px] bg-green-600"></div>
+                </div>
+            </div>
+        </div>
+    </footer>
 </body>
+
+</html>

@@ -1,179 +1,595 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
-    <title>LE LABYRINTHE OUBLIÉ</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Labyrinthe Oublié | Bragi</title>
     <link rel="icon" type="image/png" href="../../favicon.png">
-    <link rel="stylesheet" href="../../style/base.css">
-    <link rel="stylesheet" href="../../style/horror-cosmic.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=IM+Fell+English+SC&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#ff3333', // Blood Red
+                        secondary: '#d4af37', // Torch Amber
+                        background: '#0a0a0a',
+                        surface: '#1a1a1a',
+                        stone: '#2c2c2c'
+                    },
+                    fontFamily: {
+                        heading: ['Cinzel', 'serif'],
+                        body: ['IM Fell English SC', 'serif'],
+                    },
+                    animation: {
+                        'flicker': 'flicker 2s infinite',
+                        'drift': 'drift 10s infinite alternate',
+                    },
+                    keyframes: {
+                        flicker: {
+                            '0%, 19%, 21%, 23%, 25%, 54%, 56%, 100%': { opacity: '1' },
+                            '20%, 24%, 55%': { opacity: '0.6' },
+                        },
+                        drift: {
+                            '0%': { transform: 'translateX(-5%) translateY(-5%)' },
+                            '100%': { transform: 'translateX(5%) translateY(5%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                background-color: #0a0a0a;
+                color: #cbd5e1;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                font-family: 'IM Fell English SC', serif;
+            }
+            body::selection {
+                background-color: rgba(255, 51, 51, 0.4);
+                color: white;
+            }
+            h1, h2, h3, h4 {
+                font-family: 'Cinzel', serif;
+                text-transform: uppercase;
+                letter-spacing: 0.2em;
+            }
+        }
+
+        @layer components {
+            .horror-card {
+                background-color: rgba(26, 26, 26, 0.8);
+                backdrop-filter: blur(4px);
+                border-left-width: 1px;
+                border-right-width: 1px;
+                border-color: rgba(255, 51, 51, 0.2);
+                position: relative;
+                overflow: hidden;
+                transition-property: all;
+                transition-duration: 700ms;
+                box-shadow: inset 0 0 50px black;
+            }
+
+            .choice-btn {
+                transition-property: all;
+                transition-duration: 500ms;
+                position: relative;
+                overflow: hidden;
+                background-color: rgba(44, 44, 44, 0.3);
+                border-width: 1px;
+                border-color: rgba(255, 51, 51, 0.1);
+                padding: 1.5rem;
+                text-align: left;
+            }
+
+            .choice-btn:hover {
+                background-color: rgba(255, 51, 51, 0.05);
+                border-color: rgba(255, 51, 51, 0.4);
+            }
+
+            .choice-btn.selected {
+                background-color: rgba(255, 51, 51, 0.1);
+                border-color: #ff3333;
+                box-shadow: 0 0 20px rgba(255, 51, 51, 0.2);
+            }
+
+            .crt-overlay {
+                position: fixed;
+                inset: 0;
+                pointer-events: none;
+                z-index: 100;
+                opacity: 0.03;
+                background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 243, 0.06));
+                background-size: 100% 2px, 3px 100%;
+            }
+
+            .dark-fog {
+                position: fixed;
+                inset: 0;
+                pointer-events: none;
+                z-index: 90;
+                opacity: 0.3;
+                animation: drift 10s infinite alternate;
+                background-image: radial-gradient(circle at 50% 50%, transparent 20%, black 80%);
+            }
+        }
+    </style>
+
     <script src="../../js/security.js"></script>
     <script src="../../js/storyEngine.js"></script>
-    <script src="../../js/horror/cosmic/labyrinth.js"></script>
+    <script src="../../js/horror/cosmic/labyrinth.js" defer></script>
 </head>
 
 <body>
-    <div id="hud"></div>
-    <div class="quest-card">
-        <div class="story-header-image" style="background-image: url('../../img/cards/stories/labyrinth.png');"></div>
-        <h3>/// LE LABYRINTHE OUBLIÉ ///</h3>
-        <p style="text-align:center; font-style: italic; color: #888;">"N'éteignez jamais votre lanterne..."</p>
+    <div class="crt-overlay"></div>
+    <div class="dark-fog"></div>
 
-        <div id="story">
-            <!-- 1. ENTRÉE -->
-            <div class="section">
-                <p><strong>L'Entrée Béante</strong></p>
-                <p>La porte de pierre s'est refermée derrière vous. L'air est vicié. Votre lanterne vacille.</p>
-                <button class="choice" data-light="-5" data-orientation="+10" onclick="applyChoice(this)">Marquer le mur
-                    avec de la craie.</button>
-                <button class="choice" data-light="-10" data-sanity="-5" onclick="applyChoice(this)">Courir droit
-                    devant, paniqué.</button>
+    <!-- Header -->
+    <header class="sticky top-0 z-50 border-b border-primary/10 bg-black/60 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-10 h-10 border border-primary/40 flex items-center justify-center animate-flicker">
+                    <span class="material-symbols-outlined text-primary text-2xl">cyclone</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-[0.3em] text-primary">LE LABYRINTHE</h1>
+                    <p class="text-[9px] text-primary/40 font-heading -mt-1 italic tracking-widest uppercase">
+                        L'Obscurité Attend</p>
+                </div>
             </div>
-
-            <!-- 2. CARREFOUR -->
-            <div class="section">
-                <p><strong>Premier Carrefour</strong></p>
-                <p>Trois voies s'offrent à vous. L'une sent la putréfaction, l'autre le renfermé.</p>
-                <button class="choice" data-light="-5" data-orientation="+5" onclick="applyChoice(this)">Écouter les
-                    courants d'air.</button>
-                <button class="choice" data-sanity="-10" onclick="applyChoice(this)">Suivre l'odeur de pourriture
-                    (Curiosité morbide).</button>
-            </div>
-
-            <!-- 3. PIÈGE -->
-            <div class="section">
-                <p><strong>Le Couloir des Lames</strong></p>
-                <p>Un déclic sous votre pied. Des lames sortent des murs.</p>
-                <button class="choice" data-light="-10" onclick="applyChoice(this)">Se jeter au sol (Risque de casser la
-                    lanterne).</button>
-                <button class="choice" data-sanity="-10" data-orientation="+10" onclick="applyChoice(this)">Analyser le
-                    mécanisme calmement.</button>
-            </div>
-
-            <!-- 4. LUEUR -->
-            <div class="section">
-                <p><strong>Lueur Étrange</strong></p>
-                <p>Une mousse phosphorescente couvre les murs. C'est beau... et inquiétant.</p>
-                <button class="choice" data-light="+20" data-sanity="-5" onclick="applyChoice(this)">Éteindre la
-                    lanterne pour économiser l'huile.</button>
-                <button class="choice" data-light="-5" onclick="applyChoice(this)">Garder la lanterne allumée, on ne
-                    sait jamais.</button>
-            </div>
-
-            <!-- 5. ÉCHO -->
-            <div class="section">
-                <p><strong>L'Écho Déformé</strong></p>
-                <p>Vous entendez vos propres pas... avec un décalage.</p>
-                <button class="choice" data-sanity="-15" onclick="applyChoice(this)">Crier "QUI EST LÀ ?!"</button>
-                <button class="choice" data-light="-5" data-orientation="+5" onclick="applyChoice(this)">Siffler un air
-                    pour tester l'acoustique.</button>
-            </div>
-
-            <!-- 6. SALLE DES MIROIRS -->
-            <div class="section">
-                <p><strong>La Salle des Miroirs Anciens</strong></p>
-                <p>Des miroirs oxydés vous renvoient une image déformée. Votre reflet ne bouge pas en même temps que
-                    vous.</p>
-                <button class="choice" data-sanity="-20" onclick="applyChoice(this)">Fixer son reflet dans les
-                    yeux.</button>
-                <button class="choice" data-light="-5" data-orientation="+10" onclick="applyChoice(this)">Briser un
-                    miroir pour marquer le chemin.</button>
-            </div>
-
-            <!-- 7. CHUCHOTEMENTS -->
-            <div class="section">
-                <p><strong>Le Mur des Murmures</strong></p>
-                <p>Le mur semble suinter une substance noire. Des voix vous appellent.</p>
-                <button class="choice" data-sanity="+10" data-light="-10" onclick="applyChoice(this)">Fermer les yeux et
-                    prier (Repos).</button>
-                <button class="choice" data-orientation="+15" data-sanity="-10" onclick="applyChoice(this)">Écouter ce
-                    qu'ils disent (Indices ?).</button>
-            </div>
-
-            <!-- 8. L'HUILE -->
-            <div class="section">
-                <p><strong>Une Vieille Réserve</strong></p>
-                <p>Vous trouvez une fiole poussiéreuse. De l'huile ? Ou du poison ?</p>
-                <button class="choice" data-light="+30" onclick="applyChoice(this)">Remplir la lanterne
-                    (Risqué).</button>
-                <button class="choice" data-sanity="+5" onclick="applyChoice(this)">La laisser, c'est trop beau pour
-                    être vrai.</button>
-            </div>
-
-            <!-- 9. LA BÊTE -->
-            <div class="section">
-                <p><strong>La Bête de l'Ombre</strong></p>
-                <p>Deux yeux rouges brillent dans le noir devant vous. Un grognement sourd.</p>
-                <button class="choice" data-light="-20" onclick="applyChoice(this)">Braquer la lanterne vers elle pour
-                    l'aveugler.</button>
-                <button class="choice" data-orientation="-10" data-light="-5" onclick="applyChoice(this)">Reculer
-                    doucement et prendre un autre chemin.</button>
-            </div>
-
-            <!-- 10. PUITS -->
-            <div class="section">
-                <p><strong>Le Puits Sans Fond</strong></p>
-                <p>Un gouffre traverse le couloir. Une planche pourrie sert de pont.</p>
-                <button class="choice" data-orientation="+20" onclick="applyChoice(this)">Traverser en
-                    équilibre.</button>
-                <button class="choice" data-light="-10" data-orientation="-5" onclick="applyChoice(this)">Chercher un
-                    contournement</button>
-            </div>
-
-            <!-- 11. ENIGME -->
-            <div class="section">
-                <p><strong>La Porte Sphynx</strong></p>
-                <p>"Plus j'en ai, moins tu vois. Qui suis-je ?"</p>
-                <button class="choice" data-orientation="+20" onclick="applyChoice(this)">"L'Obscurité"</button>
-                <button class="choice" data-sanity="-10" onclick="applyChoice(this)">"Le Labyrinthe"</button>
-            </div>
-
-            <!-- 12. HALLUCINATION -->
-            <div class="section">
-                <p><strong>Visions</strong></p>
-                <p>Vous voyez la porte de votre maison d'enfance. Elle est là, dans le mur.</p>
-                <button class="choice" data-sanity="-20" onclick="applyChoice(this)">Ouvrir la porte (C'est un piège
-                    mental).</button>
-                <button class="choice" data-sanity="+10" onclick="applyChoice(this)">Se gifler pour se
-                    réveiller.</button>
-            </div>
-
-            <!-- 13. LA CARTE -->
-            <div class="section">
-                <p><strong>Le Cadavre de l'Explorateur</strong></p>
-                <p>Un squelette tient un parchemin. Une carte partielle ?</p>
-                <button class="choice" data-orientation="+30" onclick="applyChoice(this)">Prendre la carte.</button>
-                <button class="choice" data-light="+10" onclick="applyChoice(this)">Prendre son reste d'huile.</button>
-            </div>
-
-            <!-- 14. LA DERNIÈRE LIGNE -->
-            <div class="section">
-                <p><strong>Le Courant d'Air Frais</strong></p>
-                <p>Vous sentez l'air frais ! Mais votre lanterne vacille, presque vide.</p>
-                <button class="choice" data-light="-10" data-orientation="+20" onclick="applyChoice(this)">Courir vers
-                    l'air frais !</button>
-                <button class="choice" data-sanity="-5" onclick="applyChoice(this)">Avancer prudemment, ce pourrait être
-                    un piège.</button>
-            </div>
-
-            <!-- 15. SORTIE ? -->
-            <div class="section">
-                <p><strong>La Sortie</strong></p>
-                <p>Une lumière aveuglante au bout du tunnel. Est-ce le soleil ?</p>
-                <button class="choice" onclick="applyChoice(this); computeEnding('escaped')">Sortir (Si Orientation
-                    suffisante).</button>
-                <button class="choice" data-sanity="-100" onclick="applyChoice(this); computeEnding()">Retourner dans le
-                    noir (La folie vous tient).</button>
-            </div>
-
+            <nav class="hidden md:flex items-center gap-10 text-[10px] font-heading tracking-[0.4em] uppercase">
+                <a href="../cosmic.html" class="flex items-center gap-2 hover:text-primary transition-colors group">
+                    <span
+                        class="material-symbols-outlined text-sm group-hover:-translate-x-1 transition-transform">low_priority</span>
+                    RITUEL DE RETOUR
+                </a>
+            </nav>
         </div>
+    </header>
 
-        <footer class="project-footer">
-            <p><a href="../cosmic.html">&larr; Retour au menu</a> | <a href="https://github.com/ErwanLT/bragi"
-                    target="_blank">Voir sur GitHub</a></p>
-            <p>&copy; 2025 Histoires Bragi.</p>
-        </footer>
-    </div>
+    <main class="flex-grow max-w-7xl mx-auto w-full px-6 py-12 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+
+            <!-- Left Column: Story Content (8/12) -->
+            <div class="lg:col-span-8 space-y-20 pb-40" id="story">
+
+                <!-- Hero Section -->
+                <div class="relative group h-[500px] overflow-hidden border border-primary/20">
+                    <img id="hero-image" src="../../img/cards/stories/labyrinth.png" alt="Ancient Dungeon"
+                        class="w-full h-full object-cover transition-transform duration-[3000ms] group-hover:scale-110 opacity-70">
+                    <div class="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent">
+                    </div>
+                    <div
+                        class="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)]">
+                    </div>
+
+                    <div class="absolute bottom-12 left-12 right-12">
+                        <div class="flex items-center gap-3 text-primary text-xs mb-4 tracking-[0.3em] font-heading">
+                            <span class="w-8 h-[1px] bg-primary"></span>
+                            MISÉRICORDE
+                        </div>
+                        <h2 class="text-5xl lg:text-7xl font-bold text-white mb-6 leading-none tracking-tighter">LE
+                            LABYRINTHE OUBLIÉ</h2>
+                        <p
+                            class="text-primary/60 italic text-2xl border-l-[1px] border-primary/40 pl-8 font-serif leading-relaxed animate-flicker">
+                            &ldquo;N'éteignez jamais votre lanterne...&rdquo;
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Story Sections -->
+
+                <!-- 1. ENTRÉE -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">01</span>
+                        <h3 class="text-2xl text-primary/80 group-hover:text-primary transition-colors">L'ENTRÉE BÉANTE
+                        </h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>La porte de pierre s'est refermée derrière vous. L'air est vicié. Votre lanterne <span
+                                class="text-secondary animate-flicker">vacille</span>.</p>
+                    </div>
+                    <div class="grid grid-cols-1 gap-4 choice-container">
+                        <button class="choice-btn choice" data-light="-5" data-orientation="+10"
+                            onclick="applyChoice(this)">
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-primary/40">gesture</span>
+                                <div>
+                                    <p class="text-lg font-bold group-hover:text-primary transition-colors">Marquer le
+                                        mur avec de la craie.</p>
+                                    <span
+                                        class="text-[9px] uppercase tracking-widest text-primary/30 mt-1 block">Méthodique</span>
+                                </div>
+                            </div>
+                        </button>
+                        <button class="choice-btn choice" data-light="-10" data-sanity="-5" onclick="applyChoice(this)">
+                            <div class="flex items-center gap-4">
+                                <span class="material-symbols-outlined text-primary/40">directions_run</span>
+                                <div>
+                                    <p class="text-lg font-bold group-hover:text-primary transition-colors">Courir droit
+                                        devant, paniqué.</p>
+                                    <span
+                                        class="text-[9px] uppercase tracking-widest text-red-900 mt-1 block tracking-[0.2em]">Pulsions</span>
+                                </div>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 2. CARREFOUR -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">02</span>
+                        <h3 class="text-2xl text-primary/80">PREMIER CARREFOUR</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Trois voies s'offrent à vous. L'une sent la putréfaction, l'autre le renfermé.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice" data-light="-5" data-orientation="+5"
+                            onclick="applyChoice(this)">Écouter les courants d'air.</button>
+                        <button class="choice-btn choice text-primary" data-sanity="-10"
+                            onclick="applyChoice(this)">Suivre l'odeur de pourriture.</button>
+                    </div>
+                </div>
+
+                <!-- 3. PIÈGE -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">03</span>
+                        <h3 class="text-2xl text-primary/80">LE COULOIR DES LAMES</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Un déclic sous votre pied. Des lames sortent des murs.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice" data-light="-10" onclick="applyChoice(this)">Se jeter au
+                            sol.</button>
+                        <button class="choice-btn choice" data-sanity="-10" data-orientation="+10"
+                            onclick="applyChoice(this)">Analyser le mécanisme.</button>
+                    </div>
+                </div>
+
+                <!-- 4. LUEUR -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">04</span>
+                        <h3 class="text-2xl text-primary/80">LUEUR ÉTRANGE</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Une mousse phosphorescente couvre les murs. C'est beau... et inquiétant.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice text-secondary" data-light="+20" data-sanity="-5"
+                            onclick="applyChoice(this)">Éteindre la lanterne.</button>
+                        <button class="choice-btn choice" data-light="-5" onclick="applyChoice(this)">Garder la lanterne
+                            allumée.</button>
+                    </div>
+                </div>
+
+                <!-- 5. ÉCHO -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">05</span>
+                        <h3 class="text-2xl text-primary/80">L'ÉCHO DÉFORMÉ</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Vous entendez vos propres pas... avec un décalage.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice text-primary" data-sanity="-15"
+                            onclick="applyChoice(this)">Crier "QUI EST LÀ ?!"</button>
+                        <button class="choice-btn choice" data-light="-5" data-orientation="+5"
+                            onclick="applyChoice(this)">Siffler un air.</button>
+                    </div>
+                </div>
+
+                <!-- 6. SALLE DES MIROIRS -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">06</span>
+                        <h3 class="text-2xl text-primary/80">SALLE DES MIROIRS ANCIENS</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Des miroirs oxydés vous renvoient une image déformée. Votre reflet ne bouge pas en même temps
+                            que vous.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice text-primary" data-sanity="-20"
+                            onclick="applyChoice(this)">Fixer son reflet dans les yeux.</button>
+                        <button class="choice-btn choice" data-light="-5" data-orientation="+10"
+                            onclick="applyChoice(this)">Briser un miroir.</button>
+                    </div>
+                </div>
+
+                <!-- 7. CHUCHOTEMENTS -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">07</span>
+                        <h3 class="text-2xl text-primary/80">LE MUR DES MURMURES</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Le mur semble suinter une substance noire. Des voix vous appellent.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice text-secondary" data-sanity="+10" data-light="-10"
+                            onclick="applyChoice(this)">Fermer les yeux et prier.</button>
+                        <button class="choice-btn choice" data-orientation="+15" data-sanity="-10"
+                            onclick="applyChoice(this)">Écouter ce qu'ils disent.</button>
+                    </div>
+                </div>
+
+                <!-- 8. L'HUILE -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">08</span>
+                        <h3 class="text-2xl text-primary/80">UNE VIEILLE RÉSERVE</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Vous trouvez une fiole poussiéreuse. De l'huile ? Ou du poison ?</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice text-secondary font-bold" data-light="+30"
+                            onclick="applyChoice(this)">Remplir la lanterne.</button>
+                        <button class="choice-btn choice" data-sanity="+5" onclick="applyChoice(this)">La laisser
+                            là.</button>
+                    </div>
+                </div>
+
+                <!-- 9. LA BÊTE -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">09</span>
+                        <h3 class="text-2xl text-primary/80">LA BÊTE DE L'OMBRE</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Deux yeux rouges brillent dans le noir devant vous. Un grognement sourd.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice text-primary" data-light="-20"
+                            onclick="applyChoice(this)">Braquer la lanterne vers elle.</button>
+                        <button class="choice-btn choice" data-orientation="-10" data-light="-5"
+                            onclick="applyChoice(this)">Reculer doucement.</button>
+                    </div>
+                </div>
+
+                <!-- 10. PUITS -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">10</span>
+                        <h3 class="text-2xl text-primary/80">LE PUITS SANS FOND</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Un gouffre traverse le couloir. Une planche pourrie sert de pont.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice" data-orientation="+20" onclick="applyChoice(this)">Traverser
+                            en équilibre.</button>
+                        <button class="choice-btn choice" data-light="-10" data-orientation="-5"
+                            onclick="applyChoice(this)">Chercher un contournement.</button>
+                    </div>
+                </div>
+
+                <!-- 11. ENIGME -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">XI</span>
+                        <h3 class="text-2xl text-primary/80">LA PORTE SPHYNX</h3>
+                    </div>
+                    <div class="bg-stone/20 p-12 border border-primary/10 relative overflow-hidden italic">
+                        <div class="absolute top-0 right-0 p-4 opacity-10">
+                            <span class="material-symbols-outlined text-6xl">quiz</span>
+                        </div>
+                        <p class="text-3xl text-slate-300 font-serif leading-relaxed">&ldquo; Plus j'en ai, moins tu
+                            vois. <br>Qui suis-je ? &rdquo;</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-6 choice-container">
+                        <button class="choice-btn choice text-center !p-10 justify-center" data-orientation="+20"
+                            onclick="applyChoice(this)">
+                            <p class="text-xl font-bold uppercase tracking-widest text-secondary">"L'Obscurité"</p>
+                        </button>
+                        <button class="choice-btn choice text-center !p-10 justify-center" data-sanity="-10"
+                            onclick="applyChoice(this)">
+                            <p class="text-xl font-bold uppercase tracking-widest text-primary">"Le Labyrinthe"</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 12. HALLUCINATION -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">12</span>
+                        <h3 class="text-2xl text-primary/80">VISIONS</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Vous voyez la porte de votre maison d'enfance. Elle est là, dans le mur.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice text-primary" data-sanity="-20"
+                            onclick="applyChoice(this)">Ouvrir la porte.</button>
+                        <button class="choice-btn choice text-secondary" data-sanity="+10"
+                            onclick="applyChoice(this)">Se gifler pour se réveiller.</button>
+                    </div>
+                </div>
+
+                <!-- 13. LA CARTE -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">13</span>
+                        <h3 class="text-2xl text-primary/80">LE CADAVRE DE L'EXPLORATEUR</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Un squelette tient un parchemin. Une carte partielle ?</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice text-secondary" data-orientation="+30"
+                            onclick="applyChoice(this)">Prendre la carte.</button>
+                        <button class="choice-btn choice" data-light="+10" onclick="applyChoice(this)">Prendre son reste
+                            d'huile.</button>
+                    </div>
+                </div>
+
+                <!-- 14. LA DERNIÈRE LIGNE -->
+                <div class="section space-y-10 group">
+                    <div class="flex items-center gap-6">
+                        <span class="text-primary/40 font-heading text-lg">14</span>
+                        <h3 class="text-2xl text-primary/80">LE COURANT D'AIR FRAIS</h3>
+                    </div>
+                    <div
+                        class="prose prose-invert prose-red max-w-none text-2xl leading-[1.6] font-serif italic text-slate-400">
+                        <p>Vous sentez l'air frais ! Mais votre lanterne vacille, presque vide.</p>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 choice-container">
+                        <button class="choice-btn choice text-secondary font-bold" data-light="-10"
+                            data-orientation="+20" onclick="applyChoice(this)">Courir vers l'air frais !</button>
+                        <button class="choice-btn choice" data-sanity="-5" onclick="applyChoice(this)">Avancer
+                            prudemment.</button>
+                    </div>
+                </div>
+
+                <!-- 15. SORTIE -->
+                <div class="section space-y-12 pb-20">
+                    <div class="h-[1px] w-full bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
+                    <div class="text-center space-y-6">
+                        <h3 class="text-4xl text-primary animate-flicker">LA SORTIE</h3>
+                        <p class="text-xl italic font-serif opacity-70">Une lumière aveuglante au bout du tunnel. Est-ce
+                            le soleil ?</p>
+                    </div>
+                    <div class="flex flex-col gap-6 max-w-md mx-auto choice-container">
+                        <button
+                            class="choice-btn choice !p-8 border-primary/40 bg-primary/5 hover:bg-primary/20 text-center flex-col gap-2"
+                            onclick="applyChoice(this); computeEnding('escaped')">
+                            <span class="material-symbols-outlined text-4xl mb-2 text-secondary">sensor_door</span>
+                            <span class="text-2xl font-bold uppercase tracking-widest text-secondary">SORTIR DANS LA
+                                LUMIÈRE</span>
+                        </button>
+                        <button
+                            class="choice-btn choice !p-4 grayscale opacity-40 hover:opacity-100 transition-all text-center flex-col"
+                            data-sanity="-100" onclick="applyChoice(this); computeEnding(true)">
+                            <span class="text-xs uppercase tracking-[0.4em]">NE PLUS JAMAIS PARTIR</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Final Report Button -->
+                <div class="actions mt-20 pt-20 border-t border-primary/5">
+                    <button
+                        class="w-full p-6 border border-primary/20 font-heading text-xs uppercase tracking-[0.5em] hover:bg-primary/5 transition-all text-primary/40"
+                        id="report-btn" onclick="computeEnding(true)">
+                        Consulter son Registre Mental
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Right Column: HUD (4/12) -->
+            <aside class="lg:col-span-4 lg:sticky lg:top-24 space-y-10">
+
+                <!-- HUD Console -->
+                <div class="horror-card p-0 border border-primary/10">
+                    <div class="bg-primary/10 px-6 py-4 border-b border-primary/20 flex items-center justify-between">
+                        <h4 class="text-[10px] tracking-[0.3em] font-bold text-primary italic">SYSTEM MONITOR</h4>
+                        <span class="material-symbols-outlined text-primary text-sm animate-flicker">skull</span>
+                    </div>
+
+                    <div id="hud" class="p-8 space-y-12">
+                        <!-- Placeholder Loading HUD -->
+                        <div class="space-y-6 animate-pulse opacity-20">
+                            <div class="h-4 bg-primary/40 w-3/4"></div>
+                            <div class="h-1 bg-primary/20 w-full"></div>
+                            <div class="h-4 bg-primary/40 w-1/2"></div>
+                            <div class="h-1 bg-primary/20 w-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- Decorative Footnote -->
+                    <div class="px-8 pb-8 pt-4">
+                        <div class="flex items-center gap-4 opacity-20 text-primary">
+                            <span class="w-full h-[1px] bg-current"></span>
+                            <span class="material-symbols-outlined text-lg">cyclone</span>
+                            <span class="w-full h-[1px] bg-current"></span>
+                        </div>
+                        <p class="text-[8px] text-center mt-4 tracking-[0.4em] text-primary/40 uppercase">Ego Dissolutio
+                            Est</p>
+                    </div>
+                </div>
+
+                <!-- Dark Map (Static decorative version) -->
+                <div class="p-8 border border-primary/5 bg-black/40 space-y-6 group">
+                    <h4
+                        class="text-[10px] tracking-[0.5em] text-center opacity-40 group-hover:opacity-100 transition-opacity uppercase">
+                        Fragment de Carte</h4>
+                    <div class="grid grid-cols-6 gap-2 opacity-10 group-hover:opacity-30 transition-all duration-700">
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                        <div class="aspect-square bg-primary/20 border border-primary/40"></div>
+                    </div>
+                    <p class="text-[9px] text-center italic opacity-30 font-serif leading-relaxed line-clamp-2">"Les
+                        couloirs ne mènent nulle part. L'espace se replie."</p>
+                </div>
+
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-primary/10 py-16 bg-black/40">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-10">
+            <div class="flex items-center gap-12 font-heading text-[9px] tracking-[0.4em] text-primary/60 uppercase">
+                <a href="../cosmic.html" class="hover:text-primary transition-colors flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span>
+                    QUITTER LE DÉDALE
+                </a>
+                <a href="https://github.com/ErwanLT/bragi" target="_blank"
+                    class="hover:text-primary transition-colors flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">terminal</span>
+                    CODE SOURCE
+                </a>
+            </div>
+            <p class="text-[8px] text-primary/30 font-heading tracking-[0.5em] uppercase">
+                &copy; 1923-2025 BRAGI OCCULT SOLUTIONS.
+            </p>
+        </div>
+    </footer>
 </body>
 
 </html>

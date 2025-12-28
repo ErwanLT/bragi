@@ -3,7 +3,7 @@
  * Refactored with high-tech Biometric HUD
  */
 
-setupF12Protection('../magic_word.html');
+setupF12Protection('../../magic_word.html');
 
 new StoryEngine({
     storyId: 'kubrick9',
