@@ -19,6 +19,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
         rel="stylesheet" />
 
+    <link rel="stylesheet" href="../../style/stories/westrern/classic.css">
+
     <!-- Scripts -->
     <script src="../../js/security.js"></script>
     <script src="../../js/storyEngine.js"></script>
@@ -49,65 +51,6 @@
             },
         }
     </script>
-    <style>
-        body {
-            font-family: "Inter", sans-serif;
-            background-color: #1A120F;
-            background-image:
-                radial-gradient(circle at 50% 50%, rgba(200, 150, 100, 0.05) 0%, transparent 100%),
-                repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.01) 0px, transparent 1px, transparent 100px);
-        }
-
-        .western-title {
-            font-family: "Bebas Neue", sans-serif;
-            letter-spacing: 0.1em;
-            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.8), 4px 4px 0px rgba(226, 166, 94, 0.2);
-        }
-
-        .western-text {
-            font-family: "Special Elite", cursive;
-        }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #1A120F;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #3D2B22;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #E2A65E;
-        }
-
-        /* Choice Button Transitions */
-        .choice-btn {
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .choice-btn:hover {
-            transform: translateY(-2px);
-            background-color: #3D2B22 !important;
-            border-color: #E2A65E !important;
-        }
-
-        /* StoryEngine Integration */
-        .choice-wrapper::after {
-            content: attr(data-info);
-            display: block;
-            font-size: 0.7rem;
-            color: #E2A65E;
-            margin-top: 0.5rem;
-            text-transform: uppercase;
-            font-family: "Special Elite", cursive;
-            opacity: 0.6;
-        }
-    </style>
 </head>
 
 <body
