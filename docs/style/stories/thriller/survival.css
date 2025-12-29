@@ -1,0 +1,169 @@
+/* Survival Theme - Polar Visual Identity */
+
+body {
+    background-color: #050b14 !important;
+    /* Deep Ice Navy */
+    background-image:
+        radial-gradient(circle at 50% 10%, rgba(125, 211, 252, 0.1) 0%, transparent 50%),
+        url('https://www.transparenttextures.com/patterns/carbon-fibre.png') !important;
+}
+
+/* Titles */
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Cinzel', serif;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #e0f2fe;
+    /* Very light blue */
+}
+
+/* Survival HUD */
+.survival-hud {
+    position: fixed;
+    top: 6rem;
+    right: 1.5rem;
+    z-index: 40;
+    width: 18rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.hud-stat {
+    background-color: rgba(15, 23, 42, 0.7);
+    /* Slate Navy */
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(125, 211, 252, 0.15);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 0 20px rgba(125, 211, 252, 0.05);
+    transition: all 0.5s ease;
+}
+
+.hud-stat:hover {
+    border-color: rgba(125, 211, 252, 0.4);
+}
+
+.progress-bar-bg {
+    width: 100%;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 9999px;
+    margin-top: 0.5rem;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    transition: all 1s ease-out;
+}
+
+/* Choice Buttons */
+.choice-btn {
+    display: block;
+    width: 100%;
+    padding: 1.5rem;
+    text-align: left;
+    background-color: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(125, 211, 252, 0.1);
+    border-radius: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    color: #cbd5e1;
+    cursor: pointer;
+}
+
+.choice-btn:hover {
+    background-color: rgba(125, 211, 252, 0.05);
+    border-color: rgba(125, 211, 252, 0.5);
+    transform: translateX(0.5rem);
+    color: #f0f9ff;
+}
+
+.choice-btn.selected {
+    border-color: #7dd3fc;
+    background-color: rgba(125, 211, 252, 0.1);
+}
+
+/* Frost Overlay */
+.frost-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    opacity: 0.2;
+    background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+    backdrop-filter: contrast(1.05) brightness(1.1) saturate(0.85);
+    /* Slightly desaturated for cold feel */
+}
+
+/* Scanline global effect */
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(rgba(125, 211, 252, 0) 50%, rgba(125, 211, 252, 0.02) 50%);
+    background-size: 100% 4px;
+    z-index: 100;
+    pointer-events: none;
+    opacity: 0.3;
+}
+
+/* Completed Badge */
+.completed-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #0ea5e9;
+    /* Sky blue for completion instead of green */
+    color: white;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    z-index: 30;
+    display: none;
+}
+
+.story-card.completed .completed-badge {
+    display: block;
+}
+
+/* Sections */
+.section {
+    max-width: 48rem;
+    margin: 0 auto 8rem auto;
+    opacity: 0;
+    transform: translateY(-1rem);
+    transition: all 1s ease;
+}
+
+.section.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.section.locked {
+    pointer-events: none;
+    opacity: 0.2;
+    filter: grayscale(1);
+}
+
+/* HUD Info - StoryEngine Hook */
+.choice-wrapper::after {
+    content: attr(data-info);
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(125, 211, 252, 0.6);
+}

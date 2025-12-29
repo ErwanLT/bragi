@@ -44,7 +44,7 @@ Accédez à la [Bibliothèque complète](https://erwanlt.github.io/bragi/stories
         *   **Dossier: Ombres de Chicago - 1932** : Capone, Jazz et Prohibition.
 *   🎬 **Thriller**
     *   *Survie*
-        * prochainement    
+        *   **Dernier Souffle** : Survivre au crash, affronter le blizzard.
     
 
 ## 🛠 Structure du projet

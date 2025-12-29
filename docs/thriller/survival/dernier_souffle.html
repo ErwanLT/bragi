@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dernier Souffle | Bragi Survie</title>
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="../../style/stories/thriller/survival.css">
+
+    <!-- Scripts -->
+    <script src="../../js/security.js"></script>
+    <script src="../../js/storyEngine.js"></script>
+    <script src="../../js/thriller/survival/dernier_souffle.js" defer></script>
+
+    <!-- Theme Configuration -->
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#7dd3fc', /* Sky 300 */
+                        secondary: '#38bdf8', /* Sky 400 */
+                        background: '#050b14',
+                        surface: '#0f172a'
+                    },
+                    fontFamily: {
+                        heading: ['Cinzel', 'serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background text-slate-200 min-h-screen flex flex-col font-body selection:bg-primary/30 selection:text-primary">
+    <div class="frost-overlay"></div>
+    <div class="scanlines"></div>
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-black/40 backdrop-blur-md border-b border-white/5 h-20">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-4 group no-underline text-white">
+                <img src="../../favicon.png" alt="Logo" class="w-8 h-8 group-hover:rotate-12 transition-transform">
+                <span class="font-heading text-xl tracking-tighter uppercase">BRAGI</span>
+            </a>
+            <div class="flex items-center gap-8">
+                <div class="hidden md:block text-[10px] text-slate-500 font-bold tracking-[0.4em] uppercase">SURVIE //
+                    SECTEUR ARCTIQUE</div>
+                <a href="../survival.html"
+                    class="text-[10px] text-slate-400 hover:text-primary transition-colors font-bold tracking-widest uppercase border border-white/10 px-4 py-2 rounded-full no-underline">&larr;
+                    Quitter</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="hud" class="survival-hud"></div>
+
+    <main class="pt-40 pb-32 px-6">
+        <div class="max-w-3xl mx-auto mb-16">
+            <!-- Visual Aid (Hero Image) -->
+            <div
+                class="w-full relative rounded-2xl overflow-hidden shadow-2xl border border-white/5 group h-[300px] md:h-[450px] mb-16">
+                <div class="absolute inset-0 bg-cover bg-center contrast-125 brightness-90 transition-transform duration-[2000ms] group-hover:scale-110"
+                    style='background-image: url("../../img/cards/stories/last_breath.png");'>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-primary/10"></div>
+                <!-- Frost Effect Overlay (Static copy for the header) -->
+                <div class="absolute inset-0 bg-white/5 pointer-events-none"></div>
+            </div>
+
+            <!-- Story Sections -->
+            <div id="story">
+                <!-- Section 0: Crash -->
+                <section class="section visible">
+                    <h2 class="text-4xl font-bold mb-8 text-white">L'Impact</h2>
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Le silence est la première chose que vous remarquez. Un silence glacé, seulement interrompu par
+                        le
+                        sifflement du vent contre la carcasse déchirée de l'avion. Vos poumons brûlent à chaque
+                        inspiration.
+                        Autour de vous, la toundra blanche s'étend à l'infini. Le soleil bas à l'horizon ne vous
+                        réchauffera
+                        pas. Vous devez bouger.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="-5"
+                            data-energie="-10">
+                            Fouiller les débris pour trouver du matériel.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="-15"
+                            data-mental="5">
+                            Essayer d'envoyer un signal radio immédiat.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 1 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Le vent se lève, portant avec lui des cristaux de glace qui coupent votre visage. Vous trouvez
+                        une
+                        couverture thermique déchirée et quelques barres de céréales, mais rien qui puisse vous aider à
+                        long
+                        terme. Vous apercevez une chaîne de montagnes au loin. C'est là que se trouve la station météo.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="-15">
+                            Commencer la marche immédiatement.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="10"
+                            data-energie="-5">
+                            Prendre le temps de bricoler un abri temporaire.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 2 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Chaque pas dans la neige profonde demande un effort colossal. La fatigue commence à peser sur
+                        vos
+                        membres, mais votre corps frissonne violemment, une réaction de défense contre le froid qui
+                        s'infiltre
+                        sous vos vêtements.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="-20"
+                            data-mental="10">
+                            Chanter à haute voix pour garder le moral et avancer.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="-10">
+                            Économiser vos mouvements et marcher en silence.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 3 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Vous tombez sur une mare d'eau gelée sous la neige fine. La glace craque dangereusement.
+                        Rebrousser
+                        chemin prendrait des heures, mais traverser est risqué.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="-15"
+                            data-mental="-5">
+                            Contourner la zone glacée par la forêt.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="-5"
+                            data-mental="20">
+                            Tenter une traversée rapide et légère.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 4 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        La forêt offre un répit contre le vent, mais l'ombre est encore plus glaciale. Vous entendez un
+                        craquement dans les sous-bois. Quelque chose vous suit.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="-15">
+                            Courir pour semer ce qui vous traque.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="-10"
+                            data-chaleur="-5">
+                            Brandir une branche et faire le plus de bruit possible.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 5 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        L'obscurité tombe rapidement. Sans lumière, vous ne pourrez pas voir où vous mettez les pieds.
+                        Vous
+                        trouvez une grotte peu profonde.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="20"
+                            data-energie="-15">
+                            Allumer un petit feu avec ce que vous avez trouvé.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="-10"
+                            data-energie="20">
+                            Se rouler en boule et essayer de dormir sans feu.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 6 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Au matin, vos articulations sont rigides. La grotte est couverte de givre. Sur une pierre, vous
+                        voyez
+                        des marques anciennes... quelqu'un a déjà été ici. Cela vous redonne de l'espoir, ou peut-être
+                        est-ce un
+                        avertissement.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="15">
+                            Interpréter les signes comme un guide vers la sortie.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="-5"
+                            data-energie="-10">
+                            Ignorer et reprendre la route au plus vite.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 7 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Le terrain devient plus escarpé. Vous devez escalader une petite paroi rocheuse pour continuer
+                        vers le
+                        col. Vos mains sont presque insensibles malgré vos gants.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="-25"
+                            data-mental="5">
+                            Escalader avec prudence, prise par prise.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="-20">
+                            Chercher un passage plus long mais moins raide au pied du col.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 8 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Arrivé au sommet, vous voyez une carcasse de renne. Les loups ne sont pas loin, mais la peau et
+                        un peu
+                        de graisse pourraient être vitales pour la suite de votre voyage.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="15"
+                            data-mental="-10">
+                            Récupérer la graisse et la peau pour s'isoler.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="10"
+                            data-energie="-5">
+                            Respecter la nature et passer votre chemin.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 9 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Une tempête de neige massive éclate. La visibilité est nulle. Vous ne voyez plus vos propres
+                        mains.
+                        S'arrêter signifie mourir de froid, avancer signifie se perdre peut-être à jamais.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="-30"
+                            data-mental="15">
+                            Se lier à un rocher avec une corde et attendre.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="-25"
+                            data-energie="-10">
+                            Marcher droit devant en espérant garder la direction.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 10 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Après des heures d'errance, le vent se calme enfin. Vous êtes exténué, vos vêtements sont
+                        trempés par
+                        votre propre transpiration qui gèle instantanément. Vous voyez des traces de chenilles de
+                        motoneige.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="20">
+                            Suivre les traces avec l'énergie du désespoir.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="10"
+                            data-chaleur="-10">
+                            S'asseoir un instant pour reprendre son souffle.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 11 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Les traces vous mènent à un vieux dépôt de carburant abandonné. C'est rouillé et désert, mais
+                        protégé.
+                        Vous trouvez une boîte de conserve scellée.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="25">
+                            Manger le contenu de la boîte immédiatement.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-chaleur="15"
+                            data-energie="-5">
+                            Utiliser le métal pour renforcer ses chaussures.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 12 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        La faim commence à provoquer des hallucinations. Vous voyez des lumières danser au loin. Est-ce
+                        l'aurore
+                        boréale ou les secours ? Votre esprit vacille entre réalité et rêve féerique.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="-20">
+                            Se laisser porter par la beauté des lumières.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="10"
+                            data-energie="-10">
+                            Se gifler pour rester alerte et détourner le regard.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 13 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Vous arrivez au bord d'une gorge spectaculaire. Un pont de bois suspendu semble être le seul
+                        moyen de
+                        passer. Il balance dangereusement sous le vent.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="-15"
+                            data-energie="-5">
+                            Traverser en courant sans regarder en bas.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="-20"
+                            data-mental="10">
+                            Traverser à quatre pattes, lentement mais sûrement.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 14 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        De l'autre côté, l'air semble encore plus rare. Vous gravissez les derniers mètres du col. Vos
+                        poumons
+                        sifflent. Le froid a atteint votre cœur. Vous trouvez un cadavre de voyageur... une radio est
+                        encore
+                        accrochée à sa ceinture.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="-10"
+                            data-chaleur="-5">
+                            Vérifier si la radio fonctionne encore.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="5">
+                            Couvrir le corps par respect et continuer.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 15 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Un louveteau blessé bloque votre chemin. Il geint de douleur. Sa mère n'est sûrement pas loin.
+                        Intervenir pourrait être votre fin, mais l'ignorer serait cruel.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="15"
+                            data-energie="-10">
+                            Essayer de l'aider rapidement.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="-15"
+                            data-energie="-5">
+                            Passer à distance respectable sans s'arrêter.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 16 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Vos pieds sont comme des morceaux de bois mort. Le sang ne circule presque plus. Vous voyez
+                        enfin une
+                        antenne radio à l'horizon. C'est la station ! Mais la pente qui vous en sépare est glacée.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="-20"
+                            data-chaleur="-10">
+                            Se laisser glisser sur les fesses pour gagner du temps.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="-10"
+                            data-mental="10">
+                            Tailler des marches dans la glace avec un éclat de métal.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 17 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        La station est à portée de vue, mais une dernière épreuve vous attend : un pont de neige
+                        au-dessus d'une
+                        crevasse profonde. Il semble sur le point de s'effondrer.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="-20"
+                            data-energie="5">
+                            Sauter par-dessus la partie la plus fragile.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="-15"
+                            data-chaleur="-10">
+                            Ramper à plat ventre pour répartir son poids.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 18 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        Vous êtes devant la porte blindée de la station. Elle est verrouillée par un code électronique.
+                        Le
+                        panneau de contrôle est à moitié gelé. Vous n'avez qu'un essai avant que le système ne se
+                        bloque.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-mental="20">
+                            Tenter d'utiliser les restes de sa mémoire logique.
+                        </button>
+                        <button class="choice choice-btn" onclick="applyChoice(this)" data-energie="-20">
+                            Forcer la porte avec une barre de fer trouvée au sol.
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Section 19 -->
+                <section class="section">
+                    <p class="text-slate-300 leading-relaxed mb-8">
+                        La porte s'ouvre dans un grincement métallique. L'air chaud vous frappe de plein fouet. C'est
+                        presque
+                        douloureux. Vous voyez un téléphone satellite sur la console.
+                    </p>
+                    <div class="flex flex-col gap-4">
+                        <button class="choice choice-btn" onclick="computeEnding('REACH_OUTPOST')">
+                            Appeler les secours et s'effondrer sur le sol chauffé.
+                        </button>
+                    </div>
+                </section>
+
+    </main>
+
+    <!-- Footer navigation -->
+    <nav
+        class="fixed bottom-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-t border-white/5 py-4 px-6 text-[10px] text-slate-500 flex justify-between uppercase tracking-widest">
+        <a href="../survival.html" class="hover:text-orange-500 transition-colors">Abandonner</a>
+        <div class="hidden md:block">Système de Survie Bragi v2.0</div>
+        <div id="save-indicator" class="text-orange-500/0 transition-opacity">Progression Sauvegardée</div>
+    </nav>
+</body>
+
+</html>
