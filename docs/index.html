@@ -22,7 +22,9 @@
 
     <!-- Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/security.js"></script>
     <script>
+        setupF12Protection('magic_word.html');
         tailwind.config = {
             darkMode: 'class',
             theme: {
@@ -160,6 +162,8 @@
                     class="text-white transition-colors font-heading text-[10px] tracking-[0.3em] uppercase no-underline border-b border-primary/40 pb-1">Accueil</a>
                 <a href="stories.html"
                     class="text-slate-400 hover:text-white transition-colors font-heading text-[10px] tracking-[0.3em] uppercase no-underline">Histoires</a>
+                <a href="trophies.html"
+                    class="text-slate-400 hover:text-white transition-colors font-heading text-[10px] tracking-[0.3em] uppercase no-underline">Trophées</a>
                 <a href="about.html"
                     class="text-slate-400 hover:text-white transition-colors font-heading text-[10px] tracking-[0.3em] uppercase no-underline">À
                     Propos</a>
