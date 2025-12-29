@@ -34,6 +34,8 @@ Accédez à la [Bibliothèque complète](https://erwanlt.github.io/bragi/stories
 *   ⚓️ **Aventure**
     *   *Piraterie*
         *   **Le Trésor de l'Île Maudite** : Hissez les voiles, la mutinerie guette.
+    *   *Préhistorique*
+        *   **Jurassic Park - Isla Nublar** : "La vie trouve toujours un chemin."
 *   🐉 **Fantasy**
     *   *Médiévale*
         *   **La Quête du Code Ancestral** : Le donjon "Legacy" n'attend que vous.
@@ -41,8 +43,9 @@ Accédez à la [Bibliothèque complète](https://erwanlt.github.io/bragi/stories
     *   *Noir*
         *   **Dossier: Ombres de Chicago - 1932** : Capone, Jazz et Prohibition.
 *   🎬 **Thriller**
-    *   *Préhistorique*
-        *   **Jurassic Park - Isla Nublar** : "La vie trouve toujours un chemin."
+    *   *Survie*
+        * prochainement    
+    
 
 ## 🛠 Structure du projet
 Le projet est un site statique moderne (HTML/JS/CSS) hébergé via GitHub Pages.
