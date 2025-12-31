@@ -1,6 +1,13 @@
 /**
+ * ==================================================================
+ * BRAGI SECURITY & ACHIEVEMENTS SYSTEM
+ * Version: 2.0 (Unified Genre Mastery)
+ * ==================================================================
+ */
+
+/**
  * ------------------------------------------------------------------
- * BASE DE DONNÉES (SOURCE DE VÉRITÉ)
+ * 1. BASE DE DONNÉES (SOURCE DE VÉRITÉ)
  * Contient les titres, descriptions et icônes de tous les trophées.
  * ------------------------------------------------------------------
  */
@@ -19,12 +26,46 @@ window.BRAGI_DB = {
         { id: 'prohibition', title: "Incorruptible", desc: "Compléter 'Chicago 1932'", icon: 'policy', genre: 'Polar' }
     ],
     progression: [
+        // --- GÉNÉRAL ---
         { id: 'collectionneur_debutant', title: "Collectionneur Débutant", desc: "Terminer 3 histoires différentes.", icon: 'collections_bookmark', genre: 'Progression' },
         { id: 'maitre_narrateur', title: "Maître Narrateur", desc: "Terminer 7 récits épiques.", icon: 'auto_stories', genre: 'Progression' },
         { id: 'chasseur_secrets', title: "Chasseur de Secrets", desc: "Découvrir 3 Easter Eggs cachés.", icon: 'search', genre: 'Progression' },
         { id: 'exportateur_prudent', title: "Exportateur Prudent", desc: "Sauvegarder votre progression dans un fichier .brg.", icon: 'cloud_download', genre: 'Progression' },
-        { id: 'expert_horreur', title: "Maître de l'Effroi", desc: "Survivre à 3 récits d'horreur différents.", icon: 'skull', genre: 'Progression' },
-        { id: 'expert_scifi', title: "Voyageur du Futur", desc: "Compléter 2 récits de Science-Fiction.", icon: 'rocket_launch', genre: 'Progression' }
+
+        // --- HORREUR (3, 6, 10) ---
+        { id: 'initie_horreur', title: "Initié de l'Horreur", desc: "Survivre à 3 récits d'horreur.", icon: 'skull', genre: 'Progression' },
+        { id: 'traqueur_ombres', title: "Traqueur d'Ombres", desc: "Survivre à 6 cauchemars différents.", icon: 'visibility', genre: 'Progression' },
+        { id: 'maitre_effroi', title: "Maître de l'Effroi", desc: "Survivre à 10 récits d'horreur.", icon: 'sentiment_very_dissatisfied', genre: 'Progression' },
+
+        // --- SCIENCE-FICTION (2, 6, 10) ---
+        { id: 'cadet_scifi', title: "Cadet de l'Espace", desc: "Compléter 2 récits de Sci-Fi.", icon: 'rocket_launch', genre: 'Progression' },
+        { id: 'explorateur_galactique', title: "Explorateur Galactique", desc: "Voyager à travers 6 mondes futuristes.", icon: 'public', genre: 'Progression' },
+        { id: 'amiral_cosmos', title: "Amiral du Cosmos", desc: "Maîtriser l'espace-temps dans 10 épopées.", icon: 'auto_awesome', genre: 'Progression' },
+
+        // --- THRILLER (3, 6, 10) ---
+        { id: 'nerfs_acier', title: "Nerfs d'Acier", desc: "Garder son sang-froid dans 3 thrillers.", icon: 'psychology', genre: 'Progression' },
+        { id: 'expert_tension', title: "Expert en Tension", desc: "Survivre au suspense de 6 thrillers.", icon: 'hotel_class', genre: 'Progression' },
+        { id: 'maitre_suspense', title: "Maître du Suspense", desc: "Terminer 10 thrillers haletants.", icon: 'hourglass_bottom', genre: 'Progression' },
+
+        // --- WESTERN (3, 6, 10) ---
+        { id: 'pied_tendre', title: "Pied-Tendre", desc: "Chevaucher à travers 3 westerns.", icon: 'bedroom_baby', genre: 'Progression' },
+        { id: 'gachette_rapide', title: "Gâchette Rapide", desc: "Faire la loi dans 6 récits de l'Ouest.", icon: 'stars', genre: 'Progression' },
+        { id: 'legende_ouest', title: "Légende de l'Ouest", desc: "Devenir un mythe dans 10 westerns.", icon: 'wb_sunny', genre: 'Progression' },
+
+        // --- AVENTURE (3, 6, 10) ---
+        { id: 'voyageur_intrepide', title: "Voyageur Intrépide", desc: "Vivre 3 grandes aventures.", icon: 'hiking', genre: 'Progression' },
+        { id: 'chasseur_reliques', title: "Chasseur de Reliques", desc: "Découvrir les trésors de 6 aventures.", icon: 'diamond', genre: 'Progression' },
+        { id: 'roi_exploration', title: "Roi de l'Exploration", desc: "Cartographier 10 mondes perdus.", icon: 'map', genre: 'Progression' },
+
+        // --- FANTASY (3, 6, 10) ---
+        { id: 'ecuyer_heroique', title: "Écuyer Héroïque", desc: "Accomplir 3 quêtes fantastiques.", icon: 'shield', genre: 'Progression' },
+        { id: 'chevalier_royaume', title: "Chevalier du Royaume", desc: "Triompher de 6 épopées magiques.", icon: 'castle', genre: 'Progression' },
+        { id: 'gardien_mondes', title: "Gardien des Mondes", desc: "Sauver 10 univers fantastiques.", icon: 'auto_fix_high', genre: 'Progression' },
+
+        // --- POLAR (3, 6, 10) ---
+        { id: 'detective_prive', title: "Détective Privé", desc: "Résoudre 3 enquêtes criminelles.", icon: 'fingerprint', genre: 'Progression' },
+        { id: 'inspecteur_chef', title: "Inspecteur Chef", desc: "Mettre 6 criminels sous les verrous.", icon: 'local_police', genre: 'Progression' },
+        { id: 'grand_commissaire', title: "Grand Commissaire", desc: "Élucider 10 affaires impossibles.", icon: 'balance', genre: 'Progression' }
     ],
     secrets: [
         { id: 'cheater', title: "Hacker de pacotille", desc: "Tenter d'ouvrir la console de développement.", icon: 'terminal', genre: 'Secret' },
@@ -47,7 +88,7 @@ window.getTrophyData = function (id) {
 
 /**
  * ------------------------------------------------------------------
- * SYSTÈME DE SAUVEGARDE ET TROPHÉES
+ * 2. SYSTÈME DE SAUVEGARDE ET LOGIQUE DES TROPHÉES
  * ------------------------------------------------------------------
  */
 const STORAGE_KEY = 'bragi_progress';
@@ -59,7 +100,6 @@ window.BragiStorage = {
         if (this._inited) return;
 
         // Injection CSS pour les notifications
-        // Note: top: 100px pour passer sous le header
         const style = document.createElement('style');
         style.innerHTML = `
             .bragi-notification {
@@ -99,7 +139,7 @@ window.BragiStorage = {
     },
 
     /**
-     * Marquer un exploit ou un secret (Optimisé)
+     * Marquer un exploit ou un secret
      */
     markAchievement: function (achievementId) {
         this._init();
@@ -107,77 +147,164 @@ window.BragiStorage = {
 
         if (!progress.achievements.includes(achievementId)) {
             progress.achievements.push(achievementId);
-            this._save(progress); // Sauvegarde l'exploit immédiat
+            this._save(progress);
             this._notify(achievementId, "Exploit Secret");
-
-            // On demande au cerveau de vérifier si cela débloque autre chose (ex: Chasseur de Secrets)
+            // Vérification si cela débloque "Chasseur de Secrets"
             this.checkProgressionTrophies();
         }
     },
 
     /**
-     * Cerveau central des trophées de progression.
-     * Vérifie TOUS les critères (Histoires et Secrets) en une seule fois.
+     * CERVEAU CENTRAL DES TROPHÉES DE PROGRESSION
+     * Orchestre l'appel aux sous-fonctions.
      */
     checkProgressionTrophies: function () {
         const progress = this.getProgress();
         let hasChanged = false;
 
-        // --- 1. CALCUL GÉNÉRAL (Existant) ---
+        // 1. Calcul global (Nombre total d'histoires)
+        if (this._computeGlobalSuccess(progress)) hasChanged = true;
+
+        // 2. Calcul des Genres (Méthode Unifiée)
+        if (this._computeGenreMastery(progress)) hasChanged = true;
+
+        // 3. Calcul des Secrets
+        if (this._computeSecretsSuccess(progress)) hasChanged = true;
+
+        if (hasChanged) {
+            this._save(progress);
+        }
+    },
+
+    /**
+     * Calcul de l'avancement global (Histoires terminées)
+     */
+    _computeGlobalSuccess: function (progress) {
         const completedCount = progress.completedStories.length;
+        let changed = false;
 
         if (completedCount >= 3 && !progress.achievements.includes('collectionneur_debutant')) {
             progress.achievements.push('collectionneur_debutant');
             this._notify('collectionneur_debutant', "Progression");
-            hasChanged = true;
+            changed = true;
         }
 
         if (completedCount >= 7 && !progress.achievements.includes('maitre_narrateur')) {
             progress.achievements.push('maitre_narrateur');
             setTimeout(() => this._notify('maitre_narrateur', "Progression"), 1000);
-            hasChanged = true;
+            changed = true;
         }
 
-        // --- 2. CALCUL PAR GENRE (Nouveau !) ---
+        return changed;
+    },
 
-        // On récupère toutes les histoires d'Horreur définies dans la DB
-        const horrorStories = window.BRAGI_DB.stories.filter(s => s.genre === 'Horreur');
+    /**
+     * CALCUL DE LA MAÎTRISE DES GENRES (Moteur Unifié)
+     * Gère automatiquement tous les paliers pour tous les genres.
+     */
+    _computeGenreMastery: function (progress) {
+        let changed = false;
 
-        // On compte combien de ces histoires l'utilisateur a vraiment finies
-        // (On croise les IDs des histoires d'horreur avec les IDs complétés par le joueur)
-        const horrorCompletedCount = horrorStories.filter(s => progress.completedStories.includes(s.id)).length;
+        // CONFIGURATION DES PALIERS PAR GENRE
+        const GENRE_RULES = [
+            {
+                genre: 'Horreur',
+                tiers: [
+                    { count: 3, id: 'initie_horreur' },
+                    { count: 6, id: 'traqueur_ombres' },
+                    { count: 10, id: 'maitre_effroi' }
+                ]
+            },
+            {
+                genre: 'Sci-Fi',
+                tiers: [
+                    { count: 2, id: 'cadet_scifi' }, // Seuil bas spécifique pour Sci-Fi
+                    { count: 6, id: 'explorateur_galactique' },
+                    { count: 10, id: 'amiral_cosmos' }
+                ]
+            },
+            {
+                genre: 'Thriller',
+                tiers: [
+                    { count: 3, id: 'nerfs_acier' },
+                    { count: 6, id: 'expert_tension' },
+                    { count: 10, id: 'maitre_suspense' }
+                ]
+            },
+            {
+                genre: 'Western',
+                tiers: [
+                    { count: 3, id: 'pied_tendre' },
+                    { count: 6, id: 'gachette_rapide' },
+                    { count: 10, id: 'legende_ouest' }
+                ]
+            },
+            {
+                genre: 'Aventure',
+                tiers: [
+                    { count: 3, id: 'voyageur_intrepide' },
+                    { count: 6, id: 'chasseur_reliques' },
+                    { count: 10, id: 'roi_exploration' }
+                ]
+            },
+            {
+                genre: 'Fantasy',
+                tiers: [
+                    { count: 3, id: 'ecuyer_heroique' },
+                    { count: 6, id: 'chevalier_royaume' },
+                    { count: 10, id: 'gardien_mondes' }
+                ]
+            },
+            {
+                genre: 'Polar',
+                tiers: [
+                    { count: 3, id: 'detective_prive' },
+                    { count: 6, id: 'inspecteur_chef' },
+                    { count: 10, id: 'grand_commissaire' }
+                ]
+            }
+        ];
 
-        // Si 3 ou plus, on débloque
-        if (horrorCompletedCount >= 3 && !progress.achievements.includes('expert_horreur')) {
-            progress.achievements.push('expert_horreur');
-            setTimeout(() => this._notify('expert_horreur', "Spécialiste"), 1500);
-            hasChanged = true;
-        }
+        // BOUCLE DE TRAITEMENT
+        GENRE_RULES.forEach(rule => {
+            // 1. Trouver les histoires de ce genre dans la DB
+            const genreStories = window.BRAGI_DB.stories.filter(s => s.genre === rule.genre);
 
-        const scifiStories = window.BRAGI_DB.stories.filter(s => s.genre === 'Sci-Fi');
-        const scifiCompletedCount = scifiStories.filter(s => progress.completedStories.includes(s.id)).length;
+            // 2. Compter combien le joueur en a fini
+            const count = genreStories.filter(s => progress.completedStories.includes(s.id)).length;
 
-        if (scifiCompletedCount >= 2 && !progress.achievements.includes('expert_scifi')) {
-            progress.achievements.push('expert_scifi');
-            this._notify('expert_scifi', "Spécialiste");
-            hasChanged = true;
-        }
+            // 3. Vérifier chaque palier
+            rule.tiers.forEach(tier => {
+                if (count >= tier.count && !progress.achievements.includes(tier.id)) {
+                    progress.achievements.push(tier.id);
+                    // Délai calculé pour éviter l'avalanche de notifications visuelles
+                    setTimeout(() => this._notify(tier.id, "Spécialiste " + rule.genre), 1500 + (tier.count * 200));
+                    changed = true;
+                }
+            });
+        });
 
-        // --- 3. CALCUL DES SECRETS (Existant) ---
+        return changed;
+    },
+
+    /**
+     * Calcul des Secrets et Easter Eggs (Méta-Trophée)
+     */
+    _computeSecretsSuccess: function (progress) {
         const allSecretIds = window.BRAGI_DB.secrets.map(s => s.id);
-        const unlockedSecretsCount = progress.achievements.filter(id => allSecretIds.includes(id)).length;
+        const unlockedCount = progress.achievements.filter(id => allSecretIds.includes(id)).length;
+        let changed = false;
 
-        if (unlockedSecretsCount >= 3 && !progress.achievements.includes('chasseur_secrets')) {
+        if (unlockedCount >= 3 && !progress.achievements.includes('chasseur_secrets')) {
             progress.achievements.push('chasseur_secrets');
             setTimeout(() => this._notify('chasseur_secrets', "Méta Exploit"), 2000);
-            hasChanged = true;
+            changed = true;
         }
 
-        // --- 4. SAUVEGARDE FINALE ---
-        if (hasChanged) {
-            this._save(progress);
-        }
+        return changed;
     },
+
+    // --- Utilitaires de Stockage ---
 
     hasAchievement: function (achievementId) {
         return this.getProgress().achievements.includes(achievementId);
@@ -231,10 +358,9 @@ window.BragiStorage = {
                 if (!Array.isArray(data.achievements)) data.achievements = [];
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 
-                // ICI : On vérifie rétroactivement si l'import mérite des trophées
+                // Vérification rétroactive des trophées
                 this.checkProgressionTrophies();
 
-                // On recharge la page pour afficher les changements
                 alert("Progression importée avec succès !");
                 location.reload();
                 return true;
@@ -262,7 +388,6 @@ window.BragiStorage = {
         `;
         document.body.appendChild(toast);
 
-        // Animation
         setTimeout(() => toast.classList.add('visible'), 100);
         setTimeout(() => {
             toast.classList.remove('visible');
@@ -274,16 +399,14 @@ window.BragiStorage = {
 
 /**
  * ------------------------------------------------------------------
- * SÉCURITÉ & ANTI-TRICHE (HARDCORE MODE)
+ * 3. SÉCURITÉ & ANTI-TRICHE (HARDCORE MODE)
  * ------------------------------------------------------------------
  */
 window.setupF12Protection = function (redirectUrl) {
 
-    // Fonction interne pour punir AVANT de rediriger
-    // Permet de valider le trophée 'cheater' même si on quitte la page
+    // Helper : Punir AVANT de rediriger pour garantir le trophée
     function punishCheater() {
         if (window.BragiStorage) {
-            // Force l'ajout immédiat (synchrone)
             const progress = BragiStorage.getProgress();
             if (!progress.achievements.includes('cheater')) {
                 progress.achievements.push('cheater');
@@ -293,7 +416,7 @@ window.setupF12Protection = function (redirectUrl) {
         window.location.href = redirectUrl;
     }
 
-    // 1. Détection Clavier (F12, Ctrl+Shift+I, etc.)
+    // A. Détection Clavier
     document.addEventListener('keydown', function (event) {
         if (event.key === 'F12' || event.keyCode === 123 ||
             (event.ctrlKey && event.shiftKey && ['I', 'J', 'C'].includes(event.key)) ||
@@ -303,16 +426,16 @@ window.setupF12Protection = function (redirectUrl) {
         }
     });
 
-    // 2. Détection Clic Droit
+    // B. Détection Clic Droit
     document.addEventListener('contextmenu', function (event) {
         event.preventDefault();
         punishCheater();
     });
 
-    // 3. Détection DevTools Ouvert (Méthode Debugger)
+    // C. Détection DevTools (Boucle Debugger)
     setInterval(function () {
         const start = performance.now();
-        debugger; // <--- Point d'arrêt forcé
+        debugger;
         const end = performance.now();
         if (end - start > 100) {
             punishCheater();
@@ -323,7 +446,7 @@ window.setupF12Protection = function (redirectUrl) {
     // GESTION DES EASTER EGGS IN-GAME
     // ---------------------------------------------------
 
-    // A. Konami Code
+    // D. Konami Code
     const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
     let konamiIndex = 0;
 
@@ -335,28 +458,26 @@ window.setupF12Protection = function (redirectUrl) {
                 konamiIndex = 0;
             }
         } else {
-            // Reset intelligent : si la touche pressée est le début de la séquence, on met l'index à 1
             konamiIndex = (e.key === konamiSequence[0]) ? 1 : 0;
         }
     });
 
-    // B. Noctambule (Entre 00h et 04h)
+    // E. Noctambule
     const hour = new Date().getHours();
     if (hour >= 0 && hour <= 4) {
         if (window.BragiStorage) BragiStorage.markAchievement('noctambule');
     }
 
-    // C. Rat de Bibliothèque (2 min sur stories.html)
+    // F. Rat de Bibliothèque
     if (window.location.pathname.includes('stories.html')) {
         setTimeout(() => {
-            // Vérification double pour être sûr qu'on est toujours sur la page
             if (window.location.pathname.includes('stories.html')) {
                 if (window.BragiStorage) BragiStorage.markAchievement('rat_bibliotheque');
             }
         }, 120000);
     }
 
-    // D. Maître de l'Espace (Resize fenêtre)
+    // G. Maître de l'Espace
     let resizeCount = 0;
     let resizeTimer = null;
     window.addEventListener('resize', () => {
@@ -372,7 +493,7 @@ window.setupF12Protection = function (redirectUrl) {
         }
     });
 
-    // E. L'Apprenti de Bragi (Bas de page about.html + 30s)
+    // H. L'Apprenti de Bragi
     if (window.location.pathname.includes('about.html')) {
         let aboutTimeout = null;
         window.addEventListener('scroll', () => {
