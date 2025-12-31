@@ -229,8 +229,30 @@
         </header>
 
         <!-- Trophies Grid -->
+        <header class="text-center space-y-8 mb-16 pt-20 border-t border-white/5">
+            <div class="flex items-center justify-center gap-3 text-violet-400">
+                <span class="w-12 h-px bg-violet-400/40"></span>
+                <span class="font-heading text-xs tracking-[0.5em] uppercase">HISTOIRES</span>
+                <span class="w-12 h-px bg-violet-400/40"></span>
+            </div>
+            <h2 class="text-4xl font-bold tracking-tighter title-cinzel">TROPHÉES D'HISTOIRES</h2>
+        </header>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-32" id="trophies-grid">
             <!-- Trophies injected here -->
+        </div>
+
+        <!-- Progression Trophies Section -->
+        <header class="text-center space-y-8 mb-16 pt-20 border-t border-white/5">
+            <div class="flex items-center justify-center gap-3 text-violet-400">
+                <span class="w-12 h-px bg-violet-400/40"></span>
+                <span class="font-heading text-xs tracking-[0.5em] uppercase">HAUTS FAITS</span>
+                <span class="w-12 h-px bg-violet-400/40"></span>
+            </div>
+            <h2 class="text-4xl font-bold tracking-tighter title-cinzel">TROPHÉES DE PROGRESSION</h2>
+        </header>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-32" id="progression-grid">
+            <!-- Progression trophies injected here -->
         </div>
 
         <!-- Easter Eggs Section -->
@@ -269,36 +291,18 @@
     </footer>
 
     <script>
-        const TROPHIES = [
-            { id: 'labyrinth', title: "Lueur dans l'Abîme", desc: "Compléter 'Le Labyrinthe Oublié'", icon: 'brightness_7', genre: 'Horreur' },
-            { id: 'manor', title: "Maître du Silence", desc: "Compléter 'Le Manoir du Silence'", icon: 'visibility_off', genre: 'Horreur' },
-            { id: 'summer_camp', title: "Dernier Survivant", desc: "Compléter 'Lac Sanglant'", icon: 'nature_people', genre: 'Horreur' },
-            { id: 'signal_zero', title: "Éclaireur du Néant", desc: "Compléter 'Signal Zéro'", icon: 'radio', genre: 'Sci-Fi' },
-            { id: 'kubrick9', title: "IA Hunter", desc: "Compléter 'Kubrick 9'", icon: 'memory', genre: 'Sci-Fi' },
-            { id: 'dernier_souffle', title: "Survivant de l'Arctique", desc: "Compléter 'Dernier Souffle'", icon: 'ac_unit', genre: 'Thriller' },
-            { id: 'duel', title: "Fine Gâchette", desc: "Compléter 'Dernier Duel'", icon: 'gps_fixed', genre: 'Western' },
-            { id: 'treasure', title: "Légende des Sept Mers", desc: "Compléter 'L'Île Maudite'", icon: 'sailing', genre: 'Aventure' },
-            { id: 'jurassic', title: "Dompteur de Géants", desc: "Compléter 'Isla Nublar'", icon: 'pets', genre: 'Aventure' },
-            { id: 'quest', title: "Gardien du Code", desc: "Compléter 'Code Ancestral'", icon: 'shield', genre: 'Fantasy' },
-            { id: 'prohibition', title: "Incorruptible", desc: "Compléter 'Chicago 1932'", icon: 'policy', genre: 'Polar' }
-        ];
-
-        const EASTER_EGGS = [
-            { id: 'cheater', title: "Hacker de pacotille", desc: "Tenter d'ouvrir la console de développement.", icon: 'terminal', genre: 'Secret' },
-            { id: 'konami', title: "L'Héritage de Konami", desc: "Saisir le code ancestral (↑↑↓↓←→←→BA).", icon: 'videogame_asset', genre: 'Secret' },
-            { id: 'noctambule', title: "Noctambule", desc: "Lancer une archive entre minuit et 4h du matin.", icon: 'dark_mode', genre: 'Secret' },
-            { id: 'rat_bibliotheque', title: "Rat de Bibliothèque", desc: "Passer plus de 2 minutes à explorer les rayons de la bibliothèque.", icon: 'menu_book', genre: 'Secret' },
-            { id: 'maitre_espace', title: "Maître de l'Espace", desc: "Perturber la géométrie physique de la fenêtre 10 fois de suite.", icon: 'aspect_ratio', genre: 'Secret' },
-            { id: 'apprenti_bragi', title: "L'Apprenti de Bragi", desc: "Lire les chroniques de Bragi jusqu'à la dernière ligne.", icon: 'school', genre: 'Secret' }
-        ];
-
         document.addEventListener('DOMContentLoaded', () => {
             const grid = document.getElementById('trophies-grid');
+            const progressionGrid = document.getElementById('progression-grid');
             const eggGrid = document.getElementById('easter-eggs-grid');
             const finishedCountEl = document.getElementById('finished-count');
             const completionRateEl = document.getElementById('completion-rate');
 
-            if (!window.BragiStorage) return;
+            // Sécurité : Si le fichier JS n'a pas chargé la DB, on arrête tout
+            if (!window.BragiStorage || !window.BRAGI_DB) {
+                console.error("Erreur critique: Base de données Bragi introuvable.");
+                return;
+            }
 
             const progress = BragiStorage.getProgress();
             const completedIds = progress.completedStories || [];
@@ -325,21 +329,30 @@
                 container.insertAdjacentHTML('beforeend', html);
             };
 
-            TROPHIES.forEach(t => {
+            // 1. Rendu des Histoires (Depuis la DB globale)
+            window.BRAGI_DB.stories.forEach(t => {
                 const isUnlocked = completedIds.includes(t.id);
                 if (isUnlocked) finishedCount++;
                 renderCard(grid, t, isUnlocked);
             });
 
-            EASTER_EGGS.forEach(e => {
+            // 2. Rendu des Secrets
+            window.BRAGI_DB.secrets.forEach(e => {
                 const isUnlocked = achievements.includes(e.id);
                 if (isUnlocked) finishedCount++;
                 renderCard(eggGrid, e, isUnlocked);
             });
 
-            // Update stats
+            // 3. Rendu de la Progression
+            window.BRAGI_DB.progression.forEach(p => {
+                const isUnlocked = achievements.includes(p.id);
+                if (isUnlocked) finishedCount++;
+                renderCard(progressionGrid, p, isUnlocked);
+            });
+
+            // Calcul des stats
             finishedCountEl.innerText = finishedCount;
-            const totalPossible = TROPHIES.length + EASTER_EGGS.length;
+            const totalPossible = window.BRAGI_DB.stories.length + window.BRAGI_DB.secrets.length + window.BRAGI_DB.progression.length;
             const rate = Math.round((finishedCount / totalPossible) * 100);
             completionRateEl.innerText = `${rate}%`;
 
