@@ -31,37 +31,30 @@ window.BRAGI_DB = {
         { id: 'maitre_narrateur', title: "Maître Narrateur", desc: "Terminer 7 récits épiques.", icon: 'auto_stories', genre: 'Progression' },
         { id: 'chasseur_secrets', title: "Chasseur de Secrets", desc: "Découvrir 3 Easter Eggs cachés.", icon: 'search', genre: 'Progression' },
         { id: 'exportateur_prudent', title: "Exportateur Prudent", desc: "Sauvegarder votre progression dans un fichier .brg.", icon: 'cloud_download', genre: 'Progression' },
-
         // --- HORREUR (3, 6, 10) ---
         { id: 'initie_horreur', title: "Initié de l'Horreur", desc: "Survivre à 3 récits d'horreur.", icon: 'skull', genre: 'Progression' },
         { id: 'traqueur_ombres', title: "Traqueur d'Ombres", desc: "Survivre à 6 cauchemars différents.", icon: 'visibility', genre: 'Progression' },
         { id: 'maitre_effroi', title: "Maître de l'Effroi", desc: "Survivre à 10 récits d'horreur.", icon: 'sentiment_very_dissatisfied', genre: 'Progression' },
-
         // --- SCIENCE-FICTION (2, 6, 10) ---
         { id: 'cadet_scifi', title: "Cadet de l'Espace", desc: "Compléter 2 récits de Sci-Fi.", icon: 'rocket_launch', genre: 'Progression' },
         { id: 'explorateur_galactique', title: "Explorateur Galactique", desc: "Voyager à travers 6 mondes futuristes.", icon: 'public', genre: 'Progression' },
         { id: 'amiral_cosmos', title: "Amiral du Cosmos", desc: "Maîtriser l'espace-temps dans 10 épopées.", icon: 'auto_awesome', genre: 'Progression' },
-
         // --- THRILLER (3, 6, 10) ---
         { id: 'nerfs_acier', title: "Nerfs d'Acier", desc: "Garder son sang-froid dans 3 thrillers.", icon: 'psychology', genre: 'Progression' },
         { id: 'expert_tension', title: "Expert en Tension", desc: "Survivre au suspense de 6 thrillers.", icon: 'hotel_class', genre: 'Progression' },
         { id: 'maitre_suspense', title: "Maître du Suspense", desc: "Terminer 10 thrillers haletants.", icon: 'hourglass_bottom', genre: 'Progression' },
-
         // --- WESTERN (3, 6, 10) ---
         { id: 'pied_tendre', title: "Pied-Tendre", desc: "Chevaucher à travers 3 westerns.", icon: 'bedroom_baby', genre: 'Progression' },
         { id: 'gachette_rapide', title: "Gâchette Rapide", desc: "Faire la loi dans 6 récits de l'Ouest.", icon: 'stars', genre: 'Progression' },
         { id: 'legende_ouest', title: "Légende de l'Ouest", desc: "Devenir un mythe dans 10 westerns.", icon: 'wb_sunny', genre: 'Progression' },
-
         // --- AVENTURE (3, 6, 10) ---
         { id: 'voyageur_intrepide', title: "Voyageur Intrépide", desc: "Vivre 3 grandes aventures.", icon: 'hiking', genre: 'Progression' },
         { id: 'chasseur_reliques', title: "Chasseur de Reliques", desc: "Découvrir les trésors de 6 aventures.", icon: 'diamond', genre: 'Progression' },
         { id: 'roi_exploration', title: "Roi de l'Exploration", desc: "Cartographier 10 mondes perdus.", icon: 'map', genre: 'Progression' },
-
         // --- FANTASY (3, 6, 10) ---
         { id: 'ecuyer_heroique', title: "Écuyer Héroïque", desc: "Accomplir 3 quêtes fantastiques.", icon: 'shield', genre: 'Progression' },
         { id: 'chevalier_royaume', title: "Chevalier du Royaume", desc: "Triompher de 6 épopées magiques.", icon: 'castle', genre: 'Progression' },
         { id: 'gardien_mondes', title: "Gardien des Mondes", desc: "Sauver 10 univers fantastiques.", icon: 'auto_fix_high', genre: 'Progression' },
-
         // --- POLAR (3, 6, 10) ---
         { id: 'detective_prive', title: "Détective Privé", desc: "Résoudre 3 enquêtes criminelles.", icon: 'fingerprint', genre: 'Progression' },
         { id: 'inspecteur_chef', title: "Inspecteur Chef", desc: "Mettre 6 criminels sous les verrous.", icon: 'local_police', genre: 'Progression' },
