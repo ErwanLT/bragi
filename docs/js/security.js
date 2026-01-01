@@ -19,6 +19,7 @@ window.BRAGI_DB = {
         { id: 'signal_zero', title: "Éclaireur du Néant", desc: "Compléter 'Signal Zéro'", icon: 'radio', genre: 'Sci-Fi' },
         { id: 'kubrick9', title: "IA Hunter", desc: "Compléter 'Kubrick 9'", icon: 'memory', genre: 'Sci-Fi' },
         { id: 'dernier_souffle', title: "Survivant de l'Arctique", desc: "Compléter 'Dernier Souffle'", icon: 'ac_unit', genre: 'Thriller' },
+        { id: 'le_mystere_du_reveillon', title: "Nouvel an sous tension", desc: "Compléter 'Le mystère du nouvel an'", icon: 'calendar_month', genre: 'Thriller'},
         { id: 'duel', title: "Fine Gâchette", desc: "Compléter 'Dernier Duel'", icon: 'gps_fixed', genre: 'Western' },
         { id: 'treasure', title: "Légende des Sept Mers", desc: "Compléter 'L'Île Maudite'", icon: 'sailing', genre: 'Aventure' },
         { id: 'jurassic', title: "Dompteur de Géants", desc: "Compléter 'Isla Nublar'", icon: 'pets', genre: 'Aventure' },

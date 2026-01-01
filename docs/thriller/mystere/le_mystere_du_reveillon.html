@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark scroll-smooth">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Le Mystère du Réveillon | Bragi - Thriller</title>
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <meta name="description" content="Un meurtre à minuit. Un manoir clos. Le tueur est parmi vous.">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="../../style/stories/thriller/mystere.css">
+
+    <script src="../../js/security.js"></script>
+    <script src="../../js/storyEngine.js"></script>
+    <script src="../../js/thriller/mystere/le_mystere_du_reveillon.js" defer></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            100: '#fbf5d5',
+                            400: '#eab308',
+                            500: '#d97706',
+                            900: '#451a03',
+                        },
+                        obsidian: '#0a0a0a',
+                        surface: '#171717',
+                    },
+                    fontFamily: {
+                        serif: ["Playfair Display", "serif"],
+                        sans: ["Montserrat", "sans-serif"],
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-obsidian text-slate-300 min-h-screen flex flex-col font-sans selection:bg-gold-500/30 selection:text-gold-100">
+
+<div class="vignette-overlay"></div>
+<div class="noise-overlay"></div>
+
+<header class="fixed top-0 left-0 right-0 z-50 bg-obsidian/80 backdrop-blur-md border-b border-gold-500/20 h-20">
+    <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+        <a href="../../index.html" class="flex items-center gap-4 group no-underline text-gold-100">
+            <span class="font-serif text-2xl tracking-widest font-bold">BRAGI</span>
+        </a>
+        <a href="../mystere.html" class="text-[10px] text-gold-500/80 hover:text-gold-400 transition-colors font-bold tracking-widest uppercase border border-gold-500/20 px-4 py-2 rounded-sm no-underline hover:bg-gold-500/10">QUITTER L'ENQUÊTE</a>
+    </div>
+</header>
+
+<div id="hud" class="mystery-hud hidden lg:block"></div>
+
+<main class="pt-32 pb-32 px-6">
+    <div class="max-w-4xl mx-auto">
+
+        <div class="w-full relative rounded-sm overflow-hidden border border-gold-500/20 shadow-2xl mb-12 h-[300px] md:h-[400px] group">
+            <div class="absolute inset-0 bg-cover bg-center sepia-[0.3] contrast-125 transition-transform duration-[3000ms] group-hover:scale-105"
+                 style='background-image: url("../../img/cards/stories/le_mystere_du_reveillon.png");'>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/20 to-transparent"></div>
+            <div class="absolute bottom-6 left-6 border-l-2 border-gold-500 pl-4">
+                <h1 class="text-4xl md:text-5xl font-serif text-gold-100 mb-2">Minuit Sonante</h1>
+                <p class="text-gold-500/80 uppercase tracking-widest text-xs font-bold">Dossier #01-2026</p>
+            </div>
+        </div>
+
+        <div id="story" class="relative min-h-[400px]">
+
+            <section id="scene-start" class="section visible">
+                <h2 class="section-title">Le Toast Interrompu</h2>
+                <div class="prose">
+                    <p>La réception du Nouvel An bat son plein dans le manoir des Dubois. Le champagne coule à flots, les rires fusent. Vous discutez près de la cheminée lorsque l'horloge grand-père entame les douze coups de minuit.</p>
+                    <p>À la sixième frappe, les lumières s'éteignent brutalement. Un silence de mort, suivi d'un cri.</p>
+                </div>
+                <div class="choices-grid">
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-body">
+                        <span class="choice-title">Allumer son briquet</span>
+                        <span class="choice-desc">Voir ce qui se passe immédiatement.</span>
+                    </button>
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-body" data-mental="5">
+                        <span class="choice-title">Attendre le retour du courant</span>
+                        <span class="choice-desc">Garder son sang-froid dans l'obscurité.</span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="scene-body" class="section">
+                <h2 class="section-title">Scène de Crime</h2>
+                <div class="prose">
+                    <p>La lumière revient. Victor Dubois gît sur le tapis persan, une dague plantée dans le thorax. Autour de lui, les invités sont pétrifiés.</p>
+                    <p>Vous êtes le seul ici avec une expérience d'enquêteur. La police mettra des heures à arriver avec cette neige. C'est à vous d'agir.</p>
+                </div>
+                <div class="choices-grid">
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation" data-paper="1">
+                        <span class="choice-title">Examiner le corps (Discrétion)</span>
+                        <span class="choice-desc">Fouiller ses poches avant que quelqu'un ne s'approche.</span>
+                    </button>
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation">
+                        <span class="choice-title">Sécuriser la pièce (Autorité)</span>
+                        <span class="choice-desc">Ordonner à personne de ne sortir.</span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="scene-investigation" class="section">
+                <h2 class="section-title">Le Salon Principal</h2>
+                <div class="prose">
+                    <p>Le corps a été couvert. Les principaux suspects sont retenus dans le salon. Vous devez rassembler des preuves avant de porter une accusation.</p>
+                </div>
+
+                <div class="choices-grid">
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-eleonore">
+                        <span class="choice-title">Interroger Éléonore (Veuve)</span>
+                    </button>
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-marc">
+                        <span class="choice-title">Interroger Marc-Antoine (Associé)</span>
+                    </button>
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-jean">
+                        <span class="choice-title">Parler à Jean (Majordome)</span>
+                    </button>
+
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-library">
+                        <span class="choice-title">Inspecter la Bibliothèque</span>
+                        <span class="choice-desc">D'où provient l'arme du crime.</span>
+                    </button>
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-office">
+                        <span class="choice-title">Fouiller le Bureau</span>
+                        <span class="choice-desc">Là où Victor passait ses journées.</span>
+                    </button>
+
+                    <button id="btn-accuse" class="choice-btn border-red-500/50 hover:bg-red-900/20 hidden" onclick="makeChoice(this)" data-next="scene-accusation">
+                        <span class="choice-title text-red-400">PORTER UNE ACCUSATION</span>
+                        <span class="choice-desc">Vous avez assez d'éléments pour désigner le coupable.</span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="scene-library" class="section">
+                <h2 class="section-title">La Bibliothèque</h2>
+                <div class="prose">
+                    <p>Le présentoir de la dague est vide. Juste à côté, un livre sur la stratégie militaire est ouvert. Plus intéressant : vous trouvez un carnet de croquis oublié sur un fauteuil.</p>
+                </div>
+                <div class="choices-grid">
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation" data-artiste="1" data-clue="sketch">
+                        <span class="choice-title">Analyser le carnet</span>
+                        <span class="choice-desc">Il appartient à Mlle Sorel, l'artiste.</span>
+                    </button>
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation">
+                        <span class="choice-title">Retourner au salon</span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="scene-office" class="section">
+                <h2 class="section-title">Le Bureau</h2>
+                <div class="prose">
+                    <p>La pièce sent le tabac froid. Un coffre-fort mural est entrouvert. À l'intérieur, des dossiers financiers.</p>
+                </div>
+                <div class="choices-grid">
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation" data-fraud="1">
+                        <span class="choice-title">Lire les dossiers</span>
+                        <span class="choice-desc">Preuves de fraude impliquant Marc-Antoine.</span>
+                    </button>
+
+                    <div id="opt-camera" class="hidden w-full">
+                        <button class="choice-btn w-full" onclick="makeChoice(this)" data-next="scene-video" data-video="1">
+                            <span class="choice-title">Vérifier l'ordinateur</span>
+                            <span class="choice-desc">Jean a mentionné une caméra de sécurité.</span>
+                        </button>
+                    </div>
+
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation">
+                        <span class="choice-title">Retourner au salon</span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="scene-video" class="section">
+                <h2 class="section-title">La Vidéo de Surveillance</h2>
+                <div class="prose">
+                    <p>L'image est granuleuse. À 23h59, on voit Jean, le majordome, entrer dans la bibliothèque et en ressortir avec quelque chose sous sa veste. Cependant, à minuit pile, lors du noir, une silhouette féminine court vers le salon.</p>
+                </div>
+                <div class="choices-grid">
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation">
+                        <span class="choice-title">Noter ces informations précieuses</span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="scene-eleonore" class="section">
+                <h2 class="section-title">Éléonore Dubois</h2>
+                <div class="prose">
+                    <p>"Victor était un monstre," dit-elle sans émotion. "Mais de là à le tuer... Je voulais juste le divorce. Il menaçait de tout léguer à cette petite peintre."</p>
+                </div>
+                <div class="choices-grid">
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation" data-testament="1">
+                        <span class="choice-title">Noter le mobile financier</span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="scene-marc" class="section">
+                <h2 class="section-title">Marc-Antoine</h2>
+                <div class="prose">
+                    <p>L'homme transpire abondamment. "Je n'ai rien fait ! J'étais au téléphone avec mon avocat à minuit, vérifiez mon journal d'appels !"</p>
+                </div>
+                <div class="choices-grid">
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation" data-alibi_marc="1">
+                        <span class="choice-title">Vérifier son téléphone</span>
+                        <span class="choice-desc">L'alibi semble solide.</span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="scene-jean" class="section">
+                <h2 class="section-title">Jean, le Majordome</h2>
+                <div class="prose">
+                    <p>Impassible, il nettoie un verre. "Monsieur se faisait beaucoup d'ennemis. Il craignait pour sa vie, d'où la caméra qu'il a installée dans son bureau hier."</p>
+                    <div id="jean-paper-reaction" class="hidden mt-4 text-gold-400 italic">
+                        (En voyant le papier 'TRAHISON') "Ah... Monsieur soupçonnait Mlle Sorel de vendre des faux."
+                    </div>
+                </div>
+                <div class="choices-grid">
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation" data-camera="1">
+                        <span class="choice-title">Merci pour l'info sur la caméra</span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="scene-accusation" class="section">
+                <h2 class="section-title">Le Jugement</h2>
+                <div class="prose">
+                    <p>Le silence se fait. Tous les regards sont braqués sur vous. Vous savez qui a tué Victor Dubois.</p>
+                </div>
+                <div class="choices-grid">
+                    <button class="choice-btn" onclick="computeEnding('fin_eleonore')">
+                        <span class="choice-title">Éléonore (Pour l'héritage)</span>
+                    </button>
+                    <button class="choice-btn" onclick="computeEnding('fin_marc')">
+                        <span class="choice-title">Marc-Antoine (Pour la fraude)</span>
+                    </button>
+                    <button class="choice-btn" onclick="computeEnding('fin_jean')">
+                        <span class="choice-title">Jean (Comportement suspect)</span>
+                    </button>
+                    <button class="choice-btn" onclick="computeEnding('fin_artiste')">
+                        <span class="choice-title">Mlle Sorel (L'Artiste)</span>
+                    </button>
+                </div>
+            </section>
+
+        </div>
+    </div>
+</main>
+
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-t border-gold-500/20 py-4 px-6 flex justify-between uppercase tracking-widest text-[10px] text-gold-500/50">
+    <div>Bragi Système v2.1 // Module Enquête</div>
+    <div id="save-indicator" class="text-gold-400/0 transition-opacity">Données Sauvegardées</div>
+</nav>
+</body>
+</html>
