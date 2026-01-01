@@ -45,6 +45,8 @@ Accédez à la [Bibliothèque complète](https://erwanlt.github.io/bragi/stories
 *   🎬 **Thriller**
     *   *Survie*
         *   **Dernier Souffle** : Survivre au crash, affronter le blizzard.
+    *   *Mystère*
+        *  **Le mystère du réveillon** : Minuit. Un meurtre. Le coupable est l'un des invités. À vous de le démasquer avant qu'il ne soit trop tard. 
     
 
 ## 🛠 Structure du projet
