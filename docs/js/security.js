@@ -304,6 +304,10 @@ window.BragiStorage = {
         return this.getProgress().achievements.includes(achievementId);
     },
 
+    isCompleted: function (storyId) {
+        return this.getProgress().completedStories.includes(storyId);
+    },
+
     getProgress: function () {
         const data = localStorage.getItem(STORAGE_KEY);
         let progress = { completedStories: [], achievements: [] };
