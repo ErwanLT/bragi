@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neon Cortex | Bragi - Cyberpunk</title>
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <meta name="description" content="Néo-Tokyo, 2084. Une course contre la montre dans une ville qui ne dort jamais.">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+    <script src="../../js/security.js"></script>
+    <script src="../../js/storyEngine.js"></script>
+    <script src="../../js/science-fiction/cyberpunk/neon_cortex.js" defer></script>
+
+    <link rel="stylesheet" href="../../style/stories/science-fiction/cyberpunk.css">
+</head>
+
+<body class="min-h-screen flex flex-col">
+<div class="fixed inset-0 pointer-events-none z-50 bg-[linear-gradient(rgba(18,16,16,0)50%,rgba(0,0,0,0.1)50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%] opacity-20"></div>
+
+<header class="sticky top-0 z-50 bg-black/90 backdrop-blur border-b border-[#00f3ff]/30 h-16">
+    <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#ff00c1] animate-pulse">memory</span>
+            <span class="font-['Orbitron'] text-xl font-bold text-white tracking-widest">NEON CORTEX</span>
+        </div>
+        <a href="../../stories.html" class="text-xs font-['Share_Tech_Mono'] text-[#00f3ff] hover:text-white transition-colors border border-[#00f3ff]/30 px-3 py-1 rounded hover:bg-[#00f3ff]/10 uppercase">
+            < Déconnexion
+        </a>
+    </div>
+</header>
+
+<main class="flex-grow w-full px-6 py-10 max-w-7xl mx-auto">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+        <div class="lg:col-span-8 space-y-12" id="story">
+
+            <div class="relative rounded-lg overflow-hidden border-2 border-[#00f3ff]/50 shadow-[0_0_30px_rgba(0,243,255,0.15)] group">
+                <img src="../../img/cards/stories/neon_cortex.png" class="w-full h-64 object-cover opacity-60 group-hover:opacity-100 transition-opacity duration-700">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6">
+                    <h1 class="text-4xl md:text-6xl font-bold text-white mb-2 glitch-text" data-text="PROTOCOLE GHOST">PROTOCOLE GHOST</h1>
+                    <p class="text-[#ff00c1] font-mono text-sm tracking-widest">> CIBLE: ARASAKA TOWER // STATUT: CRITIQUE</p>
+                </div>
+            </div>
+
+            <div class="section visible">
+                <div class="prose">
+                    <p class="text-sm text-[#00f3ff] mb-2">> BOOT SEQUENCE... OK.</p>
+                    <p>La douleur est la première chose que vous ressentez. Une brûlure glacée à la base du crâne. La puce <strong>Project Izanagi</strong> est logée dans votre port neural.</p>
+                    <p>Dex, votre Fixer, est mort. Vous l'avez vu se faire descendre par Takemura. Vous êtes seul, blessé, et la corpo la plus puissante du monde vous traque.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-synapse="-5" data-tech="+1" onclick="applyChoice(this)">
+                        <div class="flex justify-between">
+                            <span class="font-bold text-white">Lancer un diagnostic système</span>
+                            <span class="text-xs text-[#00f3ff]">[TECH]</span>
+                        </div>
+                        <span class="text-xs text-slate-400">Comprendre l'étendue des dégâts.</span>
+                    </button>
+                    <button class="choice choice-btn" data-credits="-20" data-heat="-5" onclick="applyChoice(this)">
+                        <div class="flex justify-between">
+                            <span class="font-bold text-white">Appeler un Medivac d'urgence</span>
+                            <span class="text-xs text-[#ff00c1]">[CREDITS]</span>
+                        </div>
+                        <span class="text-xs text-slate-400">Cher mais sûr.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Le diagnostic défile sur votre rétine. <span class="text-[#ff00c1]">ALERTE: INTRUSION NEURALE DÉTECTÉE.</span> La puce tente de réécrire votre conscience.</p>
+                    <p>Vous êtes dans un motel miteux de Kabuki. Quelqu'un frappe à la porte.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-heat="+10" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Tirer à travers la porte</span>
+                        <span class="block text-xs text-slate-400">Pas de questions.</span>
+                    </button>
+                    <button class="choice choice-btn" data-tech="+1" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Hacker la caméra du couloir</span>
+                        <span class="block text-xs text-slate-400">Voir qui est là avant d'agir.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>C'est une Netrunner. Elle s'appelle <strong>Nyx</strong>. Elle dit qu'elle peut vous aider, mais elle veut une copie des données.</p>
+                    <p class="italic text-slate-400">"Tu as l'air d'un cadavre qui marche, V. Laisse-moi entrer."</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-data="+10" data-credits="-50" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Accepter son aide (Payer)</span>
+                        <span class="block text-xs text-slate-400">Elle stabilise la puce en échange de crédits.</span>
+                    </button>
+                    <button class="choice choice-btn" data-synapse="-10" data-tech="+2" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Refuser et tenter de se soigner seul</span>
+                        <span class="block text-xs text-slate-400">Risqué pour le cerveau, mais vous gardez vos secrets.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Vous sortez. La rue est bondée. Des drones patrouillent. Votre interface affiche un niveau de recherche en hausse.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-heat="-10" data-credits="-10" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Prendre le métro souterrain</span>
+                        <span class="block text-xs text-slate-400">Discret, mais lent.</span>
+                    </button>
+                    <button class="choice choice-btn" data-heat="+20" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Voler une voiture de corpo</span>
+                        <span class="block text-xs text-slate-400">Rapide, stylé, mais attire l'attention.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Viktor Vektor, votre charcudoc, vous examine. "C'est mauvais, gamin. Cette puce est une bombe à retardement. Il te faut un processeur plus puissant pour supporter la charge."</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-credits="-100" data-synapse="+30" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Acheter l'implant militaire (MK.4)</span>
+                        <span class="block text-xs text-slate-400">Coûteux, mais la meilleure protection.</span>
+                    </button>
+                    <button class="choice choice-btn" data-synapse="+10" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Prendre des stabilisateurs bon marché</span>
+                        <span class="block text-xs text-slate-400">Une solution temporaire.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Votre holo sonne. C'est <strong>Goro Takemura</strong>, l'ancien garde du corps de Saburo Arasaka. Il veut vous rencontrer au "Tom's Diner".</p>
+                    <p class="text-[#ff00c1]">> Goro: "Nous avons un ennemi commun. Ne me fais pas attendre."</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-heat="+5" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Aller voir Takemura</span>
+                        <span class="block text-xs text-slate-400">Alliance improbable.</span>
+                    </button>
+                    <button class="choice choice-btn" data-tech="+2" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Ignorer et contacter les Voodoo Boys</span>
+                        <span class="block text-xs text-slate-400">Ils connaissent le Net mieux que personne.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Si vous êtes allé voir Takemura : Il vous explique que son patron a été assassiné par son propre fils. Il veut votre témoignage.</p>
+                    <p>Si vous avez contacté les Voodoo Boys : Ils vous donnent rendez-vous à Pacifica, dans une église abandonnée.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-data="+10" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Écouter Takemura / Placide</span>
+                        <span class="block text-xs text-slate-400">Récupérer des infos sur la puce.</span>
+                    </button>
+                    <button class="choice choice-btn" data-heat="+10" data-credits="+50" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Traiter avec un Fixer local</span>
+                        <span class="block text-xs text-slate-400">Faire quelques boulots pour payer les factures.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Un Fixer vous propose un coup rapide. Infiltrer le casino Tyger Claws pour voler des données financières.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-tech="+3" data-credits="+100" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Hacker les serveurs (Distance)</span>
+                        <span class="block text-xs text-slate-400">Nécessite Tech élevé. Rapporte gros.</span>
+                    </button>
+                    <button class="choice choice-btn" data-heat="+20" data-credits="+80" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Entrer flingues au poing</span>
+                        <span class="block text-xs text-slate-400">Dangereux mais efficace.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>À Pacifica, les lois ne s'appliquent pas. Vous cherchez Brigitte, la chef des Voodoo Boys. Elle seule peut vous emmener au-delà du Mur Noir (Blackwall).</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-synapse="-10" data-data="+20" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Se connecter au subnet Voodoo</span>
+                        <span class="block text-xs text-slate-400">Plongée profonde. Risque de virus.</span>
+                    </button>
+                    <button class="choice choice-btn" data-heat="-10" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Rester offline et négocier</span>
+                        <span class="block text-xs text-slate-400">Plus lent, mais plus sûr pour votre cerveau.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Vous êtes dans le Cyberspace. Une muraille de glace rouge se dresse devant vous. Le Blackwall. Derrière, les IA sauvages.</p>
+                    <p class="text-[#ff00c1]">"N'y va pas," vous dit Johnny Silverhand, l'engramme dans votre tête.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-synapse="-20" data-data="+30" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Traverser le mur</span>
+                        <span class="block text-xs text-slate-400">Chercher Alt Cunningham. Risque extrême.</span>
+                    </button>
+                    <button class="choice choice-btn" data-synapse="+10" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Faire demi-tour</span>
+                        <span class="block text-xs text-slate-400">Préserver son esprit.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Vous vous réveillez dans un bain de glace. Brigitte vous a trahi. Elle voulait juste utiliser la puce comme appât.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-heat="+30" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Tuer Brigitte et Placide</span>
+                        <span class="block text-xs text-slate-400">Vengeance pure. Les Voodoo Boys vous traqueront.</span>
+                    </button>
+                    <button class="choice choice-btn" data-heat="-5" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">S'enfuir discrètement</span>
+                        <span class="block text-xs text-slate-400">Laisser couler. Priorité à la survie.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Vous recevez un message anonyme. Des coordonnées GPS dans les Badlands. C'est peut-être un piège, ou une opportunité.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-credits="-20" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Louer un véhicule tout-terrain</span>
+                        <span class="block text-xs text-slate-400">Direction le désert.</span>
+                    </button>
+                    <button class="choice choice-btn" data-tech="+2" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Tracer l'origine du signal</span>
+                        <span class="block text-xs text-slate-400">Analyse depuis la ville.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Le soleil tape dur. La poussière rouge recouvre tout. Vous rencontrez <strong>Panam Palmer</strong>, une nomade exilée.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-credits="-50" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">L'aider à récupérer sa voiture</span>
+                        <span class="block text-xs text-slate-400">Gagner sa confiance (et celle de son clan).</span>
+                    </button>
+                    <button class="choice choice-btn" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Refuser et continuer seul</span>
+                        <span class="block text-xs text-slate-400">Les nomades ne vous aideront pas.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Panam a un plan : abattre un AV (Aérodyne) d'Arasaka pour voler un équipement. Elle a besoin d'un tireur.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-heat="+40" data-tech="+5" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Utiliser la tourelle du Panzer</span>
+                        <span class="block text-xs text-slate-400">BOOM. Arasaka va être furieux.</span>
+                    </button>
+                    <button class="choice choice-btn" data-synapse="-5" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Hacker l'AV en vol</span>
+                        <span class="block text-xs text-slate-400">Plus subtil, mais difficile.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Le soir, autour du feu. Les Aldecaldos fêtent la victoire. Vous vous sentez... humain, pour la première fois depuis longtemps.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-synapse="+20" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Boire une bière et se détendre</span>
+                        <span class="block text-xs text-slate-400">Repose l'esprit.</span>
+                    </button>
+                    <button class="choice choice-btn" data-data="+5" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Parler stratégie avec Saul</span>
+                        <span class="block text-xs text-slate-400">Préparer la suite.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Il est temps de rentrer. Hanako Arasaka, la fille de l'Empereur, veut vous voir. Elle est au défilé du Festival des Chars.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-heat="+10" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Infiltrer le défilé</span>
+                        <span class="block text-xs text-slate-400">Foule, bruit, snipers.</span>
+                    </button>
+                    <button class="choice choice-btn" data-tech="+3" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Pirater un char allégorique</span>
+                        <span class="block text-xs text-slate-400">Utiliser le char comme cheval de Troie.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Des snipers d'Arasaka sont postés sur les toits. Ils visent Hanako... et vous.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-heat="+20" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Les éliminer un par un</span>
+                        <span class="block text-xs text-slate-400">Travail de pro.</span>
+                    </button>
+                    <button class="choice choice-btn" data-synapse="-10" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Hacker leurs implants optiques</span>
+                        <span class="block text-xs text-slate-400">Les rendre aveugles.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Vous êtes face à Hanako. Elle est froide, impassible. Elle vous propose un marché : témoignez contre son frère, et Arasaka vous soignera.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Accepter l'offre (Confiance Corpo)</span>
+                        <span class="block text-xs text-slate-400">Dangereux de faire confiance au diable.</span>
+                    </button>
+                    <button class="choice choice-btn" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Refuser et partir</span>
+                        <span class="block text-xs text-slate-400">Garder son indépendance.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>En sortant, une escouade d'élite d'Arasaka (les Ninjas Cybernétiques) vous tombe dessus. Takemura est touché.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-heat="+30" data-synapse="-10" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Sauver Takemura</span>
+                        <span class="block text-xs text-slate-400">Combat difficile. Honneur sauf.</span>
+                    </button>
+                    <button class="choice choice-btn" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Fuir et le laisser mourir</span>
+                        <span class="block text-xs text-slate-400">Plus facile de survivre seul.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Vous êtes à bout de forces. La puce a atteint 90% de synchronisation. Vous crachez du sang. Il faut agir maintenant. Trois options s'offrent à vous.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Appeler Rogue et l'Afterlife</span>
+                        <span class="block text-xs text-slate-400">Attaque frontale avec les légendes.</span>
+                    </button>
+                    <button class="choice choice-btn" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Appeler Panam et les Nomades</span>
+                        <span class="block text-xs text-slate-400">Attaque souterraine.</span>
+                    </button>
+                    <button class="choice choice-btn" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Appeler Hanako (Si offre acceptée)</span>
+                        <span class="block text-xs text-slate-400">La voie diplomatique.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Vous préparez votre équipement. C'est une mission suicide. La Tour Arasaka est une forteresse.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-credits="-200" data-tech="+5" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Acheter le meilleur matos disponible</span>
+                        <span class="block text-xs text-slate-400">Plus de chance de survie.</span>
+                    </button>
+                    <button class="choice choice-btn" data-synapse="+20" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Méditer et se concentrer</span>
+                        <span class="block text-xs text-slate-400">Calme avant la tempête.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Vous êtes dans le lobby de la tour. Les gardes sont partout. Les alarmes hurlent.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-heat="+50" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Mode Rambo : Tirer sur tout ce qui bouge</span>
+                        <span class="block text-xs text-slate-400">Sanglant.</span>
+                    </button>
+                    <button class="choice choice-btn" data-tech="+5" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Hacker les ascenseurs</span>
+                        <span class="block text-xs text-slate-400">Monter directement aux étages supérieurs.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Le cyborg légendaire, <strong>Adam Smasher</strong>, vous barre la route. Il est immense, terrifiant.</p>
+                    <p class="text-[#ff00c1]">"Tu as l'air d'un morceau de viande appétissant."</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-synapse="-30" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Utiliser le Sandevistan (Super-vitesse)</span>
+                        <span class="block text-xs text-slate-400">Esquiver ses missiles.</span>
+                    </button>
+                    <button class="choice choice-btn" data-tech="+10" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Pirater son armure</span>
+                        <span class="block text-xs text-slate-400">Désactiver ses armes.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Smasher est affaibli mais pas mort. Il charge.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Coup de grâce au corps à corps</span>
+                        <span class="block text-xs text-slate-400">Pour Johnny !</span>
+                    </button>
+                    <button class="choice choice-btn" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Tir en pleine tête</span>
+                        <span class="block text-xs text-slate-400">Efficace.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Vous atteignez Mikoshi, le serveur des âmes. C'est ici que vous pouvez vous connecter pour séparer votre esprit de celui de Johnny.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" data-data="+50" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Se brancher (Jack In)</span>
+                        <span class="block text-xs text-slate-400">Entrée dans le monde numérique.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p>Alt est là. Elle a pris le contrôle du système. Elle vous offre un choix :</p>
+                    <p>1. Votre corps meurt, votre esprit rejoint le Net avec elle (Immortalité numérique).</p>
+                    <p>2. Vous retournez dans votre corps, mais il ne vous reste que 6 mois à vivre.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice choice-btn" onclick="applyChoice(this)">
+                        <span class="font-bold text-white">Discuter avec Johnny une dernière fois</span>
+                        <span class="block text-xs text-slate-400">Les adieux.</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose">
+                    <p class="text-xl text-center text-[#00f3ff] animate-pulse">LA FIN EST PROCHE. CHOISISSEZ VOTRE DESTIN.</p>
+                </div>
+                <div class="mt-8 space-y-4">
+
+                    <button class="choice choice-btn border-[#00f3ff]" onclick="computeEnding('revolution')">
+                        <span class="font-bold text-[#00f3ff] text-lg">REJOINDRE LE NET (ALT)</span>
+                        <span class="block text-xs text-slate-400 mt-1">Laisser votre corps à Johnny. Devenir un pur esprit. Détruire Mikoshi.</span>
+                    </button>
+
+                    <button class="choice choice-btn border-[#10b981]" onclick="computeEnding('nomade')">
+                        <span class="font-bold text-[#10b981] text-lg">QUITTER LA VILLE (PANAM)</span>
+                        <span class="block text-xs text-slate-400 mt-1">Vivre vos derniers mois libre dans le désert avec ceux que vous aimez.</span>
+                    </button>
+
+                    <button class="choice choice-btn border-[#aaaaaa]" onclick="computeEnding('arasaka')">
+                        <span class="font-bold text-[#aaaaaa] text-lg">SIGNER LE CONTRAT (ARASAKA)</span>
+                        <span class="block text-xs text-slate-400 mt-1">Sauvegarder votre âme dans la banque de données Arasaka en attendant un nouveau corps.</span>
+                    </button>
+
+                    <button class="choice choice-btn border-[#ffd700]" data-credits="+5000" onclick="computeEnding('rich')">
+                        <span class="font-bold text-[#ffd700] text-lg">RESTER LE ROI DE L'AFTERLIFE</span>
+                        <span class="block text-xs text-slate-400 mt-1">Profiter de la gloire et de l'argent jusqu'à la fin. Devenir une légende urbaine.</span>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="prose text-center">
+                    <p class="text-xs text-slate-500">CONNEXION INTERROMPUE.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <aside class="lg:col-span-4 lg:sticky lg:top-24 space-y-8">
+            <div id="hud" class="cyber-hud"></div>
+
+            <div class="border border-[#00f3ff]/20 bg-black/60 p-4 font-mono text-[10px] text-[#00f3ff]/60">
+                <p>> NETWORK: UNSECURED</p>
+                <p>> TRACE: 99% DETECTED</p>
+                <p>> DAEMON UPLOAD... <span class="animate-pulse">COMPLETE</span></p>
+            </div>
+        </aside>
+
+    </div>
+</main>
+
+<footer class="mt-20 border-t border-[#00f3ff]/20 bg-black py-10 text-center">
+    <p class="text-xs text-slate-500 font-mono">NEON CORTEX // BRAGI SYSTEM v2.0.77</p>
+    <a href="../../stories.html" class="inline-block mt-4 text-[#ff00c1] hover:text-white transition-colors text-xs font-bold uppercase tracking-widest">Retour à la Bibliothèque</a>
+</footer>
+</body>
+</html>

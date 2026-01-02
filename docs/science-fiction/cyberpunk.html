@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyberpunk | Bragi</title>
+    <link rel="icon" type="image/png" href="../favicon.png">
+    <meta name="description" content="Histoires cyberpunk interactives.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600&family=Orbitron:wght@700&display=swap"
+            rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#00f3ff', // Neon Cyan
+                        secondary: '#ff00c1', // Neon Pink
+                        background: '#050507',
+                        surface: '#0f172a'
+                    },
+                    fontFamily: {
+                        heading: ['Cinzel', 'serif'],
+                        body: ['Inter', 'sans-serif'],
+                        scifi: ['Orbitron', 'sans-serif']
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        body {
+            background-color: #050507;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Cinzel', serif;
+        }
+
+        .hero-mask {
+            mask-image: linear-gradient(to bottom, black 50%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent);
+        }
+
+        .story-selection-card {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: #0f172a;
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+            aspect-ratio: 16 / 9;
+        }
+
+        .story-selection-card:hover {
+            transform: scale(1.02);
+            border-color: #00f3ff;
+            box-shadow: 0 40px 80px -20px rgba(0, 243, 255, 0.2);
+        }
+
+        .overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.2) 60%, transparent 100%);
+            opacity: 0.9;
+        }
+
+        .stretched-link::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 20;
+        }
+
+        .glass-header {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col pt-20">
+<header class="fixed top-0 left-0 right-0 z-50 glass-header h-20">
+    <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+        <a href="../index.html" class="flex items-center gap-4 group no-underline text-white">
+            <img src="../favicon.png" alt="Logo" class="w-8 h-8 group-hover:rotate-12 transition-transform">
+            <span class="font-heading text-xl tracking-tighter">BRAGI</span>
+        </a>
+        <nav class="hidden md:flex items-center gap-10 text-white font-heading text-[10px] tracking-[0.3em] uppercase">
+            <a href="../index.html" class="text-slate-400 hover:text-white transition-colors no-underline">Accueil</a>
+            <a href="../stories.html" class="text-slate-400 hover:text-white transition-colors no-underline">Histoires</a>
+            <a href="../trophies.html" class="text-slate-400 hover:text-white transition-colors no-underline">Trophées</a>
+            <a href="../about.html" class="text-slate-400 hover:text-white transition-colors no-underline border-b border-primary/40 pb-1">À Propos</a>
+        </nav>
+    </div>
+</header>
+
+<main class="relative z-10 flex-grow">
+    <section class="h-[30vh] min-h-[300px] relative overflow-hidden flex items-center pt-10">
+        <div class="absolute inset-0 bg-cover bg-center opacity-20 hero-mask"
+             style="background-image: url('../img/cards/subgenres/sf_cyberpunk.png');"></div>
+        <div class="max-w-7xl mx-auto px-6 w-full relative z-10">
+            <h1 class="text-5xl md:text-7xl font-scifi text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary m-0 drop-shadow-[0_0_15px_rgba(0,243,255,0.5)]">CYBERPUNK</h1>
+            <p class="text-slate-400 mt-4 max-w-lg font-light italic border-l-2 border-primary/20 pl-6">High Tech, Low Life. Le futur est sombre et électrique.</p>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-6 py-20">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+            <article class="story-selection-card group">
+                <img src="../img/cards/stories/neon_cortex.png" alt="Neon Cortex"
+                     class="absolute inset-0 w-full h-full object-cover transition-all duration-1000 group-hover:scale-105 group-hover:hue-rotate-15">
+                <div class="overlay"></div>
+                <div class="absolute bottom-10 left-10 right-10 z-30">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="px-2 py-0.5 bg-primary/20 border border-primary/40 text-[8px] text-primary font-bold tracking-widest uppercase rounded">Infiltration</span>
+                    </div>
+                    <h2 class="text-3xl font-bold text-white mb-2 font-scifi">Neon Cortex</h2>
+                    <p class="text-slate-400 text-sm font-light leading-relaxed">Une puce volée, une corpo à vos trousses. Survivrez-vous à Night City ?</p>
+                    <a href="cyberpunk/neon_cortex.html" class="stretched-link"></a>
+                </div>
+            </article>
+
+        </div>
+    </section>
+</main>
+
+<footer class="border-t border-white/5 bg-black/80 py-12 relative z-10 text-slate-500 uppercase tracking-widest text-[9px]">
+    <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <a href="index.html" class="text-inherit hover:text-primary transition-colors no-underline flex items-center gap-2">
+            <span class="material-symbols-outlined text-[12px]">arrow_back</span>
+            <span>Retour aux Histoires de Science-Fiction</span>
+        </a>
+        <p>© 2025 Histoires Bragi</p>
+    </div>
+</footer>
+</body>
+</html>
