@@ -93,24 +93,49 @@ window.BragiStorage = {
     _init: function () {
         if (this._inited) return;
 
-        // Injection CSS pour les notifications
+        // A. Create container for notifications
+        let container = document.getElementById('bragi-notification-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'bragi-notification-container';
+            document.body.appendChild(container);
+        }
+
+        // B. Injection CSS for notifications
         const style = document.createElement('style');
         style.innerHTML = `
+            #bragi-notification-container {
+                position: fixed; top: 20px; right: 20px;
+                z-index: 10000; display: flex;
+                flex-direction: column; gap: 12px;
+                align-items: flex-end;
+                pointer-events: none;
+            }
             .bragi-notification {
-                position: fixed; top: 100px; right: 20px;
+                position: relative;
                 background: rgba(15, 23, 42, 0.95);
                 border: 1px solid rgba(251, 191, 36, 0.4);
                 border-left: 4px solid #fbbf24;
                 color: white; padding: 16px 24px; border-radius: 8px;
-                z-index: 10000; display: flex; align-items: center; gap: 16px;
+                display: flex; align-items: center; gap: 16px;
                 box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-                backdrop-filter: blur(10px); transform: translateX(120%);
-                transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+                backdrop-filter: blur(10px);
+                /* Animation state */
+                transform: translateX(120%);
+                opacity: 0;
+                transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
                 font-family: 'Inter', sans-serif;
-                max-width: 90vw;
+                max-width: 350px;
+                width: 100%;
+                pointer-events: auto;
             }
-            .bragi-notification.visible { transform: translateX(0); }
-            .bragi-notification-icon { color: #fbbf24; font-variation-settings: 'FILL' 1; }
+            .bragi-notification.visible {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            .bragi-notification-icon {
+                color: #fbbf24; /* Removed FILL setting for compatibility */
+            }
             .bragi-notification-subtitle { font-size: 9px; text-transform: uppercase; letter-spacing: 0.2em; color: #94a3b8; }
             .bragi-notification-title { font-size: 13px; font-weight: bold; margin-top: 2px; color: white; }
         `;
@@ -384,7 +409,12 @@ window.BragiStorage = {
                 <span class="bragi-notification-title">${title}</span>
             </div>
         `;
-        document.body.appendChild(toast);
+        const container = document.getElementById('bragi-notification-container');
+        if (container) {
+            container.appendChild(toast);
+        } else {
+            document.body.appendChild(toast); // Fallback
+        }
 
         setTimeout(() => toast.classList.add('visible'), 100);
         setTimeout(() => {
