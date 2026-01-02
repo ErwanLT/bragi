@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La Cité des Brumes | Bragi - Exploration</title>
+    <link rel="icon" type="image/png" href="../../favicon.png">
+
+    <meta name="description" content="Une expédition périlleuse au cœur de l'Amazonie. Gérez votre inventaire et survivez.">
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+    <script src="../../js/security.js"></script>
+    <script src="../../js/storyEngine.js"></script>
+    <script src="../../js/adventure/exploration/lost_city.js" defer></script>
+
+    <link rel="stylesheet" href="../../style/stories/adventure/exploration.css">
+</head>
+
+<body class="min-h-screen flex flex-col">
+<div class="vine-deco"></div>
+
+<header class="sticky top-0 z-50 bg-[#1a1c10]/95 backdrop-blur border-b border-[#fbbf24]/20 h-20 shadow-lg">
+    <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-[#fbbf24] text-3xl">map</span>
+            <span class="font-['Cinzel_Decorative'] text-xl font-bold text-[#e2e8f0] tracking-widest">LA CITÉ DES BRUMES</span>
+        </div>
+        <a href="../exploration.html" class="text-xs font-serif text-[#fbbf24] hover:text-white transition-colors border border-[#fbbf24]/30 px-4 py-2 rounded-sm hover:bg-[#fbbf24]/10 uppercase tracking-widest">
+            Abandonner l'Expédition
+        </a>
+    </div>
+</header>
+
+<main class="flex-grow w-full px-6 py-12 max-w-7xl mx-auto relative z-10">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+
+        <div class="lg:col-span-8 flex flex-col gap-10" id="story">
+
+            <div class="flex flex-col gap-6">
+                <div class="flex items-center gap-4 text-[#fbbf24]/80 font-serif text-sm tracking-widest uppercase">
+                    <span class="px-2 py-1 border border-[#fbbf24]/30 bg-[#fbbf24]/10 rounded-sm">Chapitre 1</span>
+                    <span>Amazonie</span>
+                    <span>1925</span>
+                </div>
+
+                <h1 class="text-5xl md:text-6xl text-[#fbbf24] font-['Cinzel_Decorative'] drop-shadow-lg leading-tight">
+                    La Cité des Brumes
+                </h1>
+
+                <div class="relative w-full h-[300px] md:h-[450px] rounded-lg overflow-hidden border border-[#fbbf24]/20 shadow-2xl group">
+                    <div class="absolute inset-0 bg-cover bg-center transition-transform duration-[2000ms] group-hover:scale-105"
+                         style="background-image: url('../../img/cards/genres/adventure.png');">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#1a1c10] via-transparent to-transparent opacity-80"></div>
+
+                    <div class="absolute bottom-6 left-6 right-6">
+                        <p class="text-[#e2e8f0] font-serif italic text-lg border-l-2 border-[#fbbf24] pl-4 bg-black/40 p-3 backdrop-blur-sm rounded-r-lg inline-block">
+                            &ldquo;Certains secrets ne devraient jamais être découverts...&rdquo;
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section visible">
+                <h2 class="text-3xl mb-6 text-[#fbbf24] font-['Cinzel_Decorative']">Camp de Base</h2>
+                <div class="journal-text">
+                    <p>Le lieutenant Fawcett a disparu en cherchant la cité de "Z". Vous avez retrouvé son carnet. Il indique une vallée inexplorée, perpétuellement couverte de brume.</p>
+                    <p>Vous êtes au dernier avant-poste. C'est le moment de choisir votre équipement. Votre sac est petit, vous ne pouvez pas tout emporter.</p>
+                </div>
+
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="choice-btn" data-inv_machete="1" data-inv_corde="1" onclick="applyChoice(this)">
+                        <strong class="text-[#fbbf24] block mb-1 uppercase tracking-widest">Kit d'Escalade</strong>
+                        <span class="text-sm text-slate-400">Une Machette solide et 30m de Corde.</span>
+                    </button>
+
+                    <button class="choice-btn" data-inv_boussole="1" data-inv_torche="1" onclick="applyChoice(this)">
+                        <strong class="text-[#fbbf24] block mb-1 uppercase tracking-widest">Kit d'Explorateur</strong>
+                        <span class="text-sm text-slate-400">Une Boussole de précision et des Torches.</span>
+                    </button>
+
+                    <button class="choice-btn" data-vivres="+50" onclick="applyChoice(this)">
+                        <strong class="text-[#fbbf24] block mb-1 uppercase tracking-widest">Prévoyant</strong>
+                        <span class="text-sm text-slate-400">Bourrer le sac de rations supplémentaires (+50 Vivres).</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="text-2xl mb-4 text-[#fbbf24]">Le Mur Vert</h2>
+                <div class="journal-text">
+                    <p>Vous quittez la rivière. Devant vous, la végétation est si dense qu'elle semble former un mur solide.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice-btn" data-vivres="-5" data-req="inv_machete" onclick="applyChoice(this)">
+                        <span class="choice-req text-emerald-500 font-bold block text-xs mb-1">REQUIS : MACHETTE</span>
+                        Tailler un chemin à travers les lianes.
+                    </button>
+
+                    <button class="choice-btn" data-vivres="-15" data-sante="-5" onclick="applyChoice(this)">
+                        Avancer en force à travers les épines (Sans outil).
+                    </button>
+
+                    <button class="choice-btn" data-vivres="-20" onclick="applyChoice(this)">
+                        Contourner par le lit de la rivière asséchée.
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="text-2xl mb-4 text-[#fbbf24]">Le Gouffre</h2>
+                <div class="journal-text">
+                    <p>Le sol s'arrête brusquement. Un ravin de dix mètres de large vous sépare de la suite du chemin. Au fond, des rochers pointus.</p>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="choice-btn" data-vivres="-5" data-gloire="+20" data-req="inv_corde" onclick="applyChoice(this)">
+                        <span class="choice-req text-emerald-500 font-bold block text-xs mb-1">REQUIS : CORDE</span>
+                        Lancer le grappin et traverser.
+                    </button>
+                    <button class="choice-btn" data-vivres="-15" data-sante="-15" onclick="applyChoice(this)">
+                        Descendre et remonter à mains nues (Épuisant).
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="text-2xl mb-4 text-[#fbbf24]">Bivouac</h2>
+                <div class="journal-text">
+                    <p>La nuit tombe soudainement sous la canopée. Les insectes deviennent agressifs.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice-btn" data-vivres="-10" data-sante="+10" onclick="applyChoice(this)">
+                        Manger une ration complète et dormir.
+                    </button>
+                    <button class="choice-btn" data-vivres="+5" data-sante="-10" onclick="applyChoice(this)">
+                        Dormir le ventre vide (Mauvaise nuit).
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="text-2xl mb-4 text-[#fbbf24]">Ruines Anciennes</h2>
+                <div class="journal-text">
+                    <p>Vous trouvez les premières ruines. Un dédale de murs envahis par la mousse.</p>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="choice-btn" data-vivres="-5" data-gloire="+10" data-req="inv_boussole" onclick="applyChoice(this)">
+                        <span class="choice-req text-emerald-500 font-bold block text-xs mb-1">REQUIS : BOUSSOLE</span>
+                        Suivre le cap Nord-Est indiqué par Fawcett.
+                    </button>
+                    <button class="choice-btn" data-vivres="-25" onclick="applyChoice(this)">
+                        Se fier à son instinct (Risque de se perdre).
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="text-2xl mb-4 text-[#fbbf24]">L'Entrée Souterraine</h2>
+                <div class="journal-text">
+                    <p>Le chemin mène sous terre. Une odeur de renfermé s'en échappe. Il fait noir complet.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice-btn" data-vivres="-5" data-req="inv_torche" onclick="applyChoice(this)">
+                        <span class="choice-req text-emerald-500 font-bold block text-xs mb-1">REQUIS : TORCHE</span>
+                        Allumer une torche et entrer.
+                    </button>
+                    <button class="choice-btn" data-sante="-30" data-vivres="-5" onclick="applyChoice(this)">
+                        Avancer à tâtons dans le noir (Dangereux !).
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="journal-text">
+                    <p>Dans la grotte, un jaguar noir a élu domicile. Il grogne, prêt à bondir.</p>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="choice-btn" data-sante="-10" data-gloire="+30" data-req="inv_machete" onclick="applyChoice(this)">
+                        <span class="choice-req text-emerald-500 font-bold block text-xs mb-1">REQUIS : MACHETTE</span>
+                        Se défendre avec la lame.
+                    </button>
+                    <button class="choice-btn" data-vivres="-20" onclick="applyChoice(this)">
+                        Lui jeter toutes vos rations pour faire diversion.
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="text-2xl mb-4 text-[#fbbf24]">Le Temple Oublié</h2>
+                <div class="journal-text">
+                    <p>Vous sortez de la grotte. Devant vous, au cœur d'un cratère, la Cité des Brumes. Sur un autel, vous trouvez le Journal de Fawcett et une étrange Clé de Pierre.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice-btn" data-inv_journal="1" data-inv_cle="1" data-gloire="+50" onclick="applyChoice(this)">
+                        Ramasser les objets.
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="text-2xl mb-4 text-[#fbbf24]">Le Sanctuaire</h2>
+                <div class="journal-text">
+                    <p>La plus grande pyramide a une porte massive avec une empreinte en forme de clé.</p>
+                </div>
+                <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <button class="choice-btn" data-vivres="-5" data-req="inv_cle" onclick="applyChoice(this)">
+                        <span class="choice-req text-emerald-500 font-bold block text-xs mb-1">REQUIS : CLÉ DE PIERRE</span>
+                        Insérer la clé trouvée.
+                    </button>
+                    <button class="choice-btn" onclick="computeEnding('survivor')">
+                        Impossible d'entrer. Repartir avec le journal.
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <div class="journal-text">
+                    <p>La salle du trésor ! Au centre, l'Idole d'Or brille de mille feux. Mais le plafond semble instable.</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice-btn" data-inv_relique="1" data-gloire="+500" onclick="applyChoice(this)">
+                        Prendre l'Idole (Déclenche le piège !).
+                    </button>
+                    <button class="choice-btn" data-gloire="+100" onclick="applyChoice(this)">
+                        Prendre juste quelques pièces et partir.
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="text-2xl mb-4 text-[#fbbf24]">Effondrement !</h2>
+                <div class="journal-text">
+                    <p>Le temple tremble ! Des blocs tombent. Il faut courir !</p>
+                </div>
+                <div class="mt-6 space-y-3">
+                    <button class="choice-btn" data-sante="-10" data-req="inv_corde" onclick="applyChoice(this)">
+                        <span class="choice-req text-emerald-500 font-bold block text-xs mb-1">REQUIS : CORDE</span>
+                        Utiliser la corde pour descendre la paroi.
+                    </button>
+                    <button class="choice-btn" data-sante="-40" onclick="applyChoice(this)">
+                        Sauter et dévaler la pente (Très dangereux) !
+                    </button>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2 class="text-2xl mb-4 text-[#fbbf24]">Civilisation</h2>
+                <div class="journal-text">
+                    <p>Vous apercevez le poste avancé. Vous êtes en haillons, épuisé, mais vivant.</p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <button class="choice-btn !border-amber-500/50" data-req="inv_relique" onclick="computeEnding('rich')">
+                        <span class="choice-req text-amber-500 font-bold block text-xs mb-1">REQUIS : IDOLE D'OR</span>
+                        <span class="text-amber-400 font-bold">Montrer l'Idole d'Or !</span>
+                    </button>
+
+                    <button class="choice-btn !border-sky-500/50" data-req="inv_journal" onclick="computeEnding('knowledge')">
+                        <span class="choice-req text-sky-500 font-bold block text-xs mb-1">REQUIS : JOURNAL DE FAWCETT</span>
+                        <span class="text-sky-400 font-bold">Publier le journal de Fawcett.</span>
+                    </button>
+
+                    <button class="choice-btn" onclick="computeEnding('survivor')">
+                        S'effondrer et demander de l'eau.
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <aside class="lg:col-span-4 lg:sticky lg:top-24 space-y-8">
+            <div id="hud" class="exploration-hud"></div>
+
+            <div class="bg-black/40 p-4 border border-[#57534e] rounded text-xs text-[#a8a29e] italic shadow-lg">
+                <p>Conseil : Les objets collectés (Machette, Corde...) débloquent des options plus sûres.</p>
+            </div>
+        </aside>
+
+    </div>
+</main>
+
+<footer class="mt-20 border-t border-[#fbbf24]/20 bg-[#1a1c10] py-10 text-center">
+    <p class="text-xs text-[#a8a29e] font-serif">SOCIÉTÉ DE GÉOGRAPHIE BRAGI &copy; 1925</p>
+    <a href="../../stories.html" class="inline-block mt-4 text-[#fbbf24] hover:text-white transition-colors text-xs font-bold uppercase tracking-widest">Retour à la Bibliothèque</a>
+</footer>
+</body>
+</html>
