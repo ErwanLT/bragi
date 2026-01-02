@@ -38,7 +38,9 @@ Accédez à la [Bibliothèque complète](https://erwanlt.github.io/bragi/stories
         *   **Le Trésor de l'Île Maudite** : Hissez les voiles, la mutinerie guette.
     *   *Préhistorique*
         *   **Jurassic Park - Isla Nublar** : "La vie trouve toujours un chemin."
-*   🐉 **Fantasy**
+    *   *Exploration*
+        * **La Cité des Brumes** : Expédition en Amazonie avec gestion d'inventaire.  
+* 🐉 **Fantasy**
     *   *Médiévale*
         *   **La Quête du Code Ancestral** : Le donjon "Legacy" n'attend que vous.
 *   🕵️‍♂️ **Polar**

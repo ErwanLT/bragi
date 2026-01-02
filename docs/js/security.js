@@ -23,6 +23,7 @@ window.BRAGI_DB = {
         { id: 'le_mystere_du_reveillon', title: "Nouvel an sous tension", desc: "Compléter 'Le mystère du nouvel an'", icon: 'calendar_month', genre: 'Thriller'},
         { id: 'duel', title: "Fine Gâchette", desc: "Compléter 'Dernier Duel'", icon: 'gps_fixed', genre: 'Western' },
         { id: 'treasure', title: "Légende des Sept Mers", desc: "Compléter 'L'Île Maudite'", icon: 'sailing', genre: 'Aventure' },
+        { id: 'lost_city', title: "Pilleur de Tombes", desc: "Compléter 'La Cité des Brumes'", icon: 'temple_buddhist', genre: 'Aventure' },
         { id: 'jurassic', title: "Dompteur de Géants", desc: "Compléter 'Isla Nublar'", icon: 'pets', genre: 'Aventure' },
         { id: 'quest', title: "Gardien du Code", desc: "Compléter 'Code Ancestral'", icon: 'shield', genre: 'Fantasy' },
         { id: 'prohibition', title: "Incorruptible", desc: "Compléter 'Chicago 1932'", icon: 'policy', genre: 'Polar' }
