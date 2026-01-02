@@ -130,6 +130,10 @@
                     <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-jean">
                         <span class="choice-title">Parler à Jean (Majordome)</span>
                     </button>
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-artiste">
+                        <span class="choice-title">Interroger Mlle Sorel (L'Artiste)</span>
+                        <span class="choice-desc">Elle semble terrifiée dans un coin de la pièce.</span>
+                    </button>
 
                     <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-library">
                         <span class="choice-title">Inspecter la Bibliothèque</span>
@@ -153,7 +157,7 @@
                     <p>Le présentoir de la dague est vide. Juste à côté, un livre sur la stratégie militaire est ouvert. Plus intéressant : vous trouvez un carnet de croquis oublié sur un fauteuil.</p>
                 </div>
                 <div class="choices-grid">
-                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation" data-artiste="1" data-clue="sketch">
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation" data-artiste="1" data-sketch="1">
                         <span class="choice-title">Analyser le carnet</span>
                         <span class="choice-desc">Il appartient à Mlle Sorel, l'artiste.</span>
                     </button>
@@ -235,6 +239,43 @@
                 <div class="choices-grid">
                     <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation" data-camera="1">
                         <span class="choice-title">Merci pour l'info sur la caméra</span>
+                    </button>
+                </div>
+            </section>
+
+            <section id="scene-artiste" class="section">
+                <h2 class="section-title">Mlle Sorel</h2>
+                <div class="prose">
+                    <p>La jeune femme triture ses mains nerveusement. Elle évite votre regard. "Je... je n'arrive pas à croire qu'il soit mort. Il était mon mécène, mon bienfaiteur."</p>
+                    <p>Elle jette un coup d'œil furtif vers la sortie.</p>
+
+                    <div id="artiste-fraud-reaction" class="hidden mt-4 text-gold-400 italic border-l-2 border-gold-500 pl-4">
+                        (À la mention de la fraude) Son visage se décompose. "Je n'avais pas le choix ! Il me tenait. Il menaçait de détruire ma carrière si je ne copiais pas ces toiles..."
+                    </div>
+                </div>
+
+                <div class="choices-grid">
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation">
+                        <span class="choice-title">Lui demander son alibi</span>
+                        <span class="choice-desc">"J'étais... j'admirais les tableaux dans le couloir."</span>
+                    </button>
+
+                    <div id="opt-artiste-sketch" class="hidden w-full">
+                        <button class="choice-btn w-full" onclick="makeChoice(this)" data-next="scene-investigation">
+                            <span class="choice-title">Montrer le carnet de croquis</span>
+                            <span class="choice-desc">Lui demander pourquoi il était dans la bibliothèque (lieu du crime).</span>
+                        </button>
+                    </div>
+
+                    <div id="opt-artiste-fraud" class="hidden w-full">
+                        <button class="choice-btn w-full" onclick="makeChoice(this)" data-next="scene-artiste" data-fraud_confession="1">
+                            <span class="choice-title">La confronter sur la fraude</span>
+                            <span class="choice-desc">Vous avez les documents financiers. Elle ne peut plus mentir.</span>
+                        </button>
+                    </div>
+
+                    <button class="choice-btn" onclick="makeChoice(this)" data-next="scene-investigation">
+                        <span class="choice-title">Retourner au salon</span>
                     </button>
                 </div>
             </section>
