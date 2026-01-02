@@ -16,11 +16,13 @@ Ce projet rend hommage à cet art du récit en proposant des expériences narrat
 ## 🚀 Histoires disponibles
 Accédez à la [Bibliothèque complète](https://erwanlt.github.io/bragi/stories.html) pour explorer nos mondes :
 
-*   🛸 **Science-Fiction**
-    *   *Spatiale*
-        *   **Kubrick 9 - Station orbitale** : Une IA détraquée, une station en perdition.
-    *   *Post-Apocalypse*
-        *   **Signal Zéro - Transmission** : Guidez une escouade à distance dans un monde en ruines.
+* 🛸 **Science-Fiction**
+    * *Spatiale*
+        * **Kubrick 9 - Station orbitale** : Une IA détraquée, une station en perdition.
+    * *Post-Apocalypse*
+        * **Signal Zéro - Transmission** : Guidez une escouade à distance dans un monde en ruines.
+    * *Cyberpunk*
+        * **Neon Cortex** : Néo-Tokyo, 2084. Une puce volée, des corpos à vos trousses.
 *   👻 **Horreur**
     *   *Psychologique*
         *   **Le Manoir du Silence** : Survivez à l'oppression d'une demeure hantée.
