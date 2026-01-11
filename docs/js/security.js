@@ -20,12 +20,13 @@ window.BRAGI_DB = {
         { id: 'kubrick9', title: "IA Hunter", desc: "Compléter 'Kubrick 9'", icon: 'memory', genre: 'Sci-Fi' },
         { id: 'neon_cortex', title: "Fantôme du Réseau", desc: "Compléter 'Neon Cortex'", icon: 'memory', genre: 'Sci-Fi' },
         { id: 'dernier_souffle', title: "Survivant de l'Arctique", desc: "Compléter 'Dernier Souffle'", icon: 'ac_unit', genre: 'Thriller' },
-        { id: 'le_mystere_du_reveillon', title: "Nouvel an sous tension", desc: "Compléter 'Le mystère du nouvel an'", icon: 'calendar_month', genre: 'Thriller'},
+        { id: 'le_mystere_du_reveillon', title: "Nouvel an sous tension", desc: "Compléter 'Le mystère du nouvel an'", icon: 'calendar_month', genre: 'Thriller' },
         { id: 'duel', title: "Fine Gâchette", desc: "Compléter 'Dernier Duel'", icon: 'gps_fixed', genre: 'Western' },
         { id: 'treasure', title: "Légende des Sept Mers", desc: "Compléter 'L'Île Maudite'", icon: 'sailing', genre: 'Aventure' },
         { id: 'lost_city', title: "Pilleur de Tombes", desc: "Compléter 'La Cité des Brumes'", icon: 'temple_buddhist', genre: 'Aventure' },
         { id: 'jurassic', title: "Dompteur de Géants", desc: "Compléter 'Isla Nublar'", icon: 'pets', genre: 'Aventure' },
         { id: 'quest', title: "Gardien du Code", desc: "Compléter 'Code Ancestral'", icon: 'shield', genre: 'Fantasy' },
+        { id: 'abyss', title: "Vainqueur de l'Abîme", desc: "Compléter 'L'Ombre de l'Abîme'", icon: 'history_edu', genre: 'Fantasy' },
         { id: 'prohibition', title: "Incorruptible", desc: "Compléter 'Chicago 1932'", icon: 'policy', genre: 'Polar' }
     ],
     progression: [
