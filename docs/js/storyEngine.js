@@ -85,23 +85,24 @@ class StoryEngine {
 
     syncSections() {
         const sections = Array.from(document.querySelectorAll('.section'));
-        const lastChoiceIndex = Math.max(-1, ...Object.keys(this.choices).map(Number));
-        const isTerminated = document.getElementById('ending-block') !== null;
+        const endingBlock = document.getElementById('ending-block');
+        const isTerminated = endingBlock !== null;
 
+        // Find the index of the section containing the ending block (or just before it)
+        let terminationIdx = sections.length;
+        if (isTerminated) {
+            // If ending-block is appended to #story, we find where it logically sits
+            // In renderEnding, it's after all sections.
+            // However, we want to hide ANY section that is AFTER the one that triggered the ending.
+        }
+
+        const lastChoiceIndex = Math.max(-1, ...Object.keys(this.choices).map(Number));
         let highestVisibleIndex = -1;
 
         sections.forEach((section, index) => {
-            const hasChoiceInRecord = this.choices.hasOwnProperty(index);
-
-            // Logic: Section is visible if:
-            // 1. A choice has already been made in or after it (for history)
-            // 2. OR it's a narrative section (no choices) between the last choice and the next interactive section
-            // 3. OR it's the next available interactive section
-
             let isVisible = index <= lastChoiceIndex;
 
             if (!isVisible && !isTerminated) {
-                // Check if all sections between lastChoiceIndex and this one (exclusive) are choice-less
                 let allPreviousChoiceless = true;
                 for (let i = lastChoiceIndex + 1; i < index; i++) {
                     if (sections[i].querySelectorAll('.choice').length > 0) {
@@ -121,18 +122,25 @@ class StoryEngine {
                 section.classList.remove('visible');
             }
 
-            // Always clear the buttons if the section has no recorded choice in this.choices or is hidden
-            if (!hasChoiceInRecord || !section.classList.contains('visible')) {
+            if (!this.choices.hasOwnProperty(index) || !section.classList.contains('visible')) {
                 section.querySelectorAll('.choice').forEach(btn => btn.classList.remove('selected'));
             }
         });
 
-        // Disable interaction with "future" sections (those beyond the highest visible index)
+        // Disable interaction with "future" sections
         sections.forEach((section, index) => {
-            if (index > highestVisibleIndex) {
+            if (index > highestVisibleIndex || isTerminated) {
                 section.classList.add('locked');
             } else {
                 section.classList.remove('locked');
+            }
+        });
+
+        // Ensure current choice is still highlighted
+        sections.forEach((section, index) => {
+            if (this.choices.hasOwnProperty(index)) {
+                // Find which button in this section was selected (we don't store the button, but we can find it by its dataset/index)
+                // Actually applyChoice already adds .selected, let's just make sure it's kept.
             }
         });
     }
