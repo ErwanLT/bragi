@@ -27,7 +27,8 @@ window.BRAGI_DB = {
         { id: 'jurassic', title: "Dompteur de Géants", desc: "Compléter 'Isla Nublar'", icon: 'pets', genre: 'Aventure' },
         { id: 'quest', title: "Gardien du Code", desc: "Compléter 'Code Ancestral'", icon: 'shield', genre: 'Fantasy' },
         { id: 'abyss', title: "Vainqueur de l'Abîme", desc: "Compléter 'L'Ombre de l'Abîme'", icon: 'history_edu', genre: 'Fantasy' },
-        { id: 'prohibition', title: "Incorruptible", desc: "Compléter 'Chicago 1932'", icon: 'policy', genre: 'Polar' }
+        { id: 'prohibition', title: "Incorruptible", desc: "Compléter 'Chicago 1932'", icon: 'policy', genre: 'Polar' },
+        { id: 'templar', title: "Gardien du Temple", desc: "Compléter 'Le Secret des Templiers'", icon: 'verified_user', genre: 'Fantasy' }
     ],
     progression: [
         // --- GÉNÉRAL ---

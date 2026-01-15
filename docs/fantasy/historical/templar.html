@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le secret des templiers | Bragi</title>
+    <link rel="stylesheet" href="../../style/stories/fantasy/historical.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8b2e2e',
+                        secondary: '#c9a959',
+                        background: '#1a1512',
+                    },
+                    fontFamily: {
+                        heading: ['Cinzel', 'serif'],
+                        body: ['Cinzel', 'serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            padding: 0 !important;
+        }
+
+        #story-container {
+            margin-top: 120px;
+            margin-bottom: 60px;
+        }
+    </style>
+    <script src="../../js/storyEngine.js"></script>
+    <script src="../../js/security.js"></script>
+</head>
+
+<body class="min-h-screen flex flex-col bg-[#1a1512] text-[#d4c5b0]">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-[#1a1512]/90 backdrop-blur-md border-b border-[#8b2e2e]/30 h-20">
+        <div class="max-w-7xl mx-auto px-6 h-full flex items-center justify-between">
+            <a href="../../index.html" class="flex items-center gap-3 hover:opacity-80 transition-opacity no-underline">
+                <img src="../../favicon.png" alt="Logo" class="w-8 h-8">
+                <span class="font-heading text-lg tracking-widest text-[#c9a959]">BRAGI</span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-8 text-xs font-heading tracking-[0.2em] text-[#d4c5b0]">
+                <a href="../historical.html"
+                    class="flex items-center gap-2 hover:text-[#8b2e2e] transition-colors uppercase no-underline">
+                    <span class="material-symbols-outlined text-lg">history_edu</span>
+                    Quartier Historique
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div id="hud">
+        <!-- Rempli par JS -->
+    </div>
+
+    <div id="story-container">
+        <!-- Hero Image Area -->
+        <div class="relative group rounded-lg overflow-hidden border border-[#8b2e2e]/30 shadow-2xl mb-10">
+            <img src="../../img/cards/stories/templar.png" alt="Templar Knight"
+                class="w-full aspect-video object-cover transition-transform duration-1000 group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#1a1512] via-[#1a1512]/40 to-transparent"></div>
+            <div class="absolute bottom-6 left-6 right-6">
+                <div class="flex items-center gap-2 text-[#c9a959] text-xs mb-2 font-heading tracking-widest uppercase">
+                    <span class="material-symbols-outlined text-base">history_edu</span>
+                    Chronique Historique
+                </div>
+                <h1
+                    class="text-3xl md:text-5xl font-bold text-[#d4c5b0] mb-3 leading-none font-heading uppercase !border-0 !p-0 !text-left !shadow-none">
+                    Le secret des templiers
+                </h1>
+                <p
+                    class="text-[#c9a959]/80 italic text-sm md:text-lg border-l-2 border-[#8b2e2e] pl-4 leading-relaxed font-heading">
+                    &ldquo;Non nobis, Domine, non nobis, sed nomini tuo da gloriam.&rdquo;
+                </p>
+            </div>
+        </div>
+
+        <!-- INTRO -->
+        <div class="section visible" id="start">
+            <p><strong>Paris, 13 Octobre 1307.</strong> L'aube n'est pas encore levée, mais les cloches de Notre-Dame
+                sonnent le glas. Vous êtes Geoffroy de Sarnac, chevalier de l'Ordre du Temple. Un pressentiment glacé
+                vous étreint.</p>
+            <p>Des cris retentissent dans la cour de la commanderie. Les gardes du roi Philippe le Bel sont ici. Ils
+                enfoncent les portes. Votre mission secrète, confiée par le Grand Maître Jacques de Molay lui-même, est
+                en péril : protéger la <em>Relique</em>.</p>
+            <p>Vous êtes dans votre cellule. La porte tremble sous les coups.</p>
+            <div class="choice-container">
+                <button class="choice" data-discretion="-10" data-foi="5" onclick="applyChoice(this)">Prendre l'épée et
+                    faire face !</button>
+                <button class="choice" data-discretion="10" data-foi="-5" onclick="applyChoice(this)">S'enfuir par le
+                    passage secret.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Confrontation -->
+        <div class="section">
+            <p>Le bois cède. Trois sergents royaux font irruption, armes au poing. "Au nom du Roi, rendez-vous !", hurle
+                l'un d'eux.</p>
+            <div class="choice-container">
+                <button class="choice" data-foi="10" data-discretion="-20" onclick="applyChoice(this)">"Dieu est mon
+                    seul juge !" (Combat)</button>
+                <button class="choice" data-discretion="5" data-relique="5" onclick="applyChoice(this)">Utiliser l'éclat
+                    de la Relique pour les aveugler.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Les Catacombes -->
+        <div class="section">
+            <p>Vous parvenez à vous échapper dans les entrailles de Paris. Les catacombes sont un labyrinthe obscur et
+                humide. L'odeur de la mort est omniprésente.</p>
+            <p>La Relique dans votre besace semble pulser doucement, comme un cœur battant. Elle murmure...</p>
+            <div class="choice-container">
+                <button class="choice" data-relique="10" data-foi="-10" onclick="applyChoice(this)">Écouter le murmure
+                    pour trouver le chemin.</button>
+                <button class="choice" data-foi="5" onclick="applyChoice(this)">Prier pour ne pas céder à la tentation
+                    et avancer à l'aveugle.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 4: Le Choix du Chemin -->
+        <div class="section">
+            <p>Le chemin se divise. À gauche, l'odeur de l'encens rance d'une crypte oubliée. À droite, un courant d'air
+                frais mais le bruit de bottes ferrées au loin.</p>
+            <div class="choice-container">
+                <button class="choice" data-foi="5" onclick="applyChoice(this)">La Crypte (Gauche).</button>
+                <button class="choice" data-discretion="-10" onclick="applyChoice(this)">Le Tunnel (Droite).</button>
+            </div>
+        </div>
+
+        <!-- SECTION 5 -->
+        <div class="section">
+            <p>Vous progressez. Votre torche faiblit. Des ombres semblent danser sur les murs. Est-ce la fatigue ou la
+                Relique qui joue avec votre esprit ?</p>
+            <div class="choice-container">
+                <button class="choice" data-relique="10" data-foi="-5" onclick="applyChoice(this)">Laisser la Relique
+                    éclairer le chemin.</button>
+                <button class="choice" data-discretion="-5" onclick="applyChoice(this)">Avancer dans le noir
+                    complet.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 6 -->
+        <div class="section">
+            <p>Un mendiant est recroquevillé dans un coin. Il lève les yeux vers vous. Il porte une bure en lambeaux.
+            </p>
+            <div class="choice-container">
+                <button class="choice" data-foi="10" data-or="-10" onclick="applyChoice(this)">Lui donner une pièce
+                    d'or.</button>
+                <button class="choice" data-discretion="5" onclick="applyChoice(this)">L'ignorer et passer
+                    rapidement.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 7 -->
+        <div class="section">
+            <p>Le mendiant vous attrape le bras. "Ils sont partout, chevalier. Le Roi veut le sang du Christ." Il sait
+                qui vous êtes.</p>
+            <div class="choice-container">
+                <button class="choice" data-discretion="-20" data-foi="-10" onclick="applyChoice(this)">Le faire taire
+                    définitivement.</button>
+                <button class="choice" data-foi="5" onclick="applyChoice(this)">Lui demander ce qu'il sait.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 8 -->
+        <div class="section">
+            <p>Vous arrivez à une sortie près de la Seine. Une barge est amarrée. Le passeur regarde nerveusement autour
+                de lui.</p>
+            <div class="choice-container">
+                <button class="choice" data-or="-20" onclick="applyChoice(this)">Payer le prix fort pour
+                    traverser.</button>
+                <button class="choice" data-discretion="-10" onclick="applyChoice(this)">Le menacer pour qu'il vous
+                    prenne.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 9 -->
+        <div class="section">
+            <p>Sur le fleuve, le froid est mordant. Au loin, le donjon du Templiers brûle déjà ? Non, ce sont des
+                torches. Des centaines.</p>
+            <div class="choice-container">
+                <button class="choice" data-foi="-5" onclick="applyChoice(this)">Regarder le désastre avec
+                    amertume.</button>
+                <button class="choice" data-foi="5" onclick="applyChoice(this)">Prier pour vos frères.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 10 -->
+        <div class="section">
+            <p>La barge s'arrête brutalement. "Contrôle royal !" crie une voix depuis la berge. Le passeur blanchit.</p>
+            <div class="choice-container">
+                <button class="choice" data-discretion="10" onclick="applyChoice(this)">Se cacher sous les toiles
+                    sales.</button>
+                <button class="choice" data-relique="15" data-discretion="-10" onclick="applyChoice(this)">Invoquer une
+                    brume avec la Relique.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 11 -->
+        <div class="section">
+            <p>Vous passez de justesse. Vous débarquez en banlieue. Il faut trouver des chevaux.</p>
+            <div class="choice-container">
+                <button class="choice" data-or="-50" onclick="applyChoice(this)">Acheter un cheval à l'auberge
+                    (Cher).</button>
+                <button class="choice" data-discretion="-10" data-foi="-5" onclick="applyChoice(this)">Voler un cheval à
+                    l'écurie royale.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 12 -->
+        <div class="section">
+            <p>Vous chevauchez vers l'Ouest, vers La Rochelle, où la flotte du Temple est ancrée. La route est longue.
+            </p>
+            <p>Vous croisez une patrouille.</p>
+            <div class="choice-container">
+                <button class="choice" data-discretion="10" onclick="applyChoice(this)">Se cacher dans les
+                    bois.</button>
+                <button class="choice" data-foi="5" data-discretion="-10" onclick="applyChoice(this)">Forcer le passage
+                    au nom de Dieu !</button>
+            </div>
+        </div>
+
+        <!-- SECTION 13 -->
+        <div class="section">
+            <p>Nuit à la belle étoile. La Relique vous appelle en rêve. Elle promet une puissance capable de renverser
+                le Roi.</p>
+            <div class="choice-container">
+                <button class="choice" data-relique="20" data-foi="-20" onclick="applyChoice(this)">Accepter la
+                    puissance (Vision de conquête).</button>
+                <button class="choice" data-foi="10" onclick="applyChoice(this)">Rejeter la vision (Vision de
+                    paix).</button>
+            </div>
+        </div>
+
+        <!-- SECTION 14 -->
+        <div class="section">
+            <p>Le lendemain. Vous êtes affamé. Un monastère se dresse sur la colline.</p>
+            <div class="choice-container">
+                <button class="choice" data-foi="5" onclick="applyChoice(this)">Demander l'asile aux moines.</button>
+                <button class="choice" data-discretion="5" onclick="applyChoice(this)">Éviter le monastère, trop
+                    risqué.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 15 -->
+        <div class="section">
+            <p>Une tempête éclate. La boue ralentit votre progression. Vous sentez une présence derrière vous.</p>
+            <div class="choice-container">
+                <button class="choice" data-relique="5" onclick="applyChoice(this)">Utiliser la Relique pour repousser
+                    la fatigue.</button>
+                <button class="choice" data-foi="5" onclick="applyChoice(this)">Endurer la souffrance tel un
+                    martyr.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 16 -->
+        <div class="section">
+            <p>C'était un loup. Il vous observe, les yeux rouges. Non, ce n'est pas un loup ordinaire.</p>
+            <div class="choice-container">
+                <button class="choice" data-foi="-5" data-relique="10" onclick="applyChoice(this)">Le dompter par la
+                    volonté de la Relique.</button>
+                <button class="choice" data-discretion="-10" onclick="applyChoice(this)">Tirer l'épée et
+                    attaquer.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 17 -->
+        <div class="section">
+            <p>Vous arrivez enfin en vue de la Rochelle. La ville est en état de siège partiel. Les portes sont gardées.
+            </p>
+            <div class="choice-container">
+                <button class="choice" data-discretion="10" onclick="applyChoice(this)">Attendre la nuit pour
+                    entrer.</button>
+                <button class="choice" data-or="-20" onclick="applyChoice(this)">Soudoyer un garde corrompu.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 18 -->
+        <div class="section">
+            <p>Dans la ville, c'est le chaos. On arrête les Templiers. Vous devez rejoindre le port.</p>
+            <div class="choice-container">
+                <button class="choice" data-discretion="5" onclick="applyChoice(this)">Se déplacer par les
+                    toits.</button>
+                <button class="choice" data-discretion="-20" onclick="applyChoice(this)">Foncer à cheval à travers la
+                    foule.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 19 -->
+        <div class="section">
+            <p>Vous êtes repéré ! Un arbalétrier vous vise.</p>
+            <div class="choice-container">
+                <button class="choice" data-relique="20" data-discretion="-10" onclick="applyChoice(this)">Dévier le
+                    carreau par télékinésie (Relique).</button>
+                <button class="choice" data-foi="5" onclick="applyChoice(this)">Esquiver grâce à l'entraînement
+                    divin.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 20 -->
+        <div class="section">
+            <p>Le port est en vue. Les navires noirs du Temple lèvent l'ancre. Il reste une chaloupe.</p>
+            <div class="choice-container">
+                <button class="choice" data-discretion="-10" onclick="applyChoice(this)">Courir vers la chaloupe sous
+                    les flèches.</button>
+                <button class="choice" data-relique="10" onclick="applyChoice(this)">Créer un bouclier
+                    d'énergie.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 21 -->
+        <div class="section">
+            <p>Un capitaine des gardes royaux vous barre la route. Il est immense. "Donne-moi le trésor, sorcier !"</p>
+            <div class="choice-container">
+                <button class="choice" data-foi="10" onclick="applyChoice(this)">Duel honorable.</button>
+                <button class="choice" data-relique="20" data-foi="-20" onclick="applyChoice(this)">L'anéantir avec le
+                    feu sacré.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 22 -->
+        <div class="section">
+            <p>Le capitaine tombe. Vous sautez dans la chaloupe. Vous ramez vers le navire amiral, le <em>Falcon
+                    Temple</em>.</p>
+            <p>Une flèche vous effleure l'épaule.</p>
+            <div class="choice-container">
+                <button class="choice" data-foi="5" onclick="applyChoice(this)">Ignorer la douleur.</button>
+                <button class="choice" data-relique="5" onclick="applyChoice(this)">Guérir la plaie
+                    instantanément.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 23 -->
+        <div class="section">
+            <p>À bord du navire. Le commandeur vous accueille. "L'avez-vous ?". Vous montrez la Relique.</p>
+            <div class="choice-container">
+                <button class="choice" data-foi="10" onclick="applyChoice(this)">"Elle est en sécurité, mon
+                    frère."</button>
+                <button class="choice" data-relique="10" onclick="applyChoice(this)">"Elle est mienne... je veux dire,
+                    nôtre."</button>
+            </div>
+        </div>
+
+        <!-- SECTION 24 -->
+        <div class="section">
+            <p>Le navire prend le large. La France s'éloigne. Mais un traitre est à bord. Le commandeur s'effondre,
+                empoisonné.</p>
+            <div class="choice-container">
+                <button class="choice" data-discretion="10" onclick="applyChoice(this)">Enquêter discrètement.</button>
+                <button class="choice" data-foi="5" onclick="applyChoice(this)">Accuser le second ouvertement.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 25 -->
+        <div class="section">
+            <p>C'est le navigateur ! Il tient un poignard sous la gorge du timonier. "Demi-tour ou il meurt !"</p>
+            <div class="choice-container">
+                <button class="choice" data-discretion="-10" onclick="applyChoice(this)">Lancer votre dague.</button>
+                <button class="choice" data-relique="20" onclick="applyChoice(this)">Lui briser l'esprit avec la
+                    Relique.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 26 -->
+        <div class="section">
+            <p>Le traître est mort. Mais le mal est fait. La tempête se lève. Une vraie tempête, ou la colère de Dieu ?
+            </p>
+            <div class="choice-container">
+                <button class="choice" data-foi="10" onclick="applyChoice(this)">Prier pour le salut du navire.</button>
+                <button class="choice" data-relique="10" onclick="applyChoice(this)">Ordonner aux flots de se
+                    calmer.</button>
+            </div>
+        </div>
+
+        <!-- SECTION 27 -->
+        <div class="section">
+            <p>L'Écosse est en vue. Une terre de brumes. Le refuge final.</p>
+            <p>Mais la Relique brûle votre main. Elle exige un sacrifice.</p>
+            <div class="choice-container">
+                <button class="choice" data-relique="100" data-foi="-100" onclick="applyChoice(this)">Fusionner avec la
+                    Relique pour devenir un Dieu.</button>
+                <button class="choice" data-foi="20" data-relique="-50" onclick="applyChoice(this)">Résister et la
+                    sceller dans un coffre de plomb.</button>
+            </div>
+        </div>
+
+        <!-- FINALE -->
+        <div id="story"></div>
+
+    </div>
+
+    <script>
+        // INIT STORY ENGINE
+        const engine = new StoryEngine({
+            storyId: 'templar',
+            initialVariables: {
+                foi: 50,
+                discretion: 50,
+                relique: 0,
+                or: 50
+            },
+            clamping: {
+                foi: [0, 100],
+                discretion: [0, 100],
+                relique: [0, 100],
+                or: [0, 100]
+            },
+            onUpdateHUD: (vars) => {
+                return `
+                    <div>Foi: ${vars.foi}% <div class="stat-bar"><div class="stat-fill" style="width:${vars.foi}%"></div></div></div>
+                    <div style="margin-top:10px">Discrétion: ${vars.discretion}% <div class="stat-bar"><div class="stat-fill" style="width:${vars.discretion}%"></div></div></div>
+                    <div style="margin-top:10px">Relique: ${vars.relique}% <div class="stat-bar"><div class="stat-fill" style="width:${vars.relique}%; background:#a020f0"></div></div></div>
+                    <div style="margin-top:10px; color:gold">Or: ${vars.or} pièces</div>
+                `;
+            },
+            onComputeEnding: (vars, force) => {
+                // GAME OVER CHECKS (Automatic)
+                if (vars.discretion <= 0) {
+                    return { isTerminal: true, isSuccess: false, title: "Capturé !", text: "Votre manque de discrétion a causé votre perte. Les gardes royaux vous ont rattrapé. Vous finirez sur le bûcher.", color: "#8b2e2e" };
+                }
+                if (vars.foi <= 0) {
+                    return { isTerminal: true, isSuccess: false, title: "Âme Perdue", text: "Vous avez perdu toute foi. Désespéré, vous abandonnez la quête et disparaissez dans l'anonymat.", color: "#555" };
+                }
+                if (vars.relique >= 100) {
+                    // Ending C: The Corrupted
+                    return { isTerminal: true, isSuccess: true, title: "Le Dieu Sombre", text: "La puissance de la Relique vous a consumé. Vous n'êtes plus un chevalier, mais une entité crainte par les rois et les papes. Le monde tremblera.", color: "#a020f0" };
+                }
+
+                // FINAL SUCCESS CHECK (Only at the end of content)
+                // We use a simple hack: check if the last section is visible? No, StoryEngine handles 'force' being passed from the last button or check logic.
+                // Here we assume the user reached the last step if we are here and not dead.
+                // But wait, auto-check runs on every click. We need to distinguish "mid-game fail" from "end-game success".
+
+                // Let's rely on the last decision (Fusion vs Seal).
+                // If Fusion was chosen -> Relique goes > 100 or high enough.
+                // If Seal was chosen -> Relique drops, Faith goes up.
+
+                // How to detect "End of Story"?
+                // The last buttons can trigger a specific variable state that we catch here.
+
+                // Let's say if we are at step 27 (approx) and survive.
+                // We can't easily know step number here without tracking it in vars.
+                // Let's add a 'progress' var implicitly via buttons? Or just detect high/low states that are only possible at the end.
+
+                // Better approach for the last choice:
+                // Button 1: Fusion -> Relique +100 -> Triggers "Corrupted" above.
+                // Button 2: Seal -> Relique -50 -> We need a trigger for success.
+                // Let's say if (vars.relique < 50 && vars.foi > 0 && <some flag indicating end>). 
+                // Actually, let's just make the last button invoke a massive variable change that is unique.
+                // OR checking DOM elements? No, logic should be pure.
+
+                // Let's add 'victoire' variable hiddenly.
+                // choice 1: relique +100
+                // choice 2: victoire = 1
+
+                if (vars.victoire === 1) {
+                    return { isTerminal: true, isSuccess: true, title: "Le Gardien du Secret", text: "Vous avez atteint l'Écosse et caché la Relique. L'Ordre renaîtra de ses cendres, dans l'ombre. Vous êtes le sauveur du Temple.", color: "#c9a959" };
+                }
+
+                return null;
+            }
+        });
+
+        // Add 'victoire' handling to the last button manually or via data attribute 'data-victoire="1"'
+        // But StoryEngine only parses numeric data attributes it seems.
+        // Let's check StoryEngine. applyChoice parses all numeric data attributes.
+        // So I can add data-victoire="1" to the last button.
+    </script>
+
+    <!-- Fix for the last section buttons to include the victory trigger -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.section');
+            const lastSection = sections[sections.length - 1];
+            const buttons = lastSection.querySelectorAll('.choice');
+            // Button 2 is "Seal"
+            if (buttons[1]) buttons[1].setAttribute('data-victoire', '1');
+        });
+    </script>
+
+    <!-- Init Security -->
+    <script>
+        setupF12Protection('../../index.html');
+    </script>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-[#8b2e2e]/20 bg-[#100c0a] py-12">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <a href="../historical.html"
+                class="text-[#d4c5b0]/60 hover:text-[#c9a959] text-xs font-heading tracking-widest uppercase flex items-center gap-2 transition-colors no-underline">
+                <span class="material-symbols-outlined text-base">arrow_back</span>
+                Retour au Menu
+            </a>
+            <div class="flex items-center gap-6">
+                <p class="text-[10px] text-[#d4c5b0]/30 font-heading uppercase tracking-widest">© 2025 Ordre du Temple
+                </p>
+                <a href="https://github.com/ErwanLT/bragi" target="_blank"
+                    class="text-[#d4c5b0]/60 hover:text-[#c9a959] transition-colors">
+                    <span class="material-symbols-outlined text-base">code</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

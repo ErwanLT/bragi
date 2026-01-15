@@ -1,0 +1,140 @@
+/* THÈME HISTORIQUE - LE SECRET DES TEMPLIERS */
+:root {
+    --bg-color: #1a1512;
+    --text-color: #d4c5b0;
+    --primary-color: #8b2e2e;
+    /* Blood Red */
+    --secondary-color: #c9a959;
+    /* Old Gold */
+    --accent-color: #4a4036;
+    --font-main: 'Cinzel', serif;
+    --font-body: 'Crimson Text', serif;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,700;1,400&display=swap');
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-body);
+    line-height: 1.8;
+    margin: 0;
+    padding: 20px;
+    background-image: url('https://www.transparenttextures.com/patterns/dark-leather.png');
+    /* Texture subtile */
+}
+
+#story-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    background: rgba(20, 15, 10, 0.95);
+    border: 1px solid #3e3228;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+    border-radius: 4px;
+    position: relative;
+}
+
+#story-container::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 1px solid #5c4d3c;
+    pointer-events: none;
+}
+
+h1,
+h2 {
+    font-family: var(--font-main);
+    color: var(--secondary-color);
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 15px;
+}
+
+.section {
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(139, 46, 46, 0.2);
+}
+
+.section p {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.choice-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+button.choice {
+    background: linear-gradient(to bottom, #2b221b, #1a1512);
+    color: var(--secondary-color);
+    border: 1px solid #5c4d3c;
+    padding: 15px 25px;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+button.choice:hover {
+    background: var(--primary-color);
+    color: #fff;
+    border-color: #a43a3a;
+    box-shadow: 0 0 15px rgba(139, 46, 46, 0.4);
+    transform: translateY(-2px);
+}
+
+button.choice.selected {
+    background: #4a4036;
+    color: #888;
+    border-color: #333;
+    pointer-events: none;
+}
+
+#hud {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.85);
+    padding: 15px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+    z-index: 100;
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.stat-bar {
+    margin-top: 5px;
+    width: 100%;
+    height: 4px;
+    background: #333;
+    position: relative;
+}
+
+.stat-fill {
+    height: 100%;
+    background: var(--primary-color);
+    transition: width 0.5s ease;
+}
