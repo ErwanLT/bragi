@@ -10,8 +10,12 @@ Ce projet rend hommage à cet art du récit en proposant des expériences narrat
 
 ## ✨ Fonctionnalités
 - 📚 **Bibliothèque Interactive** : Un hub central ([stories.html](https://erwanlt.github.io/bragi/stories.html)) pour explorer et filtrer les récits par genre.
-- 💾 **Persistance de la Progression** : Votre progression est sauvegardée localement. Les histoires terminées sont marquées par un badge spécial dans la bibliothèque.
+- 🏆 **Panthéon des Exploits** : Un [Hall of Fame](https://erwanlt.github.io/bragi/trophies.html) qui recense vos trophées, secrets découverts et statistiques de complétion.
+- 💾 **Persistance Avancée** :
+    - Sauvegarde automatique locale de la progression.
+    - **Export/Import** : Transférez vos sauvegardes d'un appareil à l'autre via des fichiers `.brg` sécurisés (Base64).
 - 🛡️ **Immersion Totale** : Interface épurée, ambiances thématiques par genre et protection contre les spoils (anti-F12).
+
 
 ## 🚀 Histoires disponibles
 Accédez à la [Bibliothèque complète](https://erwanlt.github.io/bragi/stories.html) pour explorer nos mondes :
@@ -43,6 +47,12 @@ Accédez à la [Bibliothèque complète](https://erwanlt.github.io/bragi/stories
 * 🐉 **Fantasy**
     *   *Médiévale*
         *   **La Quête du Code Ancestral** : Le donjon "Legacy" n'attend que vous.
+    *   *Dark*
+        *   **L'Ombre de l'Abîme** : "Il n'y a pas de lumière ici, seulement des degrés d'obscurité."
+    *   *Historique*
+        *   **Le Secret des Templiers** : 1307. L'Ordre tombe. Protégez le secret à tout prix.
+
+
 *   🕵️‍♂️ **Polar**
     *   *Noir*
         *   **Dossier: Ombres de Chicago - 1932** : Capone, Jazz et Prohibition.
